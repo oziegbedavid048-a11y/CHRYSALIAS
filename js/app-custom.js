@@ -7,7 +7,10 @@
 (function () {
   'use strict';
 
-  const API_BASE = 'http://127.0.0.1:8000/api';
+  const isRemote = window.location.hostname.includes('github.io') || window.location.hostname.includes('onrender.com');
+  const API_BASE = isRemote 
+    ? 'https://chrysalias-backend.onrender.com/api'
+    : 'http://127.0.0.1:8000/api';
 
   window.EscrowApp = {
     API_BASE: API_BASE,

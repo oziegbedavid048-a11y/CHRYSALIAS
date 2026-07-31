@@ -111,18 +111,17 @@ REST_FRAMEWORK = {
     ],
 }
 
-# CORS — allow the frontend to call API (file:// and localhost)
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only in development
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
+ALLOWED_HOSTS = ['*']
+
+# CORS & CSRF — Allow frontend (GitHub Pages & Localhost)
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF trusted origins for frontend
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'https://*.onrender.com',
+    'https://*.github.io',
 ]
 
 # Session settings
