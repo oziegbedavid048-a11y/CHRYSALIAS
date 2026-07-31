@@ -7,19 +7,23 @@
   <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
   <link href="css/app-custom.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
+  <!-- Chart.js for Responsive, Interactive Line & Pie Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     body.dashboard-page-bg {
       font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
       background-color: #f8fafc;
       color: #0f172a;
       overflow-x: hidden;
+      margin: 0;
+      padding: 0;
     }
     
     .dash-welcome-card {
       background: linear-gradient(135deg, #002b49 0%, #01426a 100%);
       color: #ffffff;
       padding: 22px 26px;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-bottom: 20px;
       box-shadow: 0 6px 16px rgba(0, 43, 73, 0.1);
       display: flex;
@@ -46,10 +50,10 @@
     .dash-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 20px 22px;
       margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
       max-width: 100%;
       box-sizing: border-box;
     }
@@ -71,12 +75,12 @@
       margin: 0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .dash-link {
       color: #3cb95d;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       text-decoration: none;
       transition: color 0.2s ease;
       display: inline-flex;
@@ -97,7 +101,7 @@
     .metric-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 16px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -133,7 +137,7 @@
     .badge-gray { background: #f1f5f9; color: #475569; }
     .badge-red { background: #fee2e2; color: #991b1b; }
 
-    /* Responsive Touch Table Wrapper - Strictly Prevents Right Hand Side Overflow */
+    /* Responsive Touch Table Wrapper */
     .responsive-table-wrapper {
       width: 100%;
       max-width: 100%;
@@ -145,32 +149,34 @@
       box-sizing: border-box;
     }
 
-    /* Monthly Chart Visualizer */
-    .month-chart-bar {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      height: 95px;
-      padding-top: 12px;
+    /* Charts Grid Layout */
+    .charts-grid-row {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
     }
-    .chart-col {
-      flex: 1;
+    .chart-container-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 4px;
+      justify-content: space-between;
     }
-    .chart-bar-fill {
+    .chart-canvas-wrapper {
+      position: relative;
       width: 100%;
-      background: linear-gradient(180deg, #3cb95d 0%, #01426a 100%);
-      border-radius: 3px 3px 0 0;
-      min-height: 5px;
-      transition: height 0.5s ease;
+      height: 250px;
+      margin-top: 10px;
     }
-    .chart-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #64748b;
+    .pie-canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      margin: 10px auto 0 auto;
     }
 
     /* User Directory Cards Grid */
@@ -183,7 +189,7 @@
     .user-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 16px;
       display: flex;
       flex-direction: column;
@@ -256,6 +262,13 @@
       border-color: #3cb95d;
       box-shadow: 0 0 0 3px rgba(60,185,93,0.12);
     }
+
+    /* Mobile Responsive Rules */
+    @media (max-width: 900px) {
+      .charts-grid-row {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 <body class="dashboard-page-bg">
@@ -264,7 +277,7 @@
   <div id="app-header"></div>
 
   <div class="dashboard-layout">
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar Navigation with Upgraded Modern Icons -->
     <aside class="dashboard-sidebar">
       <div class="sidebar-user">
         <div class="sidebar-user-name" id="sideUserName">Alex Mercer</div>
@@ -274,20 +287,33 @@
       <ul class="sidebar-menu">
         <li class="sidebar-item">
           <a class="sidebar-link active" data-tab="overview">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
             Overview
           </a>
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" data-tab="transactions">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 022 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
             Transactions
           </a>
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" data-tab="users">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            Users
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Users & Contacts
           </a>
         </li>
       </ul>
@@ -314,7 +340,12 @@
         <div class="dash-card">
           <div class="dash-card-header">
             <h2 class="dash-card-title">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
               Users Overview
             </h2>
             <a href="#" class="dash-link" onclick="switchTab('users'); return false;">View all users →</a>
@@ -322,14 +353,14 @@
 
           <div class="metrics-grid-4">
             <div class="metric-card">
-              <div class="metric-label">Total users</div>
-              <div class="metric-value" id="overviewTotalUsers">1</div>
+              <div class="metric-label">Total Users in Network</div>
+              <div class="metric-value" id="overviewTotalUsers">2</div>
               <span class="metric-badge badge-blue">Active Counterparties</span>
             </div>
             <div class="metric-card">
-              <div class="metric-label">New users this month</div>
-              <div class="metric-value">0</div>
-              <span class="metric-badge badge-gray">Current Period</span>
+              <div class="metric-label">New Users This Month</div>
+              <div class="metric-value">1</div>
+              <span class="metric-badge badge-green">Level 2 Verified</span>
             </div>
           </div>
         </div>
@@ -339,11 +370,15 @@
           <div class="dash-card-header">
             <div>
               <h2 class="dash-card-title">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                Transactions Overview
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="20" x2="12" y2="10"></line>
+                  <line x1="18" y1="20" x2="18" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="16"></line>
+                </svg>
+                Transactions Performance & Metrics
               </h2>
               <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
-                <span class="metric-badge badge-blue" style="margin-top:0;">This Year</span> Total transactions per month this year
+                <span class="metric-badge badge-blue" style="margin-top:0;">2026 Analytics</span> Real-time Chrysalias protected volume & status breakdown
               </div>
             </div>
             <a href="#" class="dash-link" onclick="switchTab('transactions'); return false;">View all transactions →</a>
@@ -357,39 +392,55 @@
               <span class="metric-badge badge-blue">Lifetime Total</span>
             </div>
             <div class="metric-card">
-              <div class="metric-label">Completed transactions</div>
+              <div class="metric-label">Completed Transactions</div>
               <div class="metric-value" id="overviewCompletedTx" style="color: #3cb95d;">1</div>
               <span class="metric-badge badge-green">Funds Released</span>
             </div>
             <div class="metric-card">
-              <div class="metric-label">Ongoing transactions</div>
+              <div class="metric-label">Ongoing Transactions</div>
               <div class="metric-value" id="overviewOngoingTx" style="color: #0284c7;">2</div>
               <span class="metric-badge badge-blue">In Chrysalias Shield</span>
             </div>
             <div class="metric-card">
-              <div class="metric-label">Cancelled transactions</div>
+              <div class="metric-label">Cancelled / Disputes</div>
               <div class="metric-value" id="overviewCancelledTx" style="color: #94a3b8;">0</div>
               <span class="metric-badge badge-gray">No Activity</span>
             </div>
           </div>
 
-          <!-- Monthly Bar Activity Visualizer -->
-          <div style="background: #f8fafc; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0;">
-            <div style="font-size: 0.82rem; font-weight: 700; color: #002b49; margin-bottom: 8px;">Monthly Activity Breakdown (This Year)</div>
-            <div class="month-chart-bar">
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 40%;"></div><span class="chart-label">Jan</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 65%;"></div><span class="chart-label">Feb</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 30%;"></div><span class="chart-label">Mar</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 80%;"></div><span class="chart-label">Apr</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 50%;"></div><span class="chart-label">May</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 90%;"></div><span class="chart-label">Jun</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 100%;"></div><span class="chart-label">Jul</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 20%;"></div><span class="chart-label">Aug</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Sep</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Oct</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Nov</span></div>
-              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Dec</span></div>
+          <!-- Interactive Responsive Charts Row -->
+          <div class="charts-grid-row">
+            
+            <!-- Chart 1: Responsive Clickable Line/Area Graph Chart -->
+            <div class="chart-container-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.9rem; font-weight: 700; color: #002b49; display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                  Transaction Volume Trend (USD $)
+                </div>
+                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Click points for details</span>
+              </div>
+              
+              <div class="chart-canvas-wrapper">
+                <canvas id="txTrendChart"></canvas>
+              </div>
             </div>
+
+            <!-- Chart 2: Responsive Clickable Pie / Donut Chart -->
+            <div class="chart-container-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.9rem; font-weight: 700; color: #002b49; display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                  Status Breakdown
+                </div>
+                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Click slices</span>
+              </div>
+
+              <div class="pie-canvas-wrapper">
+                <canvas id="txStatusPieChart"></canvas>
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -401,7 +452,10 @@
           <div class="dash-card-header">
             <div>
               <h2 class="dash-card-title">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 022 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
                 Transactions Directory
               </h2>
               <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Track and manage all active, completed, and cancelled Chrysalias agreements</p>
@@ -439,7 +493,7 @@
             <input type="text" id="txSearchInput" class="search-input-box" placeholder="🔍 Search transactions..." oninput="onTxSearchInput()">
           </div>
 
-          <!-- Strictly Responsive Data Table Container (Fixes Overflow to Right Side) -->
+          <!-- Strictly Responsive Data Table Container -->
           <div class="responsive-table-wrapper">
             <table class="tx-table" style="width: 100%; border-collapse: collapse; min-width: 620px;">
               <thead>
@@ -466,12 +520,17 @@
           <div class="dash-card-header">
             <div>
               <h2 class="dash-card-title">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
                 Users & Counterparties Management
               </h2>
               <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Overview of buyers, sellers, and verified counterparties in your network</p>
             </div>
-            <button class="btn-escrow-navy" onclick="window.EscrowApp.showToast('User invitation sent')" style="padding: 8px 16px; font-size: 0.85rem;">+ Invite Counterparty</button>
+            <button class="btn-escrow-navy" onclick="window.EscrowApp.showToast('User invitation link copied!')" style="padding: 8px 16px; font-size: 0.85rem;">+ Invite Counterparty</button>
           </div>
 
           <!-- User Metrics Grid -->
@@ -633,6 +692,135 @@
         });
       });
 
+      // --- Chart.js Implementations ---
+      var trendChartInstance = null;
+      var pieChartInstance = null;
+
+      function initDashboardCharts() {
+        if (typeof Chart === 'undefined') return;
+
+        // 1. Line/Area Chart: Monthly Transaction Trends
+        var ctxTrend = document.getElementById('txTrendChart');
+        if (ctxTrend) {
+          var gradient = ctxTrend.getContext('2d').createLinearGradient(0, 0, 0, 200);
+          gradient.addColorStop(0, 'rgba(60, 185, 93, 0.35)');
+          gradient.addColorStop(1, 'rgba(60, 185, 93, 0.0)');
+
+          trendChartInstance = new Chart(ctxTrend, {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              datasets: [{
+                label: 'Monthly Protected Volume ($)',
+                data: [12500, 24000, 18200, 35000, 28000, 42000, 48500, 19700, 15000, 22000, 31000, 45000],
+                borderColor: '#3cb95d',
+                borderWidth: 3,
+                backgroundColor: gradient,
+                fill: true,
+                tension: 0.35,
+                pointBackgroundColor: '#002b49',
+                pointBorderColor: '#3cb95d',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 7
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#002b49',
+                  titleFont: { size: 13, weight: 'bold' },
+                  bodyFont: { size: 12 },
+                  padding: 10,
+                  displayColors: false,
+                  callbacks: {
+                    label: function(context) {
+                      return ' Volume: $' + context.raw.toLocaleString() + '.00';
+                    }
+                  }
+                }
+              },
+              onClick: function(e, activeElements) {
+                if (activeElements && activeElements.length > 0) {
+                  var index = activeElements[0].index;
+                  var month = this.data.labels[index];
+                  var val = this.data.datasets[0].data[index];
+                  window.EscrowApp.showToast(month + ' 2026 Volume: $' + val.toLocaleString() + '.00');
+                }
+              },
+              scales: {
+                x: {
+                  grid: { display: false },
+                  ticks: { font: { size: 11 }, color: '#64748b' }
+                },
+                y: {
+                  grid: { color: '#f1f5f9' },
+                  ticks: {
+                    font: { size: 10 },
+                    color: '#64748b',
+                    callback: function(value) { return '$' + (value / 1000) + 'k'; }
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // 2. Pie / Donut Chart: Status Breakdown
+        var ctxPie = document.getElementById('txStatusPieChart');
+        if (ctxPie) {
+          pieChartInstance = new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+              labels: ['Completed Deals', 'Ongoing Shield', 'Pending / Draft', 'Cancelled'],
+              datasets: [{
+                data: [1, 2, 0, 0],
+                backgroundColor: ['#3cb95d', '#0284c7', '#f59e0b', '#ef4444'],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: {
+                    font: { size: 11, weight: '600' },
+                    boxWidth: 12,
+                    padding: 12
+                  }
+                },
+                tooltip: {
+                  backgroundColor: '#002b49',
+                  padding: 10,
+                  callbacks: {
+                    label: function(context) {
+                      return ' ' + context.label + ': ' + context.raw + ' deals';
+                    }
+                  }
+                }
+              },
+              onClick: function(e, activeElements) {
+                if (activeElements && activeElements.length > 0) {
+                  var index = activeElements[0].index;
+                  var statusLabel = this.data.labels[index];
+                  var count = this.data.datasets[0].data[index];
+                  window.EscrowApp.showToast(statusLabel + ': ' + count + ' deal(s)');
+                }
+              }
+            }
+          });
+        }
+      }
+
+      initDashboardCharts();
+
       // --- Transaction Table Renderer ---
       var currentStatusFilter = 'all';
 
@@ -708,6 +896,12 @@
         var elTabOng = document.getElementById('txTabOngoingCount');
         if (elTabOng) elTabOng.textContent = ongoing;
 
+        // Update pie chart dataset if initialized
+        if (pieChartInstance) {
+          pieChartInstance.data.datasets[0].data = [completed, ongoing, 0, cancelled];
+          pieChartInstance.update();
+        }
+
         // Update filter pill counts
         document.querySelectorAll('.tx-filter-pill').forEach(function(pill) {
           var onclick = pill.getAttribute('onclick') || '';
@@ -759,5 +953,3 @@
   </script>
 </body>
 </html>
-
-
