@@ -191,7 +191,7 @@
           '<header class="dashboard-header-bar">' +
           '  <div class="dashboard-header-container">' +
           '    <a href="index.html" class="dashboard-logo" title="Go to home page" style="display:flex;align-items:center;gap:10px;text-decoration:none;">' +
-          '      <img src="build/images/chrysalias-logo.png" alt="Chrysalias" style="height:32px;width:32px;border-radius:6px;object-fit:cover;">' +
+          '      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:32px;width:32px;border-radius:6px;object-fit:cover;">' +
           '      <span style="font-family: Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:#002b49;letter-spacing:-0.5px;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>' +
           '    </a>' +
           '    <div class="dashboard-header-right">' +
@@ -302,7 +302,7 @@
         '      <div class="headerV2-container section-container">' +
         '        <div class="headerV2-inner">' +
         '          <a href="index.html" class="headerV2-logo" title="Go to home page" style="display:flex;align-items:center;gap:10px;text-decoration:none;">' +
-        '            <img src="build/images/chrysalias-logo.png" alt="Chrysalias" style="height:34px;width:34px;border-radius:6px;object-fit:cover;">' +
+        '            <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:34px;width:34px;border-radius:6px;object-fit:cover;">' +
         '            <span style="font-family: Montserrat, sans-serif; font-weight:800; font-size:1.6rem; color:#ffffff; letter-spacing: -0.5px;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>' +
         '          </a>' +
         '          <nav class="headerV2-nav">' +
