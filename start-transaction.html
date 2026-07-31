@@ -8,22 +8,26 @@
   <link href="css/app-custom.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
   <style>
-    .tx-wizard-bg {
+    body.tx-wizard-bg {
       background-color: var(--escrow-bg-webapp);
       min-height: 100vh;
       padding-bottom: 60px;
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
     }
     .tx-wizard-container {
-      max-width: 760px;
-      margin: 40px auto;
-      padding: 0 20px;
+      max-width: 740px;
+      margin: 30px auto;
+      padding: 0 16px;
+      box-sizing: border-box;
     }
     .tx-step-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       position: relative;
+      gap: 12px;
     }
     .tx-step-bar::before {
       content: '';
@@ -40,20 +44,20 @@
       position: relative;
       z-index: 2;
       background: var(--escrow-bg-webapp);
-      padding: 0 16px;
+      padding: 0 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #94a3b8;
     }
     .tx-step-item.active {
       color: var(--escrow-navy);
     }
     .tx-step-num {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: #cbd5e1;
       color: #ffffff;
@@ -61,75 +65,48 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
+      font-size: 0.84rem;
+      flex-shrink: 0;
     }
     .tx-step-item.active .tx-step-num {
       background: var(--escrow-green);
     }
     .tx-card {
       background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
       border: 1px solid #e2e8f0;
-      padding: 36px;
+      padding: 28px;
+      box-sizing: border-box;
     }
     .tx-card-title {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--escrow-navy);
       margin: 0 0 6px 0;
     }
     .tx-card-subtitle {
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #64748b;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
     .tx-section-header {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--escrow-navy);
       border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 10px;
-      margin: 28px 0 20px 0;
+      padding-bottom: 8px;
+      margin: 24px 0 16px 0;
     }
     .form-grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .addon-box {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      cursor: pointer;
-      transition: border-color 0.2s ease, background 0.2s ease;
-    }
-    .addon-box:hover {
-      border-color: var(--escrow-green);
-      background: #f0fdf4;
-    }
-    .addon-box.recommended {
-      border-color: var(--escrow-green);
-      background: #f0fdf4;
-    }
-    .addon-badge {
-      background: var(--escrow-green);
-      color: #ffffff;
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      margin-left: 8px;
+      gap: 16px;
     }
     .summary-box {
       background: #f8fafc;
-      border-radius: 8px;
-      padding: 20px;
+      border-radius: 10px;
+      padding: 18px;
       border: 1px solid #e2e8f0;
       margin: 20px 0;
     }
@@ -139,18 +116,18 @@
       align-items: center;
       padding: 10px 0;
       border-bottom: 1px dashed #e2e8f0;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     .summary-row:last-child {
       border-bottom: none;
       padding-bottom: 0;
     }
     .summary-row.total {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--escrow-navy);
       border-top: 2px solid #cbd5e1;
-      padding-top: 14px;
+      padding-top: 12px;
       margin-top: 6px;
     }
     .phone-input-group {
@@ -170,14 +147,42 @@
       border-radius: 0 6px 6px 0 !important;
       flex: 1;
     }
+
+    /* Mobile Responsive Rules */
+    @media (max-width: 640px) {
+      .tx-wizard-container {
+        padding: 0 12px !important;
+        margin: 16px auto !important;
+      }
+      .tx-card {
+        padding: 18px 16px !important;
+      }
+      .form-grid-2 {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      .tx-step-item span {
+        display: none;
+      }
+      .tx-step-bar {
+        justify-content: space-around;
+      }
+      .action-btn-row {
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+      .action-btn-row button {
+        width: 100% !important;
+      }
+    }
   </style>
 </head>
 <body class="tx-wizard-bg">
-  <!-- Top Minimal Header -->
-  <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 16px 32px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+  <!-- Top Header -->
+  <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
     <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
-      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 32px; width: 32px; border-radius: 6px; object-fit: cover;">
-      <span style="font-family: Montserrat, sans-serif; font-weight: 800; font-size: 1.4rem; color: #002b49; letter-spacing: -0.5px;">CHRYSALIAS<span style="color: #3cb95d;">.COM</span></span>
+      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 32px; width: 32px; object-fit: contain;">
+      <span style="font-family: 'Inter', sans-serif !important; font-weight: 800; font-size: 1.35rem; color: #002b49; letter-spacing: -0.5px;">CHRYSALIAS<span style="color: #3cb95d;">.COM</span></span>
     </a>
   </div>
 
@@ -204,13 +209,13 @@
 
         <form id="txStep1Form">
           <div class="form-group">
-            <label for="txTitle">Transaction title</label>
+            <label for="txTitle" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Transaction Title</label>
             <input type="text" id="txTitle" class="form-control" placeholder="e.g. Domain Purchase: kkd.com" required value="Domain Purchase: kkd.com">
           </div>
 
           <div class="form-grid-2">
             <div class="form-group">
-              <label for="myRole">My role</label>
+              <label for="myRole" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">My Role</label>
               <select id="myRole" class="form-control" style="height: 48px;" required>
                 <option value="buyer" selected>Buyer</option>
                 <option value="seller">Seller</option>
@@ -219,7 +224,7 @@
             </div>
 
             <div class="form-group">
-              <label for="currency">Currency</label>
+              <label for="currency" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Currency</label>
               <select id="currency" class="form-control" style="height: 48px;" required>
                 <option value="usd" selected>USD ($)</option>
                 <option value="eur">EUR (€)</option>
@@ -231,7 +236,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inspectionPeriod">Inspection period (days)</label>
+            <label for="inspectionPeriod" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Inspection Period (Days)</label>
             <input type="number" id="inspectionPeriod" class="form-control" min="1" max="30" value="2" required>
           </div>
 
@@ -246,7 +251,7 @@
               </div>
             </label>
 
-            <label id="optLabelPartnered" class="pay-option-card" style="border: 1px solid #cbd5e1; background: #ffffff; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box; width: 100%;">
+            <label id="optLabelPartnered" class="pay-option-card" style="border: 1px solid #cbd5e1; background: #ffffff; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box; width: 100%; margin-top: 10px;">
               <input type="radio" name="paymentType" value="partnered" onclick="togglePaymentType('partnered')" style="margin-top: 4px; accent-color: #3cb95d; flex-shrink: 0;">
               <div style="flex: 1; min-width: 0;">
                 <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; line-height: 1.3;">
@@ -260,7 +265,7 @@
 
           <!-- Partnered Payment Details Box -->
           <div id="partneredFieldsBox" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #002b49; border-radius: 8px; padding: 18px 20px; margin-bottom: 24px;">
-            <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; margin-bottom: 12px;">
               <span>Partnered Payment Settings</span>
             </div>
             <div class="form-grid-2">
@@ -282,10 +287,10 @@
             </p>
           </div>
 
-          <div class="tx-section-header">Transaction details</div>
+          <div class="tx-section-header">Transaction Details</div>
 
           <div class="form-group">
-            <label for="itemCategory">Item category</label>
+            <label for="itemCategory" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Item Category</label>
             <select id="itemCategory" class="form-control" style="height: 48px;" required>
               <option value="Domain Names" selected>Domain Names</option>
               <option value="Motor Vehicles">Motor Vehicles (Cars, Boats, Aircraft)</option>
@@ -300,12 +305,12 @@
 
           <div class="form-grid-2">
             <div class="form-group">
-              <label for="itemName">Item name / Domain</label>
+              <label for="itemName" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Item Name / Domain</label>
               <input type="text" id="itemName" class="form-control" placeholder="e.g. kkd.com" required value="kkd.com">
             </div>
 
             <div class="form-group">
-              <label for="itemPrice">Price (USD)</label>
+              <label for="itemPrice" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Price (USD)</label>
               <div style="position: relative;">
                 <span style="position: absolute; left: 14px; top: 12px; font-weight: 700; color: #64748b;">$</span>
                 <input type="number" step="0.01" id="itemPrice" class="form-control" style="padding-left: 32px;" placeholder="0.00" value="12.00" required>
@@ -314,15 +319,12 @@
           </div>
 
           <div class="form-group">
-            <label for="itemDesc">Item description</label>
+            <label for="itemDesc" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Item Description</label>
             <textarea id="itemDesc" class="form-control" rows="3" placeholder="Describe the item, domain transfer, or service deliverables...">Full transfer of domain name kkd.com including ICANN auth code to buyer account.</textarea>
           </div>
 
-          <div style="margin-top: 32px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="dashboard.html" style="color: #64748b; font-weight: 600; font-size: 0.95rem; text-decoration: underline;">
-              Skip to Dashboard
-            </a>
-            <button type="submit" class="btn-escrow-green" style="padding: 14px 36px; font-size: 1.05rem;">
+          <div class="action-btn-row" style="margin-top: 28px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn-escrow-green" style="padding: 13px 36px; font-size: 1rem; font-weight: 700;">
               Add Item / Proceed →
             </button>
           </div>
@@ -331,40 +333,23 @@
 
       <!-- STEP 2: SUMMARY & SELLER DETAILS -->
       <div id="wizardStep2" style="display: none;">
-        <h1 class="tx-card-title">Transaction summary</h1>
-        <p class="tx-card-subtitle">Review items, add-on services, fee breakdown, and counterparty details.</p>
+        <h1 class="tx-card-title">Transaction Summary</h1>
+        <p class="tx-card-subtitle">Review items, fee breakdown, and counterparty details.</p>
 
         <!-- Selected Item Badge Card -->
-        <div style="background: #f1f5f9; border-radius: 8px; padding: 18px 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: #f1f5f9; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
-            <h3 id="summaryItemName" style="margin: 0; color: var(--escrow-navy); font-size: 1.2rem;">kkd.com</h3>
-            <p id="summaryCategoryRole" style="margin: 4px 0 0 0; color: #64748b; font-size: 0.88rem;">Domain • Inspection Period: <span id="summaryDays">2</span> Days</p>
+            <h3 id="summaryItemName" style="margin: 0; color: var(--escrow-navy); font-size: 1.15rem; font-weight: 800;">kkd.com</h3>
+            <p id="summaryCategoryRole" style="margin: 4px 0 0 0; color: #64748b; font-size: 0.85rem;">Domain • Inspection Period: <span id="summaryDays">2</span> Days</p>
           </div>
-          <div id="summaryPriceTag" style="font-size: 1.4rem; font-weight: 800; color: var(--escrow-green);">$12.00</div>
+          <div id="summaryPriceTag" style="font-size: 1.35rem; font-weight: 800; color: var(--escrow-green);">$12.00</div>
         </div>
-
-        <!-- Add-on Services -->
-        <label class="addon-box">
-          <input type="checkbox" id="holdingAddon" style="margin-top: 4px; transform: scale(1.2);">
-          <div>
-            <strong>Use Domain Name Holding service</strong>
-            <p style="margin: 2px 0 0 0; font-size: 0.85rem; color: #64748b;">Keep your domain safely held in Chrysalias protection during extended payout schedules.</p>
-          </div>
-        </label>
-
-        <label class="addon-box recommended">
-          <input type="checkbox" id="conciergeAddon" checked style="margin-top: 4px; transform: scale(1.2);">
-          <div>
-            <strong>Upgrade to Chrysalias concierge service <span class="addon-badge">Recommended</span></strong>
-            <p style="margin: 2px 0 0 0; font-size: 0.85rem; color: #475569;">Ensure a smooth transfer of the domain with our personal assistance. Fees apply.</p>
-          </div>
-        </label>
 
         <!-- Fee Summary Table -->
         <div class="summary-box">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-            <strong style="color: var(--escrow-navy);">Transaction summary</strong>
-            <span style="font-size: 0.85rem; color: #64748b; text-decoration: underline; cursor: pointer;" onclick="window.EscrowApp.showToast('Chrysalias fee minimum is $50.00, protecting full transaction value.');">How are the totals calculated?</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <strong style="color: var(--escrow-navy); font-size: 0.95rem;">Transaction Summary Breakdown</strong>
+            <span style="font-size: 0.8rem; color: #64748b; text-decoration: underline; cursor: pointer;" onclick="window.EscrowApp.showToast('Chrysalias fee minimum is $50.00, protecting full transaction value.');">How are totals calculated?</span>
           </div>
 
           <div class="summary-row">
@@ -374,20 +359,20 @@
 
           <div class="summary-row">
             <span>Chrysalias fee paid by:</span>
-            <select id="feePayer" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; font-size: 0.88rem;">
-              <option value="buyer" selected>buyer ($50.00)</option>
-              <option value="seller">seller ($50.00)</option>
-              <option value="50/50">50/50 split ($25.00 each)</option>
+            <select id="feePayer" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; font-size: 0.85rem;">
+              <option value="buyer" selected>Buyer ($50.00)</option>
+              <option value="seller">Seller ($50.00)</option>
+              <option value="50/50">50/50 Split ($25.00 each)</option>
             </select>
           </div>
 
           <div class="summary-row">
-            <span>Buyer price:</span>
+            <span>Buyer Price:</span>
             <strong id="calcBuyerPrice" style="color: var(--escrow-navy);">$62.00</strong>
           </div>
 
           <div class="summary-row">
-            <span>Seller proceeds:</span>
+            <span>Seller Proceeds:</span>
             <strong id="calcSellerProceeds" style="color: var(--escrow-green);">$12.00</strong>
           </div>
 
@@ -395,45 +380,40 @@
             <span>Total Buyer Payment:</span>
             <span id="calcTotalPayment">$62.00 USD</span>
           </div>
-          <p style="margin: 8px 0 0 0; font-size: 0.8rem; color: #94a3b8; text-align: right;">All prices are in USD. Taxes may apply.</p>
+          <p style="margin: 8px 0 0 0; font-size: 0.78rem; color: #94a3b8; text-align: right;">All prices are in USD. Taxes may apply.</p>
         </div>
 
         <!-- Seller Details -->
-        <div class="tx-section-header">Seller details</div>
+        <div class="tx-section-header">Seller Details</div>
 
         <form id="txStep2Form">
           <div class="form-group">
-            <label for="sellerEmail">Seller Email</label>
+            <label for="sellerEmail" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Seller Email</label>
             <input type="email" id="sellerEmail" class="form-control" placeholder="seller@example.com" value="seller.alex@example.com" required>
           </div>
 
           <div class="form-group">
-            <label for="sellerPhone">Seller Phone Number</label>
+            <label for="sellerPhone" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Seller Phone Number</label>
             <div class="phone-input-group">
               <span class="phone-prefix">+1</span>
               <input type="tel" id="sellerPhone" class="form-control phone-input" placeholder="(555) 234-5678" value="(555) 234-5678" required>
             </div>
           </div>
 
-          <div class="form-group" style="margin: 24px 0;">
+          <div class="form-group" style="margin: 20px 0;">
             <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-              <input type="checkbox" id="termsCheck" checked required style="margin-top: 4px; transform: scale(1.2);">
-              <span style="font-size: 0.9rem; color: #475569;">I have read and agree to the <a href="#" onclick="alert('Chrysalias General Terms & Privacy Policy.'); return false;" style="color: var(--escrow-navy); text-decoration: underline;">General Chrysalias Instructions</a> and <a href="#" onclick="alert('Chrysalias Privacy Policy'); return false;" style="color: var(--escrow-navy); text-decoration: underline;">Privacy Policy</a>.</span>
+              <input type="checkbox" id="termsCheck" checked required style="margin-top: 3px; accent-color: #3cb95d; width: 16px; height: 16px; flex-shrink: 0;">
+              <span style="font-size: 0.84rem; color: #475569; line-height: 1.35;">I have read and agree to the <a href="#" onclick="alert('Chrysalias General Terms & Privacy Policy.'); return false;" style="color: var(--escrow-navy); font-weight: 700; text-decoration: underline;">General Chrysalias Instructions</a> and <a href="#" onclick="alert('Chrysalias Privacy Policy'); return false;" style="color: var(--escrow-navy); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.</span>
             </label>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px;">
-            <button type="button" class="btn btn--secondary" onclick="showStep1()" style="padding: 12px 24px;">
+          <div class="action-btn-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 28px;">
+            <button type="button" class="btn btn--secondary" onclick="showStep1()" style="padding: 11px 20px; font-weight: 600; font-size: 0.9rem;">
               ← Back to Details
             </button>
-            <div style="display: flex; gap: 16px; align-items: center;">
-              <a href="dashboard.html" style="color: #64748b; font-weight: 600; font-size: 0.95rem; text-decoration: underline;">
-                Skip to Dashboard
-              </a>
-              <button type="submit" class="btn-escrow-green" style="padding: 14px 40px; font-size: 1.1rem;">
-                Start transaction
-              </button>
-            </div>
+            <button type="submit" class="btn-escrow-green" style="padding: 13px 36px; font-size: 1rem; font-weight: 700;">
+              Start Transaction
+            </button>
           </div>
         </form>
       </div>
