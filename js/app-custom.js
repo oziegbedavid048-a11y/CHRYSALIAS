@@ -248,37 +248,20 @@
 
       // -------- Public Pages Navigation Header --------
       var authButtons = realUser
-        ? '<a href="dashboard.html" id="chrys-auth-btn1" style="display:inline-flex;align-items:center;padding:8px 16px;border-radius:6px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Dashboard</a>' +
-          '<a href="#" id="chrys-logout-link" style="display:inline-flex;align-items:center;padding:8px 18px;border-radius:6px;background:#3cb95d;color:#ffffff;font-weight:700;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Log Out</a>'
-        : '<a href="login.html" style="display:inline-flex;align-items:center;padding:8px 16px;border-radius:6px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Log In</a>' +
-          '<a href="signup.html" style="display:inline-flex;align-items:center;padding:8px 18px;border-radius:6px;background:#3cb95d;color:#ffffff;font-weight:700;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Sign Up</a>';
-
-      // Hamburger menu ID
-      var menuId = 'chrys-mobile-menu';
-      var hamburgerBtn = 'chrys-hamburger';
+        ? '<a href="dashboard.html" id="chrys-auth-btn1" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Dashboard</a>' +
+          '<a href="#" id="chrys-logout-link" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:#3cb95d;border:1.5px solid #3cb95d;color:#ffffff;font-weight:700;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Log Out</a>'
+        : '<a href="login.html" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Log In</a>' +
+          '<a href="signup.html" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:#01426a;border:1.5px solid #01426a;color:#ffffff;font-weight:700;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Sign Up</a>';
 
       headerContainer.innerHTML =
         '<style>' +
-        '#chrys-header{position:relative;z-index:9999;width:100%;box-sizing:border-box;}' +
-        '#chrys-navbar{background:#ffffff;padding:0 20px;box-shadow:0 2px 10px rgba(0,0,0,0.08);border-bottom:1px solid #e8eef2;}' +
-        '#chrys-navbar-inner{max-width:1180px;margin:0 auto;display:flex;flex-direction:row;align-items:center;justify-content:space-between;height:64px;gap:16px;}' +
+        '#chrys-header{position:fixed;top:0;left:0;right:0;z-index:99999;width:100%;box-sizing:border-box;}' +
+        '#chrys-navbar{background:#ffffff;padding:0 24px;box-shadow:0 1px 16px rgba(0,0,0,0.09);border-bottom:1px solid #e8eef2;}' +
+        '#chrys-navbar-inner{max-width:1180px;margin:0 auto;display:flex;flex-direction:row;align-items:center;justify-content:space-between;height:66px;}' +
         '#chrys-logo{display:flex;flex-direction:row;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}' +
-        '#chrys-nav{display:flex;flex-direction:row;align-items:center;gap:28px;list-style:none;margin:0;padding:0;}' +
-        '#chrys-nav li a{color:#374151;text-decoration:none;font-size:0.88rem;font-weight:500;white-space:nowrap;transition:color 0.2s;}' +
-        '#chrys-nav li a:hover{color:#01426a;}' +
-        '#chrys-actions{display:flex;flex-direction:row;align-items:center;gap:10px;flex-shrink:0;}' +
-        '#' + hamburgerBtn + '{display:none;background:none;border:none;cursor:pointer;padding:4px;color:#01426a;}' +
-        '#' + menuId + '{display:none;background:#ffffff;padding:16px 20px;flex-direction:column;gap:14px;border-top:1px solid #e8eef2;}' +
-        '#' + menuId + ' a{color:#374151;text-decoration:none;font-size:0.9rem;font-weight:500;padding:6px 0;display:block;}' +
-        '#' + menuId + ' a:hover{color:#01426a;}' +
-        '#' + menuId + ' .mobile-auth-row{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;}' +
-        '@media(max-width:768px){' +
-          '#chrys-nav{display:none !important;}' +
-          '#chrys-actions{display:none !important;}' +
-          '#' + hamburgerBtn + '{display:flex !important;}' +
-        '}' +
-        '@media(min-width:769px){' +
-          '#' + menuId + '{display:none !important;}' +
+        '#chrys-actions{display:flex;flex-direction:row;align-items:center;gap:12px;flex-shrink:0;}' +
+        '@media(max-width:480px){' +
+          '#chrys-actions a{padding:8px 14px !important;font-size:0.82rem !important;}' +
         '}' +
         '</style>' +
         '<div id="chrys-header">' +
@@ -288,35 +271,18 @@
         '        <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:32px;width:32px;object-fit:contain;flex-shrink:0;">' +
         '        <span style="font-family:Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:#01426a;letter-spacing:-0.5px;white-space:nowrap;">CHRYSALIAS<span style="color:#3cb95d;">.COM</span></span>' +
         '      </a>' +
-        '      <ul id="chrys-nav">' +
-        '        <li><a href="index.html">What is Chrysalias?</a></li>' +
-        '        <li><a href="index.html">Protection Services</a></li>' +
-        '        <li><a href="index.html">Accounts</a></li>' +
-        '      </ul>' +
         '      <div id="chrys-actions">' + authButtons + '</div>' +
-        '      <button id="' + hamburgerBtn + '" aria-label="Open menu">' +
-        '        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>' +
-        '      </button>' +
-        '    </div>' +
-        '    <div id="' + menuId + '">' +
-        '      <a href="index.html">What is Chrysalias?</a>' +
-        '      <a href="index.html">Protection Services</a>' +
-        '      <a href="index.html">Accounts</a>' +
-        '      <div class="mobile-auth-row">' + authButtons + '</div>' +
         '    </div>' +
         '  </nav>' +
         '</div>';
 
 
+
+
       setTimeout(function () {
-        var hBtn = document.getElementById(hamburgerBtn);
-        var mMenu = document.getElementById(menuId);
-        if (hBtn && mMenu) {
-          hBtn.addEventListener('click', function () {
-            var isOpen = mMenu.style.display === 'flex';
-            mMenu.style.display = isOpen ? 'none' : 'flex';
-          });
-        }
+        // Offset body content below fixed header
+        document.body.style.paddingTop = '66px';
+
         var logoutLink = document.getElementById('chrys-logout-link');
         if (logoutLink) {
           logoutLink.addEventListener('click', function (e) {
@@ -325,6 +291,7 @@
           });
         }
       }, 50);
+
 
     },
 
