@@ -248,56 +248,87 @@
 
       // -------- Public Pages Navigation Header --------
       var authButtons = realUser
-        ? '<a href="dashboard.html" class="headerV2-btn headerV2-btn--login">Dashboard (' + realUser.name.split(' ')[0] + ')</a>' +
-          '<a href="#" class="headerV2-btn headerV2-btn--signup headerV2-logout-link">Log Out</a>'
-        : '<a href="login.html" class="headerV2-btn headerV2-btn--login">Log In</a>' +
-          '<a href="signup.html" class="headerV2-btn headerV2-btn--signup">Sign Up</a>';
+        ? '<a href="dashboard.html" id="chrys-auth-btn1" style="display:inline-flex;align-items:center;padding:8px 16px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,0.5);color:#ffffff;font-weight:600;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Dashboard</a>' +
+          '<a href="#" id="chrys-logout-link" style="display:inline-flex;align-items:center;padding:8px 18px;border-radius:6px;background:#3cb95d;color:#ffffff;font-weight:700;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Log Out</a>'
+        : '<a href="login.html" style="display:inline-flex;align-items:center;padding:8px 16px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,0.5);color:#ffffff;font-weight:600;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Log In</a>' +
+          '<a href="signup.html" style="display:inline-flex;align-items:center;padding:8px 18px;border-radius:6px;background:#3cb95d;color:#ffffff;font-weight:700;font-size:0.85rem;text-decoration:none;white-space:nowrap;transition:all 0.2s;">Sign Up</a>';
+
+      // Hamburger menu ID
+      var menuId = 'chrys-mobile-menu';
+      var hamburgerBtn = 'chrys-hamburger';
 
       headerContainer.innerHTML =
-        '<header class="headerV2">' +
-        '  <div class="headerV2-topBar">' +
-        '    <div class="headerV2-container section-container">' +
-        '      <div class="headerV2-topBar-inner">' +
-        '        <div class="headerV2-topBar-left">' +
-        '          <span>Licensed & Verified Payment Protection Platform</span>' +
-        '        </div>' +
-        '        <div class="headerV2-topBar-right">' +
-        '          <a href="https://chrysalias.com" class="headerV2-supportLink">Chrysalias.com</a>' +
-        '        </div>' +
-        '      </div>' +
-        '    </div>' +
+        '<style>' +
+        '#chrys-header{position:relative;z-index:9999;width:100%;box-sizing:border-box;}' +
+        '#chrys-topbar{background:#002b49;padding:6px 20px;font-size:0.75rem;color:#94a3b8;display:flex;justify-content:space-between;align-items:center;flex-wrap:nowrap;}' +
+        '#chrys-navbar{background:#01426a;padding:0 20px;box-shadow:0 2px 12px rgba(0,0,0,0.2);}' +
+        '#chrys-navbar-inner{max-width:1180px;margin:0 auto;display:flex;flex-direction:row;align-items:center;justify-content:space-between;height:64px;gap:16px;}' +
+        '#chrys-logo{display:flex;flex-direction:row;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}' +
+        '#chrys-nav{display:flex;flex-direction:row;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}' +
+        '#chrys-nav li a{color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.88rem;font-weight:500;white-space:nowrap;transition:color 0.2s;}' +
+        '#chrys-nav li a:hover{color:#ffffff;}' +
+        '#chrys-actions{display:flex;flex-direction:row;align-items:center;gap:10px;flex-shrink:0;}' +
+        '#' + hamburgerBtn + '{display:none;background:none;border:none;cursor:pointer;padding:4px;color:#ffffff;}' +
+        '#' + menuId + '{display:none;background:#01426a;padding:16px 20px;flex-direction:column;gap:14px;border-top:1px solid rgba(255,255,255,0.1);}' +
+        '#' + menuId + ' a{color:rgba(255,255,255,0.9);text-decoration:none;font-size:0.9rem;font-weight:500;padding:6px 0;display:block;}' +
+        '#' + menuId + ' .mobile-auth-row{display:flex;gap:10px;margin-top:6px;}' +
+        '@media(max-width:768px){' +
+          '#chrys-nav{display:none !important;}' +
+          '#chrys-actions{display:none !important;}' +
+          '#' + hamburgerBtn + '{display:flex !important;}' +
+        '}' +
+        '@media(min-width:769px){' +
+          '#' + menuId + '{display:none !important;}' +
+        '}' +
+        '</style>' +
+        '<div id="chrys-header">' +
+        '  <div id="chrys-topbar">' +
+        '    <span>Licensed &amp; Verified Payment Protection Platform</span>' +
+        '    <span style="color:#3cb95d;font-weight:600;">chrysalias.com</span>' +
         '  </div>' +
-        '  <div class="headerV2-primary">' +
-        '    <div class="headerV2-container section-container">' +
-        '      <div class="headerV2-inner">' +
-        '        <div class="headerV2-logoGroup">' +
-        '          <a href="index.html" class="headerV2-logo" title="Go to home page" style="display:flex;align-items:center;gap:10px;text-decoration:none;">' +
-        '            <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:34px;width:34px;border-radius:6px;object-fit:cover;">' +
-        '            <span style="font-family: Montserrat, sans-serif; font-weight:800; font-size:1.6rem; color:#ffffff; letter-spacing: -0.5px;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>' +
-        '          </a>' +
-        '          <nav class="headerV2-nav">' +
-        '            <ul class="headerV2-primaryNav">' +
-        '              <li><a href="index.html">What is Chrysalias?</a></li>' +
-        '              <li><a href="index.html">Protection Services</a></li>' +
-        '              <li><a href="index.html">Chrysalias Accounts</a></li>' +
-        '            </ul>' +
-        '          </nav>' +
-        '        </div>' +
-        '        <div class="headerV2-actions">' + authButtons + '</div>' +
-        '      </div>' +
+        '  <nav id="chrys-navbar">' +
+        '    <div id="chrys-navbar-inner">' +
+        '      <a id="chrys-logo" href="index.html" title="Chrysalias Home">' +
+        '        <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:32px;width:32px;object-fit:contain;flex-shrink:0;">' +
+        '        <span style="font-family:Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:#ffffff;letter-spacing:-0.5px;white-space:nowrap;">CHRYSALIAS<span style="color:#3cb95d;">.COM</span></span>' +
+        '      </a>' +
+        '      <ul id="chrys-nav">' +
+        '        <li><a href="index.html">What is Chrysalias?</a></li>' +
+        '        <li><a href="index.html">Protection Services</a></li>' +
+        '        <li><a href="index.html">Accounts</a></li>' +
+        '      </ul>' +
+        '      <div id="chrys-actions">' + authButtons + '</div>' +
+        '      <button id="' + hamburgerBtn + '" aria-label="Open menu">' +
+        '        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>' +
+        '      </button>' +
         '    </div>' +
-        '  </div>' +
-        '</header>';
+        '    <div id="' + menuId + '">' +
+        '      <a href="index.html">What is Chrysalias?</a>' +
+        '      <a href="index.html">Protection Services</a>' +
+        '      <a href="index.html">Accounts</a>' +
+        '      <div class="mobile-auth-row">' + authButtons + '</div>' +
+        '    </div>' +
+        '  </nav>' +
+        '</div>';
 
       setTimeout(function () {
-        var logoutLinks = headerContainer.querySelectorAll('.headerV2-logout-link');
-        logoutLinks.forEach(function (link) {
-          link.addEventListener('click', function (e) {
+        var hBtn = document.getElementById(hamburgerBtn);
+        var mMenu = document.getElementById(menuId);
+        if (hBtn && mMenu) {
+          hBtn.addEventListener('click', function () {
+            var isOpen = mMenu.style.display === 'flex';
+            mMenu.style.display = isOpen ? 'none' : 'flex';
+          });
+        }
+        var logoutLink = document.getElementById('chrys-logout-link');
+        if (logoutLink) {
+          logoutLink.addEventListener('click', function (e) {
             e.preventDefault();
             window.EscrowApp.logout();
           });
-        });
+        }
       }, 50);
+
     },
 
     renderFooter: function () {
