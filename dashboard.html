@@ -182,9 +182,9 @@
     /* User Directory Cards Grid */
     .user-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 14px;
-      margin-bottom: 18px;
+      margin-top: 16px;
     }
     .user-card {
       background: #ffffff;
@@ -203,12 +203,12 @@
     .user-card-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 10px;
     }
     .user-avatar {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: #002b49;
       color: #ffffff;
@@ -216,12 +216,13 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-family: 'Inter', sans-serif !important;
+      flex-shrink: 0;
     }
     .user-card-info h4 {
       margin: 0 0 2px 0;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: #002b49;
       font-family: 'Inter', sans-serif !important;
     }
@@ -229,6 +230,7 @@
       margin: 0;
       font-size: 0.78rem;
       color: #64748b;
+      word-break: break-all;
     }
 
     /* Filter & Controls */
@@ -269,6 +271,15 @@
         grid-template-columns: 1fr !important;
       }
     }
+    @media (max-width: 640px) {
+      .user-cards-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .metrics-grid-4 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+      }
+    }
   </style>
 </head>
 <body class="dashboard-page-bg">
@@ -277,7 +288,7 @@
   <div id="app-header"></div>
 
   <div class="dashboard-layout">
-    <!-- Sidebar Navigation with Upgraded Modern Icons -->
+    <!-- Sidebar Navigation with Modern Icons -->
     <aside class="dashboard-sidebar">
       <div class="sidebar-user">
         <div class="sidebar-user-name" id="sideUserName">Alex Mercer</div>
@@ -307,13 +318,13 @@
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" data-tab="users">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linecap="round" stroke-linejoin="round">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
               <circle cx="9" cy="7" r="4"></circle>
               <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
               <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
             </svg>
-            Users & Contacts
+            Users & Network
           </a>
         </li>
       </ul>
@@ -326,7 +337,7 @@
       <div class="dash-welcome-card">
         <div>
           <h1 id="welcomeGreeting">Good evening</h1>
-          <p>Welcome to your Chrysalias dashboard where you can have an overview of your transactions and activities.</p>
+          <p>Welcome to your Chrysalias dashboard where you can have an overview of your transactions, counterparties, and activities.</p>
         </div>
         <button class="btn-escrow-green" onclick="window.location.href='start-transaction.html'" style="padding: 8px 16px; font-weight: 700; font-size: 0.85rem;">
           + Start Transaction
@@ -336,33 +347,121 @@
       <!-- TAB 1: OVERVIEW -->
       <div id="tab-overview" class="tab-panel">
         
-        <!-- Users Overview Section -->
+        <!-- Redesigned Users & Network Overview Section -->
         <div class="dash-card">
           <div class="dash-card-header">
-            <h2 class="dash-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              Users Overview
-            </h2>
-            <a href="#" class="dash-link" onclick="switchTab('users'); return false;">View all users →</a>
+            <div>
+              <h2 class="dash-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Users & Network Overview
+              </h2>
+              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                Verified counterparties and business contacts linked to your active agreements
+              </div>
+            </div>
+            <a href="#" class="dash-link" onclick="switchTab('users'); return false;">Manage network →</a>
           </div>
 
+          <!-- 4 User Metric Cards -->
           <div class="metrics-grid-4">
             <div class="metric-card">
-              <div class="metric-label">Total Users in Network</div>
-              <div class="metric-value" id="overviewTotalUsers">2</div>
-              <span class="metric-badge badge-blue">Active Counterparties</span>
+              <div class="metric-label">Active Counterparties</div>
+              <div class="metric-value" id="overviewTotalUsers">3</div>
+              <span class="metric-badge badge-blue">Connected Accounts</span>
             </div>
             <div class="metric-card">
-              <div class="metric-label">New Users This Month</div>
-              <div class="metric-value">1</div>
+              <div class="metric-label">Active Buyers</div>
+              <div class="metric-value" style="color: #0284c7;">2</div>
+              <span class="metric-badge badge-blue">Funded Buyers</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active Sellers</div>
+              <div class="metric-value" style="color: #3cb95d;">1</div>
+              <span class="metric-badge badge-green">Payout Verified</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">KYC Compliance Rate</div>
+              <div class="metric-value" style="color: #002b49;">100%</div>
               <span class="metric-badge badge-green">Level 2 Verified</span>
             </div>
           </div>
+
+          <!-- Active Counterparty Cards Preview Grid -->
+          <div style="margin-top: 18px;">
+            <div style="font-size: 0.88rem; font-weight: 700; color: #002b49; margin-bottom: 10px;">Primary Deal Counterparties</div>
+            <div class="user-cards-grid">
+              
+              <!-- Counterparty 1 -->
+              <div class="user-card">
+                <div>
+                  <div class="user-card-header">
+                    <div class="user-avatar" style="background: #0284c7;">AI</div>
+                    <div class="user-card-info">
+                      <h4>Alex Investment Co</h4>
+                      <p>alex.buyer@investments.co</p>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
+                    <span class="metric-badge badge-blue">Buyer</span>
+                    <span class="metric-badge badge-green">✓ Level 2 Verified</span>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">
+                  <span style="color: #64748b;">Deal: <strong>ESC-892401</strong></span>
+                  <span style="color: #002b49; font-weight: 800;">$15,500.00</span>
+                </div>
+              </div>
+
+              <!-- Counterparty 2 -->
+              <div class="user-card">
+                <div>
+                  <div class="user-card-header">
+                    <div class="user-avatar" style="background: #3cb95d;">MC</div>
+                    <div class="user-card-info">
+                      <h4>Motor Classics Dealer</h4>
+                      <p>motorclassics@dealers.com</p>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
+                    <span class="metric-badge badge-blue">Seller</span>
+                    <span class="metric-badge badge-green">✓ Level 2 Verified</span>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">
+                  <span style="color: #64748b;">Deal: <strong>ESC-891904</strong></span>
+                  <span style="color: #002b49; font-weight: 800;">$178,000.00</span>
+                </div>
+              </div>
+
+              <!-- Counterparty 3 -->
+              <div class="user-card">
+                <div>
+                  <div class="user-card-header">
+                    <div class="user-avatar" style="background: #002b49;">TI</div>
+                    <div class="user-card-info">
+                      <h4>Tech Imports Wholesale</h4>
+                      <p>techimports.us@gmail.com</p>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
+                    <span class="metric-badge badge-blue">Buyer</span>
+                    <span class="metric-badge badge-green">✓ Verified Buyer</span>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">
+                  <span style="color: #64748b;">Deal: <strong>ESC-889021</strong></span>
+                  <span style="color: #3cb95d; font-weight: 800;">$4,200 (Completed)</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
 
         <!-- Transactions Overview Section -->
@@ -537,7 +636,7 @@
           <div class="metrics-grid-4" style="margin-bottom: 18px;">
             <div class="metric-card">
               <div class="metric-label">Total Network Users</div>
-              <div class="metric-value">2</div>
+              <div class="metric-value">3</div>
               <span class="metric-badge badge-blue">Connected Accounts</span>
             </div>
             <div class="metric-card">
@@ -547,7 +646,7 @@
             </div>
             <div class="metric-card">
               <div class="metric-label">Active Buyers</div>
-              <div class="metric-value" style="color: #0284c7;">1</div>
+              <div class="metric-value" style="color: #0284c7;">2</div>
               <span class="metric-badge badge-blue">Funded Accounts</span>
             </div>
             <div class="metric-card">
@@ -560,6 +659,7 @@
           <!-- User Directory Cards Grid -->
           <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Counterparty Profiles</div>
           <div class="user-cards-grid">
+            
             <div class="user-card">
               <div>
                 <div class="user-card-header">
@@ -583,26 +683,47 @@
             <div class="user-card">
               <div>
                 <div class="user-card-header">
-                  <div class="user-avatar" style="background: #0284c7;">DB</div>
+                  <div class="user-avatar" style="background: #0284c7;">AI</div>
                   <div class="user-card-info">
-                    <h4>David Buyer</h4>
-                    <p>buyer@example.com</p>
+                    <h4>Alex Investment Co</h4>
+                    <p>alex.buyer@investments.co</p>
                   </div>
                 </div>
                 <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
                   <span class="metric-badge badge-blue">Buyer Counterparty</span>
-                  <span class="metric-badge badge-green">Email Verified</span>
+                  <span class="metric-badge badge-green">Level 2 Verified</span>
                 </div>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
-                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">1 Transaction</span>
+                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">1 Transaction ($15,500)</span>
                 <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty details active')">View Activity</button>
               </div>
             </div>
+
+            <div class="user-card">
+              <div>
+                <div class="user-card-header">
+                  <div class="user-avatar" style="background: #3cb95d;">MC</div>
+                  <div class="user-card-info">
+                    <h4>Motor Classics Dealer</h4>
+                    <p>motorclassics@dealers.com</p>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
+                  <span class="metric-badge badge-blue">Seller Counterparty</span>
+                  <span class="metric-badge badge-green">Level 2 Verified</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">1 Transaction ($178,000)</span>
+                <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty details active')">View Activity</button>
+              </div>
+            </div>
+
           </div>
 
           <!-- User Directory Table -->
-          <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Full User Directory</div>
+          <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-top: 20px; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Full User Directory</div>
           <div class="responsive-table-wrapper">
             <table class="tx-table" style="width: 100%; border-collapse: collapse; min-width: 580px;">
               <thead>
@@ -627,16 +748,28 @@
                   <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
                   <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Profile active')">View Profile</button></td>
                 </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 12px 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #0284c7;">AI</div>
+                      <strong style="font-size: 0.88rem;">Alex Investment Co</strong>
+                    </div>
+                  </td>
+                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">alex.buyer@investments.co</td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Buyer</span></td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
+                  <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty active')">View Profile</button></td>
+                </tr>
                 <tr>
                   <td style="padding: 12px 14px;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #0284c7;">DB</div>
-                      <strong style="font-size: 0.88rem;">David Buyer</strong>
+                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #3cb95d;">MC</div>
+                      <strong style="font-size: 0.88rem;">Motor Classics Dealer</strong>
                     </div>
                   </td>
-                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">buyer@example.com</td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Buyer</span></td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Verified</span></td>
+                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">motorclassics@dealers.com</td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Seller</span></td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
                   <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty active')">View Profile</button></td>
                 </tr>
               </tbody>
