@@ -388,7 +388,7 @@
         '      </ul></div>' +
         '  </div>' +
         '  <div style="max-width:1120px;margin:40px auto 0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;text-align:center;color:#64748b;">' +
-        '    &copy; 2026 Chrysalias.com. All rights reserved. Chrysalias is a licensed escrow agent.' +
+        '    &copy; 2026 Chrysalias.com. All rights reserved. Chrysalias is a licensed payment protection platform.' +
         '  </div>' +
         '</footer>';
     }
