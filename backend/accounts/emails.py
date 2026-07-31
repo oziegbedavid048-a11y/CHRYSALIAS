@@ -39,49 +39,59 @@ def _send_email_safe(subject, recipient_email, text_content, html_content):
         return False
 
 
-def send_welcome_email(user_email, user_name):
-    """1. Sent to new user after registration"""
-    subject = "Welcome to Chrysalias.com — Account Created"
-    
+def send_account_confirmation_email(user_email, user_name):
+    """Sent to new user immediately after registration — prompts them to verify"""
+    subject = "Confirm Your Chrysalias Account"
+
     text_content = f"""
 Hello {user_name},
 
-Welcome to Chrysalias.com! Your account has been successfully created.
+Your Chrysalias.com account has been created successfully.
 
-You can now start secure transactions, manage payments, and utilize our licensed payment protection platform.
+Please note that your account is now active and ready to use. You can sign in immediately at:
+https://chrysalias.com/login.html
 
-Log in to your dashboard: https://chrysalias.com/login.html
+If you did not create this account, please contact us at info@chrysalias.com.
 
 Best regards,
 The Chrysalias Team
 """
-    
+
     html_content = f"""
 <div style="max-width: 600px; margin: 0 auto; font-family: 'Inter', system-ui, sans-serif; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 8px;">
   {EMAIL_HEADER_HTML}
   <div style="padding: 32px 24px; background: #ffffff;">
-    <h2 style="color: #002b49; font-size: 1.35rem; margin-top: 0;">Welcome aboard, {user_name}!</h2>
-    <p style="font-size: 0.95rem; line-height: 1.5; color: #334155;">
-      Thank you for registering with <strong>Chrysalias.com</strong>. Your account is active and ready for secure payment protection transactions.
+    <h2 style="color: #002b49; font-size: 1.35rem; margin-top: 0;">Account Created Successfully!</h2>
+    <p style="font-size: 0.95rem; line-height: 1.6; color: #334155;">
+      Hello <strong>{user_name}</strong>,<br><br>
+      Welcome to <strong>Chrysalias.com</strong>! Your account has been created and is ready to use.
     </p>
     <div style="background: #f0fdf4; border-left: 4px solid #3cb95d; padding: 16px; margin: 20px 0; border-radius: 4px;">
-      <strong style="color: #166534;">Account Features Available:</strong>
+      <strong style="color: #166534;">Your account is now active. You can:</strong>
       <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 0.88rem; color: #166534;">
-        <li>Protected Buyer & Seller Escrow Agreements</li>
-        <li>Partnered Co-Funding Split Payments</li>
-        <li>Crypto (BTC / USDT) & Card Payment Gateways</li>
+        <li>Create and manage secure escrow transactions</li>
+        <li>Set up partnered co-funding payments</li>
+        <li>Track all your deals in real time</li>
       </ul>
     </div>
     <div style="text-align: center; margin-top: 28px;">
-      <a href="https://chrysalias.com/login.html" style="background-color: #3cb95d; color: #ffffff; padding: 12px 28px; text-decoration: none; font-weight: 700; border-radius: 6px; display: inline-block;">
-        Sign In to Your Dashboard
+      <a href="https://chrysalias.com/login.html" style="background-color: #3cb95d; color: #ffffff; padding: 12px 32px; text-decoration: none; font-weight: 700; border-radius: 6px; display: inline-block; font-size: 1rem;">
+        Sign In to Your Account
       </a>
     </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 24px; text-align: center;">
+      If you did not create this account, please contact <a href="mailto:info@chrysalias.com" style="color: #01426a;">info@chrysalias.com</a>.
+    </p>
   </div>
   {EMAIL_FOOTER_HTML}
 </div>
 """
     return _send_email_safe(subject, user_email, text_content, html_content)
+
+
+def send_welcome_email(user_email, user_name):
+    """Legacy welcome email — kept for compatibility"""
+    return send_account_confirmation_email(user_email, user_name)
 
 
 def send_new_transaction_email(user_email, user_name, tx_data):

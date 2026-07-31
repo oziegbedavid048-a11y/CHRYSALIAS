@@ -59,23 +59,25 @@ class RegisterView(View):
             password=password,
             full_name=full_name,
             kyc_status='level_1',
-            is_verified=True,
+            is_verified=False,  # User must verify email before full access
+            is_active=True,     # Account is active so login can work after verification
         )
         UserProfile.objects.get_or_create(user=user)
 
         token, _ = Token.objects.get_or_create(user=user)
         login(request, user)
 
-        # Trigger welcome email via ZeptoMail
+        # Trigger account confirmation email via ZeptoMail
         try:
-            from .emails import send_welcome_email
-            send_welcome_email(user.email, user.display_name)
-        except Exception:
-            pass
+            from .emails import send_account_confirmation_email
+            send_account_confirmation_email(user.email, user.display_name)
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Confirmation email failed: {e}")
 
         return json_response({
             'success': True,
-            'token': token.key,
+            'message': 'Account created successfully. Please check your email to verify your account.',
             'user': {
                 'id':        user.id,
                 'email':     user.email,
