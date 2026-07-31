@@ -91,7 +91,8 @@
         const fullName = `${firstName} ${lastName}`.trim() || 'New User';
 
         window.EscrowApp.setUser({ name: fullName, email: email });
-        window.EscrowApp.showToast('Account created successfully! Welcome aboard.');
+        window.EscrowApp.sendEmail('welcome', email, { name: fullName });
+        window.EscrowApp.showToast('Account created successfully! Confirmation email sent.');
 
         setTimeout(function () {
           window.location.href = 'dashboard.html';

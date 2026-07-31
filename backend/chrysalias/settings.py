@@ -125,3 +125,14 @@ CSRF_TRUSTED_ORIGINS = [
 # Session settings
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+
+# ZeptoMail SMTP Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.zeptomail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'emailapikey'
+EMAIL_HOST_PASSWORD = 'wSsVR61y/RWkW/p4yTOpdrhuyAtQB16kEkWp3lP36n+tH6iU8Mc6xRfJDFD0H/gWQDI8EDQbpe8hm0sC0WULhth7mA4ACCiF9mqRe1U4J3x17qnvhDzIX2VfkBSJLoIJzg1imGNnEcsr+g=='
+DEFAULT_FROM_EMAIL = 'Chrysalias Support <noreply@chrysalias.com>'
+

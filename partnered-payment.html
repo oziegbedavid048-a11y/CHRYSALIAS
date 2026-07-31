@@ -544,13 +544,27 @@
       const spinner = document.getElementById('loadingSpinner');
       spinner.classList.add('active');
 
+      // Trigger Payment Received Email Notification via ZeptoMail
+      const user = (window.EscrowApp && window.EscrowApp.getUser()) || { name: 'Alex Mercer', email: 'alex.seller@chrysalias-demo.com' };
+      const txTitle = document.getElementById('txTitle') ? document.getElementById('txTitle').textContent : 'Partnered Payment Item';
+      const txId = document.getElementById('txIdDisplay') ? document.getElementById('txIdDisplay').textContent : 'ESC-892401';
+      const amountPaid = 7750.00;
+
+      if (window.EscrowApp && window.EscrowApp.sendEmail) {
+        window.EscrowApp.sendEmail('payment_confirmed', user.email, {
+          name: user.name,
+          amount_paid: amountPaid,
+          tx_data: { id: txId, title: txTitle, amount: amountPaid }
+        });
+      }
+
       // 3-Second Loading Timer
       setTimeout(function() {
         spinner.classList.remove('active');
         document.getElementById('drawerFormView').style.display = 'none';
         document.getElementById('drawerSuccessView').style.display = 'block';
         document.getElementById('cryptoDrawerOverlay').classList.add('active');
-        window.EscrowApp.showToast('Payment submitted for verification!');
+        window.EscrowApp.showToast('Payment submitted! Confirmation email sent.');
       }, 3000);
     }
   </script>

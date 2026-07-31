@@ -576,21 +576,45 @@
       existingTx.unshift(newTx);
       localStorage.setItem('escrow_transactions', JSON.stringify(existingTx));
 
+      // Dispatch Email Notifications via ZeptoMail SMTP backend
+      const currentUser = (window.EscrowApp && window.EscrowApp.getUser()) || { name: 'Alex Mercer', email: 'alex.seller@chrysalias-demo.com' };
+      const ownerName = currentUser.name || 'Alex Mercer';
+      const userEmail = currentUser.email || 'alex.seller@chrysalias-demo.com';
+
+      // 1. Send Transaction Creation Confirmation Email to User
+      if (window.EscrowApp && window.EscrowApp.sendEmail) {
+        window.EscrowApp.sendEmail('tx_created', userEmail, {
+          name: ownerName,
+          tx_data: { id: txId, title: title, amount: buyerPrice, role: role, inspectionPeriod: inspectionDays }
+        });
+      }
+
       if (isPartneredPayment) {
-        if (window.EscrowApp && window.EscrowApp.showToast) {
-          window.EscrowApp.showToast('Partnered Transaction Created! Redirecting to Partnered Payment Portal...');
-        }
-        const currentUser = (window.EscrowApp && window.EscrowApp.getUser()) || { name: 'Alex Mercer' };
-        const ownerName = currentUser.name || 'Alex Mercer';
         const partnerAmount = buyerPrice;
         const remainingAmount = Math.round(buyerPrice * 0.5);
+        const loc = window.location.href;
+        const basePath = loc.substring(0, loc.lastIndexOf('/') + 1);
+        const partnerLink = basePath + 'partnered-payment.html?id=' + encodeURIComponent(txId) + '&title=' + encodeURIComponent(title) + '&owner=' + encodeURIComponent(ownerName) + '&amount=' + partnerAmount + '&remaining=' + remainingAmount;
+
+        // 2. Send Partnered Payment Invitation Email to Partner
+        if (window.EscrowApp && window.EscrowApp.sendEmail && partnerEmail) {
+          window.EscrowApp.sendEmail('partnered_invitation', partnerEmail, {
+            initiator_name: ownerName,
+            partner_link: partnerLink,
+            tx_data: { id: txId, title: title, amount: buyerPrice, partnerContribution: partnerContribution }
+          });
+        }
+
+        if (window.EscrowApp && window.EscrowApp.showToast) {
+          window.EscrowApp.showToast('Partnered Transaction Created! Email invitation sent to partner.');
+        }
 
         setTimeout(() => {
           window.location.href = 'partnered-payment.html?id=' + encodeURIComponent(txId) + '&title=' + encodeURIComponent(title) + '&owner=' + encodeURIComponent(ownerName) + '&amount=' + partnerAmount + '&remaining=' + remainingAmount;
         }, 1200);
       } else {
         if (window.EscrowApp && window.EscrowApp.showToast) {
-          window.EscrowApp.showToast('Transaction created successfully! Redirecting to dashboard...');
+          window.EscrowApp.showToast('Transaction created successfully! Confirmation email sent.');
         }
         setTimeout(() => {
           window.location.href = 'dashboard.html';

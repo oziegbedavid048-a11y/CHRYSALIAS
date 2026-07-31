@@ -66,6 +66,13 @@ class RegisterView(View):
         token, _ = Token.objects.get_or_create(user=user)
         login(request, user)
 
+        # Trigger welcome email via ZeptoMail
+        try:
+            from .emails import send_welcome_email
+            send_welcome_email(user.email, user.display_name)
+        except Exception:
+            pass
+
         return json_response({
             'success': True,
             'token': token.key,
@@ -152,3 +159,46 @@ class MeView(View):
                 'is_staff':  user.is_staff,
             }
         })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SendEmailNotificationView(View):
+    """API Endpoint to dispatch system emails (welcome, tx_created, partnered_invitation, payment_confirmed)"""
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            return json_response({'error': 'Invalid JSON.'}, 400)
+
+        email_type = data.get('type')
+        email = data.get('email')
+        name = data.get('name', 'Valued Customer')
+        tx_data = data.get('tx_data', {})
+
+        if not email_type or not email:
+            return json_response({'error': 'type and email are required.'}, 400)
+
+        from .emails import (
+            send_welcome_email,
+            send_new_transaction_email,
+            send_partnered_payment_invitation,
+            send_payment_confirmation_email,
+        )
+
+        sent = False
+        if email_type == 'welcome':
+            sent = send_welcome_email(email, name)
+        elif email_type == 'tx_created':
+            sent = send_new_transaction_email(email, name, tx_data)
+        elif email_type == 'partnered_invitation':
+            initiator = data.get('initiator_name', 'A Chrysalias User')
+            partner_link = data.get('partner_link', '')
+            sent = send_partnered_payment_invitation(email, initiator, tx_data, partner_link)
+        elif email_type == 'payment_confirmed':
+            amount_paid = data.get('amount_paid', tx_data.get('amount', 0.0))
+            sent = send_payment_confirmation_email(email, name, tx_data, amount_paid)
+        else:
+            return json_response({'error': 'Unknown email type.'}, 400)
+
+        return json_response({'success': sent, 'email': email, 'type': email_type})
+

@@ -84,6 +84,24 @@
       }
     },
 
+    sendEmail: function (type, email, extraData) {
+      if (!email) return;
+      var user = this.getUser() || { name: 'Valued Customer', email: email };
+      var payload = Object.assign({
+        type: type,
+        email: email,
+        name: user.name || 'Valued Customer',
+      }, extraData || {});
+
+      try {
+        fetch(API_BASE + '/auth/send-email/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(function () {});
+      } catch (e) {}
+    },
+
     fetchBackendTransactions: async function () {
       try {
         const resp = await fetch(API_BASE + '/transactions/');
