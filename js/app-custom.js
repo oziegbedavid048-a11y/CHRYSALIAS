@@ -166,14 +166,11 @@
 
       var path = window.location.pathname.toLowerCase();
 
-      // Suppress header on auth, transaction pages, and index (which has its own built-in nav)
+      // Suppress header only on auth & transaction wizard pages
       if (
         path.includes('login.html') ||
         path.includes('signup.html') ||
-        path.includes('start-transaction.html') ||
-        path === '/' ||
-        path.endsWith('index.html') ||
-        path === ''
+        path.includes('start-transaction.html')
       ) {
         headerContainer.innerHTML = '';
         return;
