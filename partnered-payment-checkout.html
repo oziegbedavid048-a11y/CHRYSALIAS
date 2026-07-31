@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Partnered Payment Checkout | Chrysalias.com</title>
+  <title>Complete Partnered Payment | Chrysalias.com</title>
   <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
   <link href="css/app-custom.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
@@ -17,7 +17,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Top Header with Account Owner Profile */
+    /* Top Header */
     .partner-header {
       background: #002b49;
       color: #ffffff;
@@ -28,33 +28,41 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.12);
       gap: 12px;
     }
+    .header-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .header-logo-icon {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+    }
     .header-logo-text {
-      font-family: 'Inter', sans-serif !important;
       font-weight: 800;
       font-size: 1.35rem;
       color: #ffffff;
       letter-spacing: -0.5px;
-      text-decoration: none;
-      white-space: nowrap;
+      line-height: 1;
     }
     .header-logo-text span {
       color: #3cb95d;
     }
 
-    /* Owner Profile Badge */
+    /* Owner Badge */
     .owner-profile-badge {
       display: flex;
       align-items: center;
       gap: 10px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 5px 12px;
+      padding: 5px 14px;
       border-radius: 30px;
-      margin-left: auto;
     }
     .owner-avatar {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: #3cb95d;
       color: #ffffff;
@@ -62,30 +70,26 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 0.82rem;
-      flex-shrink: 0;
+      font-size: 0.8rem;
     }
     .owner-info {
       display: flex;
       flex-direction: column;
     }
     .owner-name {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: #ffffff;
-      line-height: 1.2;
-      white-space: nowrap;
     }
     .owner-tag {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #cbd5e1;
-      white-space: nowrap;
     }
 
-    /* Container & Layout */
+    /* Container */
     .partner-container {
-      max-width: 740px;
-      margin: 28px auto;
+      max-width: 780px;
+      margin: 24px auto;
       padding: 0 16px;
       box-sizing: border-box;
     }
@@ -93,60 +97,149 @@
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
-      padding: 26px 28px;
+      padding: 24px 26px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       box-sizing: border-box;
     }
 
-    /* Payment Tabs & Ultra-Responsive Buttons */
-    .payment-tab-btn {
-      flex: 1;
-      min-width: 100px;
-      padding: 10px 12px;
-      border: 1px solid #cbd5e1;
+    /* Payment Method Selection Grid */
+    .pay-methods-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .pay-method-card {
+      border: 2px solid #e2e8f0;
       background: #ffffff;
-      color: #475569;
-      font-weight: 600;
-      font-size: clamp(0.78rem, 3.2vw, 0.88rem);
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .payment-tab-btn.active, .payment-tab-btn:hover {
-      background: #002b49;
-      color: #ffffff;
-      border-color: #002b49;
-    }
-
-    .responsive-pay-btn {
-      width: 100% !important;
-      padding: 13px 16px !important;
-      font-size: clamp(0.88rem, 3.8vw, 1rem) !important;
-      font-weight: 700 !important;
-      border-radius: 8px !important;
-      box-shadow: 0 4px 14px rgba(60,185,93,0.3) !important;
-      text-align: center !important;
-      line-height: 1.35 !important;
-      white-space: normal !important;
-      word-wrap: break-word !important;
-      overflow-wrap: break-word !important;
-      box-sizing: border-box !important;
-      display: block !important;
-      margin: 0 auto !important;
-    }
-
-    /* Success Alert */
-    .success-alert-box {
-      display: none;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
       border-radius: 12px;
-      padding: 26px 20px;
-      margin-top: 24px;
-      text-align: center;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .pay-method-card.selected {
+      border-color: #3cb95d;
+      background: #f0fdf4;
+    }
+    .pay-method-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #002b49;
+    }
+    .pay-method-card.selected .pay-method-icon {
+      background: #3cb95d;
+      color: #ffffff;
+    }
+
+    /* Crypto Selection Box */
+    .crypto-select-box {
+      margin-top: 16px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    /* Bottom Drawer Modal */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 43, 73, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .drawer-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .drawer-modal {
+      background: #ffffff;
+      width: 100%;
+      max-width: 580px;
+      border-radius: 20px 20px 0 0;
+      padding: 24px;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.25);
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .drawer-overlay.active .drawer-modal {
+      transform: translateY(0);
+    }
+    .drawer-handle {
+      width: 40px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 3px;
+      margin: 0 auto 16px auto;
+    }
+
+    /* Copy Button */
+    .copy-address-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 6px 12px;
+      margin-top: 8px;
+      gap: 10px;
+    }
+    .copy-address-text {
+      flex: 1;
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #0f172a;
+      word-break: break-all;
+    }
+
+    /* Centered Spinner Overlay */
+    .spinner-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 43, 73, 0.8);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .spinner-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .spin-ring {
+      width: 54px;
+      height: 54px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top: 5px solid #3cb95d;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin-bottom: 16px;
     }
 
     @media (max-width: 640px) {
@@ -156,35 +249,26 @@
       .header-logo-text {
         font-size: 1.15rem;
       }
-      .owner-profile-badge {
-        padding: 4px 10px;
-        gap: 6px;
-      }
-      .owner-avatar {
-        width: 28px;
-        height: 28px;
-        font-size: 0.75rem;
-      }
-      .owner-name {
-        font-size: 0.78rem;
-      }
-      .owner-tag {
-        display: none;
+      .pay-methods-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
       }
       .partner-card {
-        padding: 18px 16px;
-        border-radius: 12px;
+        padding: 18px 16px !important;
+      }
+      .drawer-modal {
+        padding: 20px 16px !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header with Brand Logo & Account Owner Profile on the Right -->
+  <!-- Top Header -->
   <header class="partner-header">
-    <a href="index.html" class="header-logo-text" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 28px; width: 28px; border-radius: 6px; object-fit: cover;">
-      CHRYSALIAS<span>.COM</span>
+    <a href="index.html" class="header-logo-link">
+      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" class="header-logo-icon">
+      <span class="header-logo-text">CHRYSALIAS<span>.COM</span></span>
     </a>
 
     <div class="owner-profile-badge">
@@ -197,134 +281,242 @@
   </header>
 
   <div class="partner-container">
-    
+
     <!-- Payment Summary Box -->
-    <div class="partner-card" style="background: #f8fafc; border-color: #cbd5e1; margin-bottom: 20px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div class="partner-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
         <div>
-          <span style="font-size: 0.78rem; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 4px 12px; border-radius: 20px;" id="checkoutTxId">TX-892014</span>
-          <h2 style="margin: 6px 0 2px 0; font-size: clamp(1.2rem, 4.5vw, 1.45rem); color: #002b49; font-weight: 800;" id="checkoutTitle">FintechDomain.com</h2>
-          <p style="margin: 0; color: #64748b; font-size: 0.84rem;">Partnered Chrysalias Payment Checkout</p>
+          <span style="background: #002b49; color: #ffffff; font-size: 0.72rem; padding: 3px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase;">Co-Buyer Payment Checkout</span>
+          <h1 id="txTitle" style="font-size: 1.35rem; font-weight: 800; color: #002b49; margin: 8px 0 4px 0;">Premium Domain Transfer (FintechApp.com)</h1>
+          <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Transaction ID: <strong id="txIdDisplay" style="color: #002b49;">ESC-892401</strong></p>
         </div>
         <div style="text-align: right;">
-          <div style="font-size: 0.78rem; color: #1e40af; font-weight: 700;">Remaining Balance to Pay</div>
-          <div style="font-size: clamp(1.25rem, 5vw, 1.55rem); font-weight: 800; color: #1d4ed8;" id="checkoutRemaining">$2,000.00 USD</div>
+          <div style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Your Share to Pay</div>
+          <div id="txShareAmount" style="font-size: 1.4rem; font-weight: 800; color: #002b49;">USD $7,750.00</div>
         </div>
       </div>
     </div>
 
-    <!-- Main Payment Checkout Form Card -->
-    <div class="partner-card" id="paymentMethodCard">
-      <h3 style="margin: 0 0 8px 0; color: #002b49; font-weight: 700; font-size: 1.2rem;">Select Payment Method</h3>
-      <p style="margin: 0 0 18px 0; color: #64748b; font-size: 0.88rem;">Complete the remaining <strong style="color: #002b49;" id="cardPayAmount">$2,000.00 USD</strong> deposit into Chrysalias protection.</p>
+    <!-- Select Payment Means Card -->
+    <div class="partner-card">
+      <h2 style="font-size: 1.15rem; font-weight: 800; color: #002b49; margin: 0 0 6px 0;">Choose Payment Method</h2>
+      <p style="font-size: 0.84rem; color: #64748b; margin: 0 0 16px 0;">Complete your share via Card or Crypto.</p>
 
-      <!-- Payment Tabs -->
-      <div style="display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap;">
-        <button class="payment-tab-btn active" onclick="switchPayTab('card', this)">💳 Card</button>
-        <button class="payment-tab-btn" onclick="switchPayTab('wire', this)">🏦 Wire Transfer</button>
-        <button class="payment-tab-btn" onclick="switchPayTab('crypto', this)">🪙 USDT / Crypto</button>
+      <!-- 2 Payment Means Only: Card or Crypto -->
+      <div class="pay-methods-grid">
+        <!-- Option 1: Card -->
+        <div class="pay-method-card" id="cardOption" onclick="selectPaymentMethod('card')">
+          <div class="pay-method-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #002b49;">Credit / Debit Card</div>
+            <div style="font-size: 0.78rem; color: #64748b;">Visa, Mastercard, Amex</div>
+          </div>
+        </div>
+
+        <!-- Option 2: Crypto -->
+        <div class="pay-method-card selected" id="cryptoOption" onclick="selectPaymentMethod('crypto')">
+          <div class="pay-method-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 9h6M9 15h6"/></svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #002b49;">Cryptocurrency</div>
+            <div style="font-size: 0.78rem; color: #64748b;">Bitcoin (BTC) & USDT</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Payment Form -->
-      <form id="partnerPayForm" onsubmit="executePartnerPayment(event)">
-        <div id="payFormCardTab">
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">Cardholder Name</label>
-            <input type="text" class="form-control" placeholder="Partner Full Name" value="David Co-Buyer" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
-          </div>
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">Card Number</label>
-            <input type="text" class="form-control" placeholder="4532 •••• •••• 8891" value="4532 •••• •••• 8891" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
-            <div>
-              <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">Expiry Date</label>
-              <input type="text" class="form-control" placeholder="MM/YY" value="08/28" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
-            </div>
-            <div>
-              <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">CVC / CVV</label>
-              <input type="password" class="form-control" placeholder="123" value="123" maxlength="4" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
-            </div>
-          </div>
-        </div>
-
-        <div id="payFormWireTab" style="display: none; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-          <div style="font-weight: 700; color: #002b49; margin-bottom: 6px; font-size: 0.95rem;">Chrysalias Wire Deposit Instructions</div>
-          <div style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">
-            Bank Name: Chase Bank N.A.<br>
-            Account Name: Chrysalias Services Inc.<br>
-            Account Number: 9817263541<br>
-            Routing / ABA: 021000021<br>
-            Reference: <strong style="color: #002b49;" id="wireRefCode">TX-892014-PARTNER</strong>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-escrow-green responsive-pay-btn" id="paySubmitBtn">
-          <span class="btn-text-main">Pay Remaining Balance Now</span>
+      <!-- Card Form -->
+      <div id="cardSection" style="display: none; margin-top: 20px;">
+        <button type="button" class="btn-escrow-navy" style="width: 100%; padding: 12px; font-weight: 700;" onclick="window.EscrowApp.showToast('Redirecting to Card Payment Gateway...')">
+          Proceed with Card Payment
         </button>
-      </form>
-
-      <!-- Instant Live Success Banner -->
-      <div class="success-alert-box" id="successAlertBox">
-        <div style="width: 52px; height: 52px; border-radius: 50%; background: #dcfce7; color: #166534; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; margin: 0 auto 14px auto;">✓</div>
-        <h3 style="margin: 0 0 6px 0; color: #166534; font-size: 1.25rem; font-weight: 800;">Payment Successful — 100% Fully Funded!</h3>
-        <p style="margin: 0 0 18px 0; color: #15803d; font-size: 0.9rem; line-height: 1.45;">Your partnered payment of <strong id="successPaidAmount">$2,000.00 USD</strong> has been received and verified. The transaction is now 100% fully funded in Chrysalias protection and waiting for the seller to confirm dispatch.</p>
-        <button class="btn-escrow-navy" onclick="window.location.href='dashboard.html'" style="padding: 10px 22px; font-size: 0.88rem; font-weight: 700;">Return to Dashboard</button>
       </div>
 
+      <!-- Crypto Dropdown Selector -->
+      <div id="cryptoSection" style="margin-top: 20px;">
+        <div class="crypto-select-box">
+          <label for="cryptoDropdown" style="font-size: 0.85rem; font-weight: 700; color: #002b49; display: block; margin-bottom: 8px;">
+            Choose Cryptocurrency:
+          </label>
+          <select id="cryptoDropdown" class="form-control" style="height: 48px; font-weight: 600;" onchange="onCryptoChange()">
+            <option value="BTC" selected>Bitcoin (BTC) — Instant Transfer</option>
+            <option value="USDT">Tether USD (USDT - TRC20 / ERC20)</option>
+          </select>
+
+          <button type="button" class="btn-escrow-green" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px; font-weight: 700; margin-top: 16px;" onclick="openCryptoDrawer()">
+            Pay with Crypto (Show Address & QR)
+          </button>
+        </div>
+      </div>
     </div>
+
+  </div>
+
+  <!-- Bottom Drawer Modal for Crypto Payment -->
+  <div class="drawer-overlay" id="cryptoDrawerOverlay">
+    <div class="drawer-modal">
+      <div class="drawer-handle" onclick="closeCryptoDrawer()" style="cursor: pointer;"></div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="font-weight: 800; font-size: 1.15rem; color: #002b49; display: flex; align-items: center; gap: 8px;">
+          <span id="drawerCryptoTitle">Bitcoin (BTC) Payment</span>
+        </div>
+        <button type="button" onclick="closeCryptoDrawer()" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; padding: 0;">&times;</button>
+      </div>
+
+      <!-- Drawer Content View -->
+      <div id="drawerFormView">
+        <!-- QR Code Image -->
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 12px; display: inline-block;">
+            <img id="drawerQrCode" src="build/images/btc-qr.png" alt="Crypto QR Code" style="width: 170px; height: 170px; display: block; margin: 0 auto; object-fit: contain;">
+          </div>
+          <div style="font-size: 0.78rem; color: #64748b; margin-top: 6px;">Scan QR Code to pay</div>
+        </div>
+
+        <!-- Deposit Address Box with Copy Button -->
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Deposit Address:</label>
+          <div class="copy-address-box">
+            <span class="copy-address-text" id="drawerAddressText">bc1q9v8h2xzk5ln7p34m8q9w2e4r6t8y0u1i2o3p4</span>
+            <button type="button" class="btn-escrow-navy" style="padding: 6px 12px; font-size: 0.78rem; white-space: nowrap;" onclick="copyCryptoAddress()">
+              Copy Address
+            </button>
+          </div>
+        </div>
+
+        <!-- Instruction Note -->
+        <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 14px; border-radius: 6px; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 18px; line-height: 1.4;">
+          Please send the exact remaining amount in <strong id="drawerCryptoName">BTC</strong> to the deposit address above. Payment expires in 60 minutes.
+        </div>
+
+        <!-- Upload Receipt Section -->
+        <div style="margin-bottom: 20px;">
+          <label for="receiptFileInput" style="font-size: 0.84rem; font-weight: 700; color: #002b49; display: block; margin-bottom: 6px;">
+            Upload Payment Receipt / Screenshot <span style="color: #ef4444;">*</span>
+          </label>
+          <input type="file" id="receiptFileInput" accept="image/*,.pdf" class="form-control" style="font-size: 0.85rem;" onchange="onReceiptFileSelected(this)">
+          <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Upload screenshot or proof of transfer (PNG, JPG, PDF)</div>
+        </div>
+
+        <!-- "I Have Sent Payment" Button (Disabled until receipt uploaded) -->
+        <button type="button" id="btnIHaveSent" class="btn-escrow-green" disabled style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 13px; font-weight: 700; opacity: 0.5; cursor: not-allowed;" onclick="submitCryptoPayment()">
+          I Have Sent Payment
+        </button>
+      </div>
+
+      <!-- Success View (Hidden initially) -->
+      <div id="drawerSuccessView" style="display: none; text-align: center; padding: 20px 10px;">
+        <div style="width: 64px; height: 64px; background: #dcfce7; color: #166534; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3 style="font-size: 1.3rem; font-weight: 800; color: #002b49; margin: 0 0 8px 0;">Payment Submitted</h3>
+        <span style="background: #fef3c7; color: #d97706; font-size: 0.78rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; display: inline-block; margin-bottom: 14px;">
+          ⏳ Pending Blockchain Confirmation
+        </span>
+        <p style="font-size: 0.88rem; color: #475569; line-height: 1.5; margin-bottom: 20px;">
+          Your receipt has been submitted successfully and your payment is currently pending confirmation. You will receive an email notification as soon as your funds are verified by Chrysalias.
+        </p>
+        <button type="button" class="btn-escrow-navy" style="width: 100%; padding: 12px; font-weight: 700;" onclick="closeCryptoDrawer()">
+          Return to Summary
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Centered 3-Second Loading Spinner -->
+  <div class="spinner-backdrop" id="loadingSpinner">
+    <div class="spin-ring"></div>
+    <div style="font-weight: 700; font-size: 1.05rem;">Verifying Payment...</div>
+    <div style="font-size: 0.82rem; color: #cbd5e1; margin-top: 4px;">Please wait while we process your receipt</div>
   </div>
 
   <script src="js/app-custom.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const txId = params.get('id') || 'TX-892014';
-    const txTitle = params.get('title') || 'FintechDomain.com';
-    const ownerName = params.get('owner') || 'Alex Mercer';
-    const totalAmt = parseFloat(params.get('amount')) || 5000;
-    let remainingAmt = parseFloat(params.get('remaining')) || 2000;
+    const CRYPTO_DATA = {
+      BTC: {
+        title: "Bitcoin (BTC) Payment",
+        name: "BTC",
+        qr: "build/images/btc-qr.png",
+        address: "bc1q9v8h2xzk5ln7p34m8q9w2e4r6t8y0u1i2o3p4"
+      },
+      USDT: {
+        title: "Tether (USDT TRC20) Payment",
+        name: "USDT",
+        qr: "build/images/usdt-qr.png",
+        address: "TY9xK8zP2mN7q4L8w2E4r6T8y0U1i2O3P4"
+      }
+    };
 
-    document.getElementById('headerOwnerName').textContent = ownerName;
-    const initials = ownerName.split(' ').map(n => n[0]).join('').toUpperCase();
-    document.getElementById('headerOwnerAvatar').textContent = initials || 'AM';
+    function selectPaymentMethod(method) {
+      document.getElementById('cardOption').classList.toggle('selected', method === 'card');
+      document.getElementById('cryptoOption').classList.toggle('selected', method === 'crypto');
+      document.getElementById('cardSection').style.display = method === 'card' ? 'block' : 'none';
+      document.getElementById('cryptoSection').style.display = method === 'crypto' ? 'block' : 'none';
+    }
 
-    document.getElementById('checkoutTxId').textContent = txId;
-    document.getElementById('checkoutTitle').textContent = txTitle;
-    document.getElementById('wireRefCode').textContent = txId + '-PARTNER';
-    document.getElementById('checkoutRemaining').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
-    document.getElementById('cardPayAmount').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
+    function onCryptoChange() {
+      const selected = document.getElementById('cryptoDropdown').value;
+      const data = CRYPTO_DATA[selected] || CRYPTO_DATA.BTC;
+      document.getElementById('drawerCryptoTitle').textContent = data.title;
+      document.getElementById('drawerCryptoName').textContent = data.name;
+      document.getElementById('drawerQrCode').src = data.qr;
+      document.getElementById('drawerAddressText').textContent = data.address;
+    }
 
-    function switchPayTab(type, btn) {
-      document.querySelectorAll('.payment-tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      if (type === 'wire') {
-        document.getElementById('payFormCardTab').style.display = 'none';
-        document.getElementById('payFormWireTab').style.display = 'block';
+    function openCryptoDrawer() {
+      onCryptoChange();
+      document.getElementById('drawerFormView').style.display = 'block';
+      document.getElementById('drawerSuccessView').style.display = 'none';
+      document.getElementById('cryptoDrawerOverlay').classList.add('active');
+    }
+
+    function closeCryptoDrawer() {
+      document.getElementById('cryptoDrawerOverlay').classList.remove('active');
+    }
+
+    function copyCryptoAddress() {
+      const addr = document.getElementById('drawerAddressText').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(addr).then(() => {
+          window.EscrowApp.showToast('Crypto address copied to clipboard!');
+        }).catch(() => {
+          prompt('Copy Address:', addr);
+        });
       } else {
-        document.getElementById('payFormCardTab').style.display = 'block';
-        document.getElementById('payFormWireTab').style.display = 'none';
+        prompt('Copy Address:', addr);
       }
     }
 
-    function executePartnerPayment(e) {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById('paySubmitBtn');
-      submitBtn.textContent = 'Processing Partnered Payment...';
-      submitBtn.disabled = true;
+    function onReceiptFileSelected(input) {
+      const btn = document.getElementById('btnIHaveSent');
+      if (input.files && input.files.length > 0) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        window.EscrowApp.showToast('Receipt attached successfully!');
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+      }
+    }
 
-      setTimeout(() => {
-        document.getElementById('successPaidAmount').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
-        document.getElementById('partnerPayForm').style.display = 'none';
-        document.getElementById('successAlertBox').style.display = 'block';
+    function submitCryptoPayment() {
+      closeCryptoDrawer();
+      const spinner = document.getElementById('loadingSpinner');
+      spinner.classList.add('active');
 
-        const txs = window.EscrowApp.getTransactions();
-        const targetTx = txs.find(t => t.id === txId || t.title === txTitle);
-        if (targetTx) {
-          targetTx.status = 'In Progress (Fully Funded)';
-          window.EscrowApp.saveTransactions(txs);
-        }
-      }, 1200);
+      // 3-Second Loading Timer
+      setTimeout(function() {
+        spinner.classList.remove('active');
+        document.getElementById('drawerFormView').style.display = 'none';
+        document.getElementById('drawerSuccessView').style.display = 'block';
+        document.getElementById('cryptoDrawerOverlay').classList.add('active');
+        window.EscrowApp.showToast('Payment submitted for verification!');
+      }, 3000);
     }
   </script>
 </body>
