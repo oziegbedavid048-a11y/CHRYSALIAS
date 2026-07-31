@@ -791,11 +791,11 @@
       var welcomeHeader = document.getElementById('welcomeGreeting');
       if (welcomeHeader) welcomeHeader.textContent = greeting;
 
-      // --- User ---
+      // --- User Auth Verification ---
       var user = window.EscrowApp.getUser();
       if (!user) {
-        user = { name: 'Alex Mercer', email: 'alex.seller@chrysalias-demo.com' };
-        window.EscrowApp.setUser(user);
+        window.location.href = 'login.html';
+        return;
       }
       var sideUser = document.getElementById('sideUserName');
       if (sideUser) sideUser.textContent = user.name;

@@ -1,49 +1,11 @@
 /**
- * Chrysalias.com Global Unified Engine & Header/Footer/Sticky Renderer
- * Fixed: renderFooter template literal, all dropdown bindings, tab switching
+ * Chrysalias.com Global Unified Engine
+ * Clean Production API Integration connected to live PostgreSQL Database
+ * No mock data arrays & no local storage dependency
  */
 
 (function () {
   'use strict';
-
-  const DEFAULT_TRANSACTIONS = [
-    {
-      id: "ESC-892401",
-      title: "Premium Domain Transfer (FintechApp.com)",
-      role: "Seller",
-      counterparty: "alex.buyer@investments.co",
-      amount: 15500.00,
-      currency: "USD",
-      category: "Domain Names",
-      status: "Funded",
-      inspectionPeriod: 5,
-      date: "2026-07-22"
-    },
-    {
-      id: "ESC-891904",
-      title: "2024 Porsche 911 GT3 (VIN: WP0ZZZ99ZLS88912)",
-      role: "Buyer",
-      counterparty: "motorclassics@dealers.com",
-      amount: 178000.00,
-      currency: "USD",
-      category: "Motor Vehicles",
-      status: "In Inspection",
-      inspectionPeriod: 3,
-      date: "2026-07-20"
-    },
-    {
-      id: "ESC-889021",
-      title: "Bulk Electronics Wholesale Shipment",
-      role: "Seller",
-      counterparty: "techimports.us@gmail.com",
-      amount: 4200.00,
-      currency: "USD",
-      category: "General Goods",
-      status: "Completed",
-      inspectionPeriod: 7,
-      date: "2026-07-10"
-    }
-  ];
 
   const API_BASE = 'http://127.0.0.1:8000/api';
 
@@ -52,19 +14,22 @@
 
     getUser: function () {
       try {
-        const u = localStorage.getItem('escrow_user');
+        const u = sessionStorage.getItem('chrysalias_active_user');
         return u ? JSON.parse(u) : null;
       } catch (e) { return null; }
     },
 
     setUser: function (userObj) {
-      localStorage.setItem('escrow_user', JSON.stringify(userObj));
+      if (!userObj) {
+        sessionStorage.removeItem('chrysalias_active_user');
+      } else {
+        sessionStorage.setItem('chrysalias_active_user', JSON.stringify(userObj));
+      }
     },
 
     logout: function () {
-      localStorage.removeItem('escrow_user');
-      localStorage.removeItem('escrow_token');
-      // Attempt backend logout
+      sessionStorage.removeItem('chrysalias_active_user');
+      sessionStorage.removeItem('chrysalias_token');
       try {
         fetch(API_BASE + '/auth/logout/', { method: 'POST' }).catch(function () {});
       } catch (e) {}
@@ -72,15 +37,12 @@
     },
 
     getTransactions: function () {
+      // Synchronous return from memory/session cache or empty array
       try {
-        const txs = localStorage.getItem('escrow_transactions');
-        if (!txs) {
-          localStorage.setItem('escrow_transactions', JSON.stringify(DEFAULT_TRANSACTIONS));
-          return DEFAULT_TRANSACTIONS;
-        }
-        return JSON.parse(txs);
+        const txs = sessionStorage.getItem('chrysalias_transactions');
+        return txs ? JSON.parse(txs) : [];
       } catch (e) {
-        return DEFAULT_TRANSACTIONS;
+        return [];
       }
     },
 
@@ -107,7 +69,7 @@
         const resp = await fetch(API_BASE + '/transactions/');
         if (resp.ok) {
           const data = await resp.json();
-          if (Array.isArray(data) && data.length > 0) {
+          if (Array.isArray(data)) {
             const mapped = data.map(tx => ({
               id: tx.tx_id,
               title: tx.title,
@@ -118,42 +80,43 @@
               category: tx.category,
               status: tx.status,
               inspectionPeriod: tx.inspection_period,
-              date: tx.created_at ? tx.created_at.split('T')[0] : '2026-07-31',
+              date: tx.created_at ? tx.created_at.split('T')[0] : '',
               isPartneredPayment: tx.is_partnered
             }));
-            localStorage.setItem('escrow_transactions', JSON.stringify(mapped));
+            sessionStorage.setItem('chrysalias_transactions', JSON.stringify(mapped));
             return mapped;
           }
         }
       } catch (e) {
-        console.log('Django API backend offline or unreachable, using local storage cache.');
+        console.log('PostgreSQL API endpoint unreachable.');
       }
       return this.getTransactions();
     },
 
-    addTransaction: function (newTx) {
-      const txs = this.getTransactions();
-      txs.unshift(newTx);
-      localStorage.setItem('escrow_transactions', JSON.stringify(txs));
-
-      // Async post to Django backend if online
+    addTransaction: async function (newTx) {
       try {
-        fetch(API_BASE + '/transactions/', {
+        const resp = await fetch(API_BASE + '/transactions/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             title: newTx.title,
             initiator_role: newTx.role || 'Buyer',
-            amount: newTx.amount,
+            amount: newTx.amount || newTx.price,
             currency: newTx.currency || 'USD',
             category: newTx.category || 'General Merchandise',
-            inspection_period: newTx.inspectionPeriod || 2,
-            buyer_email: newTx.counterparty || '',
-            seller_email: newTx.counterparty || '',
+            inspection_period: newTx.inspectionDays || newTx.inspectionPeriod || 2,
+            buyer_email: newTx.role === 'Seller' ? newTx.sellerEmail : '',
+            seller_email: newTx.role === 'Buyer' ? newTx.sellerEmail : '',
             is_partnered: !!newTx.isPartneredPayment,
           })
-        }).catch(function () {});
-      } catch (e) {}
+        });
+
+        if (resp.ok) {
+          await this.fetchBackendTransactions();
+        }
+      } catch (e) {
+        console.log('Backend sync error:', e);
+      }
     },
 
     showToast: function (msg) {
@@ -161,19 +124,29 @@
       if (!container) {
         container = document.createElement('div');
         container.className = 'toast-container';
+        container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none;';
         document.body.appendChild(container);
       }
+
       const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerHTML = '<span>' + msg + '</span>';
+      toast.style.cssText = 'background:#002b49;color:#ffffff;padding:12px 20px;border-radius:8px;font-size:0.88rem;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;pointer-events:auto;transition:all 0.3s ease;transform:translateY(20px);opacity:0;border-left:4px solid #3cb95d;';
+      toast.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>' + msg + '</span>';
       container.appendChild(toast);
+
+      requestAnimationFrame(function () {
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
+      });
+
       setTimeout(function () {
+        toast.style.transform = 'translateY(20px)';
         toast.style.opacity = '0';
         setTimeout(function () { toast.remove(); }, 300);
       }, 3500);
     },
 
-    calculateFee: function (amount) {
+    calculateFees: function (amount) {
+      amount = parseFloat(amount) || 0;
       var feeRate = 0.0325;
       if (amount > 25000) feeRate = 0.0125;
       else if (amount > 5000) feeRate = 0.022;
@@ -198,7 +171,14 @@
 
       var isDashboard = activePage === 'dashboard' || path.includes('dashboard.html');
       var realUser = this.getUser();
-      var user = realUser || { name: 'Alex Mercer', email: 'alex.seller@chrysalias-demo.com' };
+      
+      // If user is not logged in on dashboard, redirect to login
+      if (isDashboard && !realUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      var user = realUser || { name: 'Guest User', email: '' };
       var nameParts = user.name ? user.name.trim().split(' ') : ['User'];
       var initials = nameParts.length > 1
         ? (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase()
@@ -213,29 +193,6 @@
           '      <span style="font-family: Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:#002b49;letter-spacing:-0.5px;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>' +
           '    </a>' +
           '    <div class="dashboard-header-right">' +
-          '      <div class="dashboard-notif-wrapper">' +
-          '        <button type="button" class="dashboard-notif-btn" id="notifBellBtn" title="Notifications">' +
-          '          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-          '            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>' +
-          '            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>' +
-          '          </svg>' +
-          '          <span class="notif-badge" id="notifBadge">2</span>' +
-          '        </button>' +
-          '        <div class="notif-dropdown" id="notifDropdown">' +
-          '          <div class="notif-dropdown-header">' +
-          '            <strong>Notifications</strong>' +
-          '            <span class="mark-read" id="markReadBtn">Mark all read</span>' +
-          '          </div>' +
-          '          <div class="notif-item">' +
-          '            <div class="notif-dot"></div>' +
-          '            <div><p class="notif-title">Transaction ESC-892401 Funded</p><span class="notif-time">10 mins ago</span></div>' +
-          '          </div>' +
-          '          <div class="notif-item">' +
-          '            <div class="notif-dot"></div>' +
-          '            <div><p class="notif-title">Identity Verification Approved</p><span class="notif-time">1 hour ago</span></div>' +
-          '          </div>' +
-          '        </div>' +
-          '      </div>' +
           '      <div class="dashboard-user-profile-wrapper" id="userProfileBtn">' +
           '        <div class="user-avatar-circle">' + initials + '</div>' +
           '        <span class="user-profile-name">' + user.name + '</span>' +
@@ -255,38 +212,15 @@
           '  </div>' +
           '</header>';
 
-        // Bind all dropdown interactions after DOM injection
         setTimeout(function () {
-          var bellBtn = document.getElementById('notifBellBtn');
-          var notifDd = document.getElementById('notifDropdown');
           var userBtn = document.getElementById('userProfileBtn');
           var userDd = document.getElementById('userDropdown');
-          var markReadBtn = document.getElementById('markReadBtn');
           var logoutBtn = document.getElementById('logoutBtn');
-          var notifBadge = document.getElementById('notifBadge');
-
-          if (bellBtn && notifDd) {
-            bellBtn.addEventListener('click', function (e) {
-              e.stopPropagation();
-              if (userDd) userDd.classList.remove('show');
-              notifDd.classList.toggle('show');
-            });
-          }
 
           if (userBtn && userDd) {
             userBtn.addEventListener('click', function (e) {
               e.stopPropagation();
-              if (notifDd) notifDd.classList.remove('show');
               userDd.classList.toggle('show');
-            });
-          }
-
-          if (markReadBtn && notifBadge) {
-            markReadBtn.addEventListener('click', function (e) {
-              e.stopPropagation();
-              notifBadge.style.display = 'none';
-              window.EscrowApp.showToast('All notifications marked as read.');
-              if (notifDd) notifDd.classList.remove('show');
             });
           }
 
@@ -298,7 +232,6 @@
           }
 
           document.addEventListener('click', function () {
-            if (notifDd) notifDd.classList.remove('show');
             if (userDd) userDd.classList.remove('show');
           });
         }, 50);
@@ -307,64 +240,48 @@
       }
 
       // -------- Public Pages Navigation Header --------
-      var authHtml = realUser && realUser.name
-        ? '<li class="headerV2-authNav-item"><a href="dashboard.html" class="headerV2-authNav-link" style="font-weight:700;color:#3cb95d;"><span class="headerV2-authNav-text">My Dashboard (' + realUser.name.split(' ')[0] + ')</span></a></li>' +
-          '<li class="headerV2-authNav-item"><a href="#" class="headerV2-authNav-link headerV2-logout-link"><span class="headerV2-authNav-text" style="opacity:0.8;">Logout</span></a></li>'
-        : '<li class="headerV2-authNav-item"><a href="login.html" class="headerV2-authNav-link"><span class="headerV2-authNav-text">Login</span></a></li>' +
-          '<li class="headerV2-authNav-item"><a href="signup.html" class="headerV2-authNav-link"><span class="headerV2-authNav-text">Signup</span></a></li>';
+      var authButtons = realUser
+        ? '<a href="dashboard.html" class="headerV2-btn headerV2-btn--login">Dashboard (' + realUser.name.split(' ')[0] + ')</a>' +
+          '<a href="#" class="headerV2-btn headerV2-btn--signup headerV2-logout-link">Log Out</a>'
+        : '<a href="login.html" class="headerV2-btn headerV2-btn--login">Log In</a>' +
+          '<a href="signup.html" class="headerV2-btn headerV2-btn--signup">Sign Up</a>';
 
       headerContainer.innerHTML =
-        '<div class="chrysalias-nav-header">' +
-        '  <header class="headerV2 is-header-scrollTop">' +
-        '    <div class="headerV2-primary">' +
-        '      <div class="headerV2-container section-container">' +
-        '        <div class="headerV2-inner">' +
+        '<header class="headerV2">' +
+        '  <div class="headerV2-topBar">' +
+        '    <div class="headerV2-container section-container">' +
+        '      <div class="headerV2-topBar-inner">' +
+        '        <div class="headerV2-topBar-left">' +
+        '          <span>Licensed & Verified Payment Protection Platform</span>' +
+        '        </div>' +
+        '        <div class="headerV2-topBar-right">' +
+        '          <a href="https://chrysalias.com" class="headerV2-supportLink">Chrysalias.com</a>' +
+        '        </div>' +
+        '      </div>' +
+        '    </div>' +
+        '  </div>' +
+        '  <div class="headerV2-primary">' +
+        '    <div class="headerV2-container section-container">' +
+        '      <div class="headerV2-inner">' +
+        '        <div class="headerV2-logoGroup">' +
         '          <a href="index.html" class="headerV2-logo" title="Go to home page" style="display:flex;align-items:center;gap:10px;text-decoration:none;">' +
         '            <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:34px;width:34px;border-radius:6px;object-fit:cover;">' +
         '            <span style="font-family: Montserrat, sans-serif; font-weight:800; font-size:1.6rem; color:#ffffff; letter-spacing: -0.5px;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>' +
         '          </a>' +
         '          <nav class="headerV2-nav">' +
         '            <ul class="headerV2-primaryNav">' +
-        '              <li class="headerV2-primaryNav-item" data-header-nav-item="">' +
-        '                <span class="headerV2-primaryNav-title"><span class="headerV2-primaryNav-text">Consumer</span></span>' +
-        '                <div class="headerV2-subnav"><ul class="headerV2-subnav-list">' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">What is Chrysalias?</h3><p class="headerV2-subnav-desc">Learn how payments are protected</p></a></li>' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">Domain Names</h3><p class="headerV2-subnav-desc">Domain concierge protection</p></a></li>' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">Motor Vehicles</h3><p class="headerV2-subnav-desc">Cars, boats, and VIN checks</p></a></li>' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">General Merchandise</h3><p class="headerV2-subnav-desc">Luxury goods & art</p></a></li>' +
-        '                </ul></div>' +
-        '              </li>' +
-        '              <li class="headerV2-primaryNav-item" data-header-nav-item="">' +
-        '                <span class="headerV2-primaryNav-title"><span class="headerV2-primaryNav-text">Broker</span></span>' +
-        '                <div class="headerV2-subnav"><ul class="headerV2-subnav-list">' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">Brokerage Services</h3><p class="headerV2-subnav-desc">Domain & broker commissions</p></a></li>' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">Domain Holding</h3><p class="headerV2-subnav-desc">Long-term DNS & ICANN holding</p></a></li>' +
-        '                </ul></div>' +
-        '              </li>' +
-        '              <li class="headerV2-primaryNav-item" data-header-nav-item="">' +
-        '                <span class="headerV2-primaryNav-title"><span class="headerV2-primaryNav-text">Business</span></span>' +
-        '                <div class="headerV2-subnav"><ul class="headerV2-subnav-list">' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">E-Commerce Checkout</h3><p class="headerV2-subnav-desc">Marketplace integrations</p></a></li>' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">Digital Letter of Credit</h3><p class="headerV2-subnav-desc">Global B2B trade protection</p></a></li>' +
-        '                </ul></div>' +
-        '              </li>' +
-        '              <li class="headerV2-primaryNav-item" data-header-nav-item="">' +
-        '                <span class="headerV2-primaryNav-title"><span class="headerV2-primaryNav-text">Help</span></span>' +
-        '                <div class="headerV2-subnav"><ul class="headerV2-subnav-list">' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">Help Desk / FAQs</h3><p class="headerV2-subnav-desc">Search common answers</p></a></li>' +
-        '                  <li class="headerV2-subnav-item"><a href="index.html" class="headerV2-subnav-link"><h3 class="headerV2-subnav-title">About Us</h3><p class="headerV2-subnav-desc">Over 25 years of trust</p></a></li>' +
-        '                </ul></div>' +
-        '              </li>' +
+        '              <li><a href="index.html">What is Chrysalias?</a></li>' +
+        '              <li><a href="index.html">Protection Services</a></li>' +
+        '              <li><a href="index.html">Chrysalias Accounts</a></li>' +
         '            </ul>' +
-        '            <ul class="headerV2-authNav">' + authHtml + '</ul>' +
         '          </nav>' +
         '        </div>' +
+        '        <div class="headerV2-actions">' + authButtons + '</div>' +
         '      </div>' +
         '    </div>' +
-        '  </header>' +
-        '</div>';
+        '  </div>' +
+        '</header>';
 
-      // Bind logout for public nav
       setTimeout(function () {
         var logoutLinks = headerContainer.querySelectorAll('.headerV2-logout-link');
         logoutLinks.forEach(function (link) {
@@ -414,7 +331,6 @@
     }
   };
 
-  // ---------- Sticky Header on scroll (index.html) ----------
   function initStickyHeader() {
     var headerElem = document.querySelector('.chrysalias-nav-header');
     var heroElem = document.querySelector('.sectionHero') || document.querySelector('.hero');
@@ -423,15 +339,14 @@
     function onScroll() {
       var heroHeight = heroElem ? (heroElem.offsetHeight || 450) : 400;
       var scrollPos = window.scrollY || window.pageYOffset || 0;
-
-      if (scrollPos > (heroHeight - 90)) {
-        headerElem.classList.add('is-sticky-header');
+      if (scrollPos > heroHeight) {
+        headerElem.classList.add('is-sticky');
       } else {
-        headerElem.classList.remove('is-sticky-header');
+        headerElem.classList.remove('is-sticky');
       }
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll);
     onScroll();
   }
 
@@ -440,5 +355,4 @@
     window.EscrowApp.renderFooter();
     initStickyHeader();
   });
-
 })();

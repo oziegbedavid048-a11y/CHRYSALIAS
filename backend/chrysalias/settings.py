@@ -63,11 +63,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chrysalias.wsgi.application'
 
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:SFw8Jic6bAdLMvr4eGcpXngS@chrysalias-wild-trail.cloud.layerbase.dev/chrysalias?sslmode=require',
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
