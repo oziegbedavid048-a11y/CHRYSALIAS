@@ -22,7 +22,7 @@ EMAIL_FOOTER_HTML = """
 
 def _send_email_safe(subject, recipient_email, text_content, html_content):
     try:
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'Chrysalias Support <noreply@chrysalias.com>')
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'Chrysalias Support <info@chrysalias.com>')
         msg = EmailMultiAlternatives(
             subject=subject,
             body=text_content,

@@ -135,5 +135,5 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='emailapikey')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='wSsVR61y/RWkW/p4yTOpdrhuyAtQB16kEkWp3lP36n+tH6iU8Mc6xRfJDFD0H/gWQDI8EDQbpe8hm0sC0WULhth7mA4ACCiF9mqRe1U4J3x17qnvhDzIX2VfkBSJLoIJzg1imGNnEcsr+g==')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Chrysalias Support <noreply@chrysalias.com>')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Chrysalias Support <info@chrysalias.com>')
 
