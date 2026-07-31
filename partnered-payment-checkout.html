@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Partnered Payment Checkout | Chrysalias.com</title>
+  <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
+  <link href="css/app-custom.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      background-color: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Header with Account Owner Profile */
+    .partner-header {
+      background: #002b49;
+      color: #ffffff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      gap: 12px;
+    }
+    .header-logo-text {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .header-logo-text span {
+      color: #3cb95d;
+    }
+
+    /* Owner Profile Badge */
+    .owner-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
+      border-radius: 30px;
+      margin-left: auto;
+    }
+    .owner-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3cb95d;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+    .owner-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .owner-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .owner-tag {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    /* Container & Layout */
+    .partner-container {
+      max-width: 740px;
+      margin: 28px auto;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .partner-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 26px 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      margin-bottom: 24px;
+      box-sizing: border-box;
+    }
+
+    /* Payment Tabs & Ultra-Responsive Buttons */
+    .payment-tab-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      font-weight: 600;
+      font-size: clamp(0.78rem, 3.2vw, 0.88rem);
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .payment-tab-btn.active, .payment-tab-btn:hover {
+      background: #002b49;
+      color: #ffffff;
+      border-color: #002b49;
+    }
+
+    .responsive-pay-btn {
+      width: 100% !important;
+      padding: 13px 16px !important;
+      font-size: clamp(0.88rem, 3.8vw, 1rem) !important;
+      font-weight: 700 !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 14px rgba(60,185,93,0.3) !important;
+      text-align: center !important;
+      line-height: 1.35 !important;
+      white-space: normal !important;
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      box-sizing: border-box !important;
+      display: block !important;
+      margin: 0 auto !important;
+    }
+
+    /* Success Alert */
+    .success-alert-box {
+      display: none;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 26px 20px;
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .partner-header {
+        padding: 12px 14px;
+      }
+      .header-logo-text {
+        font-size: 1.15rem;
+      }
+      .owner-profile-badge {
+        padding: 4px 10px;
+        gap: 6px;
+      }
+      .owner-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+      }
+      .owner-name {
+        font-size: 0.78rem;
+      }
+      .owner-tag {
+        display: none;
+      }
+      .partner-card {
+        padding: 18px 16px;
+        border-radius: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header with Brand Logo & Account Owner Profile on the Right -->
+  <header class="partner-header">
+    <a href="index.html" class="header-logo-text">
+      CHRYSALIAS<span>.COM</span>
+    </a>
+
+    <div class="owner-profile-badge">
+      <div class="owner-avatar" id="headerOwnerAvatar">AM</div>
+      <div class="owner-info">
+        <div class="owner-name" id="headerOwnerName">Alex Mercer</div>
+        <div class="owner-tag">✓ Primary Buyer</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="partner-container">
+    
+    <!-- Payment Summary Box -->
+    <div class="partner-card" style="background: #f8fafc; border-color: #cbd5e1; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 4px 12px; border-radius: 20px;" id="checkoutTxId">TX-892014</span>
+          <h2 style="margin: 6px 0 2px 0; font-size: clamp(1.2rem, 4.5vw, 1.45rem); color: #002b49; font-weight: 800;" id="checkoutTitle">FintechDomain.com</h2>
+          <p style="margin: 0; color: #64748b; font-size: 0.84rem;">Partnered Chrysalias Payment Checkout</p>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.78rem; color: #1e40af; font-weight: 700;">Remaining Balance to Pay</div>
+          <div style="font-size: clamp(1.25rem, 5vw, 1.55rem); font-weight: 800; color: #1d4ed8;" id="checkoutRemaining">$2,000.00 USD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Payment Checkout Form Card -->
+    <div class="partner-card" id="paymentMethodCard">
+      <h3 style="margin: 0 0 8px 0; color: #002b49; font-weight: 700; font-size: 1.2rem;">Select Payment Method</h3>
+      <p style="margin: 0 0 18px 0; color: #64748b; font-size: 0.88rem;">Complete the remaining <strong style="color: #002b49;" id="cardPayAmount">$2,000.00 USD</strong> deposit into Chrysalias protection.</p>
+
+      <!-- Payment Tabs -->
+      <div style="display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap;">
+        <button class="payment-tab-btn active" onclick="switchPayTab('card', this)">💳 Card</button>
+        <button class="payment-tab-btn" onclick="switchPayTab('wire', this)">🏦 Wire Transfer</button>
+        <button class="payment-tab-btn" onclick="switchPayTab('crypto', this)">🪙 USDT / Crypto</button>
+      </div>
+
+      <!-- Payment Form -->
+      <form id="partnerPayForm" onsubmit="executePartnerPayment(event)">
+        <div id="payFormCardTab">
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">Cardholder Name</label>
+            <input type="text" class="form-control" placeholder="Partner Full Name" value="David Co-Buyer" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
+          </div>
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">Card Number</label>
+            <input type="text" class="form-control" placeholder="4532 •••• •••• 8891" value="4532 •••• •••• 8891" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+            <div>
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">Expiry Date</label>
+              <input type="text" class="form-control" placeholder="MM/YY" value="08/28" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #002b49; margin-bottom: 5px;">CVC / CVV</label>
+              <input type="password" class="form-control" placeholder="123" value="123" maxlength="4" required style="padding: 10px 12px; border-radius: 6px; font-size: 0.9rem;">
+            </div>
+          </div>
+        </div>
+
+        <div id="payFormWireTab" style="display: none; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+          <div style="font-weight: 700; color: #002b49; margin-bottom: 6px; font-size: 0.95rem;">Chrysalias Wire Deposit Instructions</div>
+          <div style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">
+            Bank Name: Chase Bank N.A.<br>
+            Account Name: Chrysalias Services Inc.<br>
+            Account Number: 9817263541<br>
+            Routing / ABA: 021000021<br>
+            Reference: <strong style="color: #002b49;" id="wireRefCode">TX-892014-PARTNER</strong>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-escrow-green responsive-pay-btn" id="paySubmitBtn">
+          <span class="btn-text-main">Pay Remaining Balance Now</span>
+        </button>
+      </form>
+
+      <!-- Instant Live Success Banner -->
+      <div class="success-alert-box" id="successAlertBox">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #dcfce7; color: #166534; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; margin: 0 auto 14px auto;">✓</div>
+        <h3 style="margin: 0 0 6px 0; color: #166534; font-size: 1.25rem; font-weight: 800;">Payment Successful — 100% Fully Funded!</h3>
+        <p style="margin: 0 0 18px 0; color: #15803d; font-size: 0.9rem; line-height: 1.45;">Your partnered payment of <strong id="successPaidAmount">$2,000.00 USD</strong> has been received and verified. The transaction is now 100% fully funded in Chrysalias protection and waiting for the seller to confirm dispatch.</p>
+        <button class="btn-escrow-navy" onclick="window.location.href='dashboard.html'" style="padding: 10px 22px; font-size: 0.88rem; font-weight: 700;">Return to Dashboard</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/app-custom.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const txId = params.get('id') || 'TX-892014';
+    const txTitle = params.get('title') || 'FintechDomain.com';
+    const ownerName = params.get('owner') || 'Alex Mercer';
+    const totalAmt = parseFloat(params.get('amount')) || 5000;
+    let remainingAmt = parseFloat(params.get('remaining')) || 2000;
+
+    document.getElementById('headerOwnerName').textContent = ownerName;
+    const initials = ownerName.split(' ').map(n => n[0]).join('').toUpperCase();
+    document.getElementById('headerOwnerAvatar').textContent = initials || 'AM';
+
+    document.getElementById('checkoutTxId').textContent = txId;
+    document.getElementById('checkoutTitle').textContent = txTitle;
+    document.getElementById('wireRefCode').textContent = txId + '-PARTNER';
+    document.getElementById('checkoutRemaining').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
+    document.getElementById('cardPayAmount').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
+
+    function switchPayTab(type, btn) {
+      document.querySelectorAll('.payment-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (type === 'wire') {
+        document.getElementById('payFormCardTab').style.display = 'none';
+        document.getElementById('payFormWireTab').style.display = 'block';
+      } else {
+        document.getElementById('payFormCardTab').style.display = 'block';
+        document.getElementById('payFormWireTab').style.display = 'none';
+      }
+    }
+
+    function executePartnerPayment(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('paySubmitBtn');
+      submitBtn.textContent = 'Processing Partnered Payment...';
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        document.getElementById('successPaidAmount').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
+        document.getElementById('partnerPayForm').style.display = 'none';
+        document.getElementById('successAlertBox').style.display = 'block';
+
+        const txs = window.EscrowApp.getTransactions();
+        const targetTx = txs.find(t => t.id === txId || t.title === txTitle);
+        if (targetTx) {
+          targetTx.status = 'In Progress (Fully Funded)';
+          window.EscrowApp.saveTransactions(txs);
+        }
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "chrysalias-website",
+  "version": "1.0.0",
+  "description": "Chrysalias local static website",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y serve . -l 8080",
+    "dev": "npx -y serve . -l 8080"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

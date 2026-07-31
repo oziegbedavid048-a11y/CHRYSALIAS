@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>My Account & Dashboard | Chrysalias.com</title>
+  <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
+  <link href="css/app-custom.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
+  <style>
+    body.dashboard-page-bg {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+    
+    .dash-welcome-card {
+      background: linear-gradient(135deg, #002b49 0%, #01426a 100%);
+      color: #ffffff;
+      padding: 22px 26px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 16px rgba(0, 43, 73, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .dash-welcome-card h1 {
+      margin: 0 0 4px 0;
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      font-family: 'Inter', sans-serif !important;
+    }
+    .dash-welcome-card p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 0.86rem;
+      max-width: 580px;
+      line-height: 1.4;
+    }
+
+    .dash-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .dash-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .dash-card-title {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #002b49;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dash-link {
+      color: #3cb95d;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .dash-link:hover {
+      color: #002b49;
+      text-decoration: underline;
+    }
+
+    /* Grid Layouts */
+    .metrics-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      background: #ffffff;
+      border-color: #cbd5e1;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #002b49;
+      line-height: 1.1;
+    }
+    .metric-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 3px 8px;
+      border-radius: 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-blue { background: #e0f2fe; color: #075985; }
+    .badge-gray { background: #f1f5f9; color: #475569; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+
+    /* Responsive Touch Table Wrapper - Strictly Prevents Right Hand Side Overflow */
+    .responsive-table-wrapper {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
+
+    /* Monthly Chart Visualizer */
+    .month-chart-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 95px;
+      padding-top: 12px;
+    }
+    .chart-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .chart-bar-fill {
+      width: 100%;
+      background: linear-gradient(180deg, #3cb95d 0%, #01426a 100%);
+      border-radius: 3px 3px 0 0;
+      min-height: 5px;
+      transition: height 0.5s ease;
+    }
+    .chart-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* User Directory Cards Grid */
+    .user-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .user-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .user-card:hover {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      border-color: #cbd5e1;
+    }
+    .user-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #002b49;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif !important;
+    }
+    .user-card-info h4 {
+      margin: 0 0 2px 0;
+      font-size: 0.9rem;
+      color: #002b49;
+      font-family: 'Inter', sans-serif !important;
+    }
+    .user-card-info p {
+      margin: 0;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    /* Filter & Controls */
+    .tx-filter-pill {
+      background: #ffffff;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 6px 13px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tx-filter-pill.active, .tx-filter-pill:hover {
+      background: #002b49;
+      color: #ffffff;
+      border-color: #002b49;
+    }
+    .search-input-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 0.84rem;
+      width: 100%;
+      max-width: 260px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .search-input-box:focus {
+      border-color: #3cb95d;
+      box-shadow: 0 0 0 3px rgba(60,185,93,0.12);
+    }
+  </style>
+</head>
+<body class="dashboard-page-bg">
+
+  <!-- Top Navigation Header -->
+  <div id="app-header"></div>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-user-name" id="sideUserName">Alex Mercer</div>
+        <div class="sidebar-user-role">Verified Chrysalias Account</div>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a class="sidebar-link active" data-tab="overview">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Overview
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" data-tab="transactions">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 022 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            Transactions
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" data-tab="users">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            Users
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="dashboard-main">
+
+      <!-- Dynamic Welcome Banner -->
+      <div class="dash-welcome-card">
+        <div>
+          <h1 id="welcomeGreeting">Good evening</h1>
+          <p>Welcome to your Chrysalias dashboard where you can have an overview of your transactions and activities.</p>
+        </div>
+        <button class="btn-escrow-green" onclick="window.location.href='start-transaction.html'" style="padding: 8px 16px; font-weight: 700; font-size: 0.85rem;">
+          + Start Transaction
+        </button>
+      </div>
+
+      <!-- TAB 1: OVERVIEW -->
+      <div id="tab-overview" class="tab-panel">
+        
+        <!-- Users Overview Section -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h2 class="dash-card-title">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+              Users Overview
+            </h2>
+            <a href="#" class="dash-link" onclick="switchTab('users'); return false;">View all users →</a>
+          </div>
+
+          <div class="metrics-grid-4">
+            <div class="metric-card">
+              <div class="metric-label">Total users</div>
+              <div class="metric-value" id="overviewTotalUsers">1</div>
+              <span class="metric-badge badge-blue">Active Counterparties</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">New users this month</div>
+              <div class="metric-value">0</div>
+              <span class="metric-badge badge-gray">Current Period</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Overview Section -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div>
+              <h2 class="dash-card-title">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Transactions Overview
+              </h2>
+              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                <span class="metric-badge badge-blue" style="margin-top:0;">This Year</span> Total transactions per month this year
+              </div>
+            </div>
+            <a href="#" class="dash-link" onclick="switchTab('transactions'); return false;">View all transactions →</a>
+          </div>
+
+          <!-- 4 Main Transaction Stat Cards -->
+          <div class="metrics-grid-4" style="margin-bottom: 18px;">
+            <div class="metric-card">
+              <div class="metric-label">Total Transactions Created</div>
+              <div class="metric-value" id="overviewTotalTx">3</div>
+              <span class="metric-badge badge-blue">Lifetime Total</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Completed transactions</div>
+              <div class="metric-value" id="overviewCompletedTx" style="color: #3cb95d;">1</div>
+              <span class="metric-badge badge-green">Funds Released</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Ongoing transactions</div>
+              <div class="metric-value" id="overviewOngoingTx" style="color: #0284c7;">2</div>
+              <span class="metric-badge badge-blue">In Chrysalias Shield</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Cancelled transactions</div>
+              <div class="metric-value" id="overviewCancelledTx" style="color: #94a3b8;">0</div>
+              <span class="metric-badge badge-gray">No Activity</span>
+            </div>
+          </div>
+
+          <!-- Monthly Bar Activity Visualizer -->
+          <div style="background: #f8fafc; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #002b49; margin-bottom: 8px;">Monthly Activity Breakdown (This Year)</div>
+            <div class="month-chart-bar">
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 40%;"></div><span class="chart-label">Jan</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 65%;"></div><span class="chart-label">Feb</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 30%;"></div><span class="chart-label">Mar</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 80%;"></div><span class="chart-label">Apr</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 50%;"></div><span class="chart-label">May</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 90%;"></div><span class="chart-label">Jun</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 100%;"></div><span class="chart-label">Jul</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 20%;"></div><span class="chart-label">Aug</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Sep</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Oct</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Nov</span></div>
+              <div class="chart-col"><div class="chart-bar-fill" style="height: 15%;"></div><span class="chart-label">Dec</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: TRANSACTIONS -->
+      <div id="tab-transactions" class="tab-panel" style="display: none;">
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div>
+              <h2 class="dash-card-title">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 022 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                Transactions Directory
+              </h2>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Track and manage all active, completed, and cancelled Chrysalias agreements</p>
+            </div>
+            <button class="btn-escrow-green" onclick="window.location.href='start-transaction.html'" style="padding: 8px 16px; font-weight: 700; font-size: 0.85rem;">+ Start Transaction</button>
+          </div>
+
+          <!-- Top Summary Metrics Bar -->
+          <div class="metrics-grid-4" style="margin-bottom: 18px;">
+            <div class="metric-card">
+              <div class="metric-label">Total Protected Volume</div>
+              <div class="metric-value" style="font-size: 1.45rem; color: #002b49;">$197,700.00</div>
+              <span class="metric-badge badge-green">100% Chrysalias Protection</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Total Transactions</div>
+              <div class="metric-value" style="font-size: 1.45rem; color: #0284c7;" id="txTabTotalCount">3</div>
+              <span class="metric-badge badge-blue">Active Portfolio</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Ongoing Transactions</div>
+              <div class="metric-value" style="font-size: 1.45rem; color: #3cb95d;" id="txTabOngoingCount">2</div>
+              <span class="metric-badge badge-green">Funds Held</span>
+            </div>
+          </div>
+
+          <!-- Filter & Search Control Row -->
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button class="tx-filter-pill active" onclick="filterTransactions('all', this)">All Deals (3)</button>
+              <button class="tx-filter-pill" onclick="filterTransactions('In Progress', this)">Ongoing (2)</button>
+              <button class="tx-filter-pill" onclick="filterTransactions('Completed', this)">Completed (1)</button>
+              <button class="tx-filter-pill" onclick="filterTransactions('Cancelled', this)">Cancelled (0)</button>
+            </div>
+            <input type="text" id="txSearchInput" class="search-input-box" placeholder="🔍 Search transactions..." oninput="onTxSearchInput()">
+          </div>
+
+          <!-- Strictly Responsive Data Table Container (Fixes Overflow to Right Side) -->
+          <div class="responsive-table-wrapper">
+            <table class="tx-table" style="width: 100%; border-collapse: collapse; min-width: 620px;">
+              <thead>
+                <tr style="background: #f8fafc; text-align: left; font-size: 0.76rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.04em;">
+                  <th style="padding: 12px 14px;">Transaction ID & Details</th>
+                  <th style="padding: 12px 14px;">My Role</th>
+                  <th style="padding: 12px 14px;">Counterparty Email</th>
+                  <th style="padding: 12px 14px;">Agreed Price</th>
+                  <th style="padding: 12px 14px;">Status</th>
+                  <th style="padding: 12px 14px; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="txTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: USERS -->
+      <div id="tab-users" class="tab-panel" style="display: none;">
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div>
+              <h2 class="dash-card-title">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Users & Counterparties Management
+              </h2>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Overview of buyers, sellers, and verified counterparties in your network</p>
+            </div>
+            <button class="btn-escrow-navy" onclick="window.EscrowApp.showToast('User invitation sent')" style="padding: 8px 16px; font-size: 0.85rem;">+ Invite Counterparty</button>
+          </div>
+
+          <!-- User Metrics Grid -->
+          <div class="metrics-grid-4" style="margin-bottom: 18px;">
+            <div class="metric-card">
+              <div class="metric-label">Total Network Users</div>
+              <div class="metric-value">2</div>
+              <span class="metric-badge badge-blue">Connected Accounts</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active Sellers</div>
+              <div class="metric-value" style="color: #3cb95d;">1</div>
+              <span class="metric-badge badge-green">Ready for Payouts</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active Buyers</div>
+              <div class="metric-value" style="color: #0284c7;">1</div>
+              <span class="metric-badge badge-blue">Funded Accounts</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">KYC Compliance</div>
+              <div class="metric-value" style="color: #002b49;">100%</div>
+              <span class="metric-badge badge-green">Level 2 Verified</span>
+            </div>
+          </div>
+
+          <!-- User Directory Cards Grid -->
+          <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Counterparty Profiles</div>
+          <div class="user-cards-grid">
+            <div class="user-card">
+              <div>
+                <div class="user-card-header">
+                  <div class="user-avatar" style="background: #002b49;">AM</div>
+                  <div class="user-card-info">
+                    <h4>Alex Mercer <span style="font-size: 0.72rem; color: #3cb95d; font-weight: 700;">(You)</span></h4>
+                    <p>alex.seller@chrysalias-demo.com</p>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
+                  <span class="metric-badge badge-blue">Primary Account</span>
+                  <span class="metric-badge badge-green">Level 2 KYC Verified</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">3 Transactions</span>
+                <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Account profile verified')">Manage Profile</button>
+              </div>
+            </div>
+
+            <div class="user-card">
+              <div>
+                <div class="user-card-header">
+                  <div class="user-avatar" style="background: #0284c7;">DB</div>
+                  <div class="user-card-info">
+                    <h4>David Buyer</h4>
+                    <p>buyer@example.com</p>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
+                  <span class="metric-badge badge-blue">Buyer Counterparty</span>
+                  <span class="metric-badge badge-green">Email Verified</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">1 Transaction</span>
+                <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty details active')">View Activity</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Directory Table -->
+          <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Full User Directory</div>
+          <div class="responsive-table-wrapper">
+            <table class="tx-table" style="width: 100%; border-collapse: collapse; min-width: 580px;">
+              <thead>
+                <tr style="background: #f8fafc; text-align: left; font-size: 0.76rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.04em;">
+                  <th style="padding: 12px 14px;">User Name</th>
+                  <th style="padding: 12px 14px;">Email Address</th>
+                  <th style="padding: 12px 14px;">Role</th>
+                  <th style="padding: 12px 14px;">KYC Status</th>
+                  <th style="padding: 12px 14px; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 12px 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem;">AM</div>
+                      <strong style="font-size: 0.88rem;">Alex Mercer</strong>
+                    </div>
+                  </td>
+                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">alex.seller@chrysalias-demo.com</td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Seller / Buyer</span></td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
+                  <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Profile active')">View Profile</button></td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #0284c7;">DB</div>
+                      <strong style="font-size: 0.88rem;">David Buyer</strong>
+                    </div>
+                  </td>
+                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">buyer@example.com</td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Buyer</span></td>
+                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Verified</span></td>
+                  <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty active')">View Profile</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app-custom.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // --- Greeting ---
+      var hour = new Date().getHours();
+      var greeting = hour < 12 ? 'Good morning' : (hour < 18 ? 'Good afternoon' : 'Good evening');
+      var welcomeHeader = document.getElementById('welcomeGreeting');
+      if (welcomeHeader) welcomeHeader.textContent = greeting;
+
+      // --- User ---
+      var user = window.EscrowApp.getUser();
+      if (!user) {
+        user = { name: 'Alex Mercer', email: 'alex.seller@chrysalias-demo.com' };
+        window.EscrowApp.setUser(user);
+      }
+      var sideUser = document.getElementById('sideUserName');
+      if (sideUser) sideUser.textContent = user.name;
+
+      // --- Ensure only first tab panel is visible initially ---
+      document.querySelectorAll('.tab-panel').forEach(function(p, i) {
+        p.style.display = (i === 0) ? 'block' : 'none';
+      });
+
+      // --- Tab Switching ---
+      window.switchTab = function(tabId) {
+        document.querySelectorAll('.sidebar-link[data-tab]').forEach(function(l) {
+          if (l.getAttribute('data-tab') === tabId) l.classList.add('active');
+          else l.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-panel').forEach(function(p) {
+          p.style.display = 'none';
+        });
+        var targetPanel = document.getElementById('tab-' + tabId);
+        if (targetPanel) targetPanel.style.display = 'block';
+      };
+
+      document.querySelectorAll('.sidebar-link[data-tab]').forEach(function(link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          switchTab(this.getAttribute('data-tab'));
+        });
+      });
+
+      // --- Transaction Table Renderer ---
+      var currentStatusFilter = 'all';
+
+      function renderTable(filterStatus, searchQuery) {
+        filterStatus = filterStatus || 'all';
+        searchQuery = searchQuery || '';
+
+        var txs = window.EscrowApp.getTransactions();
+        var tbody = document.getElementById('txTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        var totalCreated = txs.length;
+        var completed = 0, ongoing = 0, cancelled = 0;
+
+        txs.forEach(function(tx) {
+          if (tx.status === 'Completed') completed++;
+          else if (tx.status === 'Cancelled') cancelled++;
+          else ongoing++;
+
+          if (filterStatus !== 'all' && tx.status !== filterStatus) return;
+          if (searchQuery) {
+            var q = searchQuery.toLowerCase();
+            var matchId = (tx.id || '').toLowerCase().includes(q);
+            var matchTitle = (tx.title || '').toLowerCase().includes(q);
+            var matchEmail = (tx.counterparty || tx.sellerEmail || '').toLowerCase().includes(q);
+            if (!matchId && !matchTitle && !matchEmail) return;
+          }
+
+          var isPartnered = tx.isPartneredPayment;
+          var partneredBadge = isPartnered ? '<span class="metric-badge badge-blue" style="margin-left:6px;">Partnered Pay</span>' : '';
+          var statusClass = tx.status === 'Completed' ? 'badge-green' : (tx.status === 'Cancelled' ? 'badge-red' : 'badge-blue');
+          var amount = Number(tx.amount || tx.price || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+          var counterparty = tx.counterparty || tx.sellerEmail || 'seller@example.com';
+          var txId = tx.id;
+          var txTitle = (tx.title || '').replace(/'/g, "&#39;");
+          var txAmount = tx.amount || tx.price || 0;
+
+          var tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid #f1f5f9';
+          tr.innerHTML =
+            '<td style="padding:12px 14px;max-width:240px;">' +
+              '<div style="font-weight:700;color:#002b49;font-size:0.86rem;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">' +
+                '<span>' + txId + '</span>' +
+                '<span style="font-weight:500;color:#475569;">-</span>' +
+                '<span style="overflow:hidden;text-overflow:ellipsis;">' + tx.title + '</span>' +
+                partneredBadge +
+              '</div>' +
+              '<div style="font-size:0.74rem;color:#64748b;margin-top:2px;">' + (tx.category || 'General') + ' &bull; ' + (tx.inspectionPeriod || 2) + ' Day Inspection</div>' +
+            '</td>' +
+            '<td style="padding:12px 14px;"><span style="font-weight:700;color:#002b49;font-size:0.84rem;">' + tx.role + '</span></td>' +
+            '<td style="padding:12px 14px;color:#475569;font-size:0.84rem;">' + counterparty + '</td>' +
+            '<td style="padding:12px 14px;font-weight:800;color:#002b49;font-size:0.9rem;">' + (tx.currency || 'USD') + ' $' + amount + '</td>' +
+            '<td style="padding:12px 14px;"><span class="metric-badge ' + statusClass + '">' + tx.status + '</span></td>' +
+            '<td style="padding:12px 14px;text-align:right;white-space:nowrap;">' +
+              '<button class="btn-escrow-navy" style="font-size:0.74rem;padding:5px 10px;margin-right:4px;" onclick="window.EscrowApp.showToast(\'Details loaded for ' + txId + '\')">View Details</button>' +
+              '<button class="btn-escrow-green" style="font-size:0.74rem;padding:5px 10px;" onclick="sharePartneredPaymentLink(\'' + txId + '\',\'' + txTitle + '\',' + txAmount + ')">Share Pay Link</button>' +
+            '</td>';
+          tbody.appendChild(tr);
+        });
+
+        // Update counters
+        var elTotal = document.getElementById('overviewTotalTx');
+        if (elTotal) elTotal.textContent = totalCreated;
+        var elComp = document.getElementById('overviewCompletedTx');
+        if (elComp) elComp.textContent = completed;
+        var elOng = document.getElementById('overviewOngoingTx');
+        if (elOng) elOng.textContent = ongoing;
+        var elCanc = document.getElementById('overviewCancelledTx');
+        if (elCanc) elCanc.textContent = cancelled;
+        var elTabTotal = document.getElementById('txTabTotalCount');
+        if (elTabTotal) elTabTotal.textContent = totalCreated;
+        var elTabOng = document.getElementById('txTabOngoingCount');
+        if (elTabOng) elTabOng.textContent = ongoing;
+
+        // Update filter pill counts
+        document.querySelectorAll('.tx-filter-pill').forEach(function(pill) {
+          var onclick = pill.getAttribute('onclick') || '';
+          if (onclick.includes("'all'")) pill.textContent = 'All Deals (' + totalCreated + ')';
+          else if (onclick.includes("'In Progress'") || onclick.includes("Ongoing")) pill.textContent = 'Ongoing (' + ongoing + ')';
+          else if (onclick.includes("'Completed'")) pill.textContent = 'Completed (' + completed + ')';
+          else if (onclick.includes("'Cancelled'")) pill.textContent = 'Cancelled (' + cancelled + ')';
+        });
+      }
+
+      window.filterTransactions = function(status, pill) {
+        currentStatusFilter = status;
+        document.querySelectorAll('.tx-filter-pill').forEach(function(p) { p.classList.remove('active'); });
+        if (pill) pill.classList.add('active');
+        var q = document.getElementById('txSearchInput') ? document.getElementById('txSearchInput').value : '';
+        renderTable(status, q);
+      };
+
+      window.onTxSearchInput = function() {
+        var q = document.getElementById('txSearchInput') ? document.getElementById('txSearchInput').value : '';
+        renderTable(currentStatusFilter, q);
+      };
+
+      window.sharePartneredPaymentLink = function(txId, title, amount) {
+        var remaining = Math.round(amount * 0.4);
+        var currentUser = window.EscrowApp.getUser() || { name: 'Alex Mercer' };
+        var ownerName = currentUser.name || 'Alex Mercer';
+        var loc = window.location.href;
+        var basePath = loc.substring(0, loc.lastIndexOf('/') + 1);
+        var shareUrl = basePath + 'partnered-payment.html?id=' + encodeURIComponent(txId) +
+          '&title=' + encodeURIComponent(title) +
+          '&owner=' + encodeURIComponent(ownerName) +
+          '&amount=' + amount +
+          '&remaining=' + remaining;
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(shareUrl).then(function() {
+            window.EscrowApp.showToast('Payment link copied to clipboard!');
+          }).catch(function() {
+            prompt('Copy Partnered Payment Link:', shareUrl);
+          });
+        } else {
+          prompt('Copy Partnered Payment Link:', shareUrl);
+        }
+      };
+
+      renderTable();
+    });
+  </script>
+</body>
+</html>
+
+

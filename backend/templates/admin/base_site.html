@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | Chrysalias.com Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" style="margin: 0; padding: 10px 0; font-family: 'Inter', sans-serif;">
+  <a href="{% url 'admin:index' %}" style="color: #ffffff; text-decoration: none; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px;">
+    CHRYSALIAS<span style="color: #3cb95d;">.COM</span> <span style="font-size: 0.8rem; font-weight: 400; opacity: 0.85; margin-left: 8px;">ADMIN PORTAL</span>
+  </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

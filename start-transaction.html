@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Start a Transaction | Chrysalias.com</title>
+  <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
+  <link href="css/app-custom.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
+  <style>
+    .tx-wizard-bg {
+      background-color: var(--escrow-bg-webapp);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+    .tx-wizard-container {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .tx-step-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .tx-step-bar::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+    .tx-step-item {
+      position: relative;
+      z-index: 2;
+      background: var(--escrow-bg-webapp);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+    .tx-step-item.active {
+      color: var(--escrow-navy);
+    }
+    .tx-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .tx-step-item.active .tx-step-num {
+      background: var(--escrow-green);
+    }
+    .tx-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+      padding: 36px;
+    }
+    .tx-card-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--escrow-navy);
+      margin: 0 0 6px 0;
+    }
+    .tx-card-subtitle {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
+    .tx-section-header {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--escrow-navy);
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 10px;
+      margin: 28px 0 20px 0;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .addon-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .addon-box:hover {
+      border-color: var(--escrow-green);
+      background: #f0fdf4;
+    }
+    .addon-box.recommended {
+      border-color: var(--escrow-green);
+      background: #f0fdf4;
+    }
+    .addon-badge {
+      background: var(--escrow-green);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-left: 8px;
+    }
+    .summary-box {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      margin: 20px 0;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e2e8f0;
+      font-size: 0.95rem;
+    }
+    .summary-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .summary-row.total {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--escrow-navy);
+      border-top: 2px solid #cbd5e1;
+      padding-top: 14px;
+      margin-top: 6px;
+    }
+    .phone-input-group {
+      display: flex;
+      align-items: center;
+    }
+    .phone-prefix {
+      background: #e2e8f0;
+      color: #334155;
+      padding: 12px 14px;
+      border: 1px solid var(--escrow-border);
+      border-right: none;
+      border-radius: 6px 0 0 6px;
+      font-weight: 700;
+    }
+    .phone-input {
+      border-radius: 0 6px 6px 0 !important;
+      flex: 1;
+    }
+  </style>
+</head>
+<body class="tx-wizard-bg">
+  <!-- Top Minimal Header -->
+  <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 16px 32px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+    <a href="index.html" style="text-decoration: none;">
+      <span style="font-family: Montserrat, sans-serif; font-weight: 800; font-size: 1.4rem; color: #002b49; letter-spacing: -0.5px;">CHRYSALIAS<span style="color: #3cb95d;">.COM</span></span>
+    </a>
+  </div>
+
+  <div class="tx-wizard-container">
+    
+    <!-- Wizard Progress Bar -->
+    <div class="tx-step-bar">
+      <div class="tx-step-item active" id="stepIndicator1">
+        <div class="tx-step-num">1</div>
+        <span>Transaction & Item Details</span>
+      </div>
+      <div class="tx-step-item" id="stepIndicator2">
+        <div class="tx-step-num">2</div>
+        <span>Summary & Seller Details</span>
+      </div>
+    </div>
+
+    <div class="tx-card">
+      
+      <!-- STEP 1: FORM INPUTS -->
+      <div id="wizardStep1">
+        <h1 class="tx-card-title">Start Transaction</h1>
+        <p class="tx-card-subtitle">Set up protected Chrysalias terms for your purchase or sale.</p>
+
+        <form id="txStep1Form">
+          <div class="form-group">
+            <label for="txTitle">Transaction title</label>
+            <input type="text" id="txTitle" class="form-control" placeholder="e.g. Domain Purchase: kkd.com" required value="Domain Purchase: kkd.com">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="myRole">My role</label>
+              <select id="myRole" class="form-control" style="height: 48px;" required>
+                <option value="buyer" selected>Buyer</option>
+                <option value="seller">Seller</option>
+                <option value="broker">Broker</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="currency">Currency</label>
+              <select id="currency" class="form-control" style="height: 48px;" required>
+                <option value="usd" selected>USD ($)</option>
+                <option value="eur">EUR (€)</option>
+                <option value="gbp">GBP (£)</option>
+                <option value="cad">CAD ($)</option>
+                <option value="aud">AUD ($)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inspectionPeriod">Inspection period (days)</label>
+            <input type="number" id="inspectionPeriod" class="form-control" min="1" max="30" value="2" required>
+          </div>
+
+          <div class="tx-section-header">Payment & Co-Funding Option</div>
+
+          <div class="payment-option-grid" style="margin-bottom: 20px;">
+            <label id="optLabelStandard" class="pay-option-card" style="border: 2px solid #3cb95d; background: #f0fdf4; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box; width: 100%;">
+              <input type="radio" name="paymentType" value="standard" checked onclick="togglePaymentType('standard')" style="margin-top: 4px; accent-color: #3cb95d; flex-shrink: 0;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; line-height: 1.3;">Standard Chrysalias Payment</div>
+                <div style="font-size: 0.82rem; color: #475569; margin-top: 4px; line-height: 1.35;">Single buyer completes full transaction payment.</div>
+              </div>
+            </label>
+
+            <label id="optLabelPartnered" class="pay-option-card" style="border: 1px solid #cbd5e1; background: #ffffff; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box; width: 100%;">
+              <input type="radio" name="paymentType" value="partnered" onclick="togglePaymentType('partnered')" style="margin-top: 4px; accent-color: #3cb95d; flex-shrink: 0;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; line-height: 1.3;">
+                  Partnered Payment
+                  <span style="background: #002b49; color: #ffffff; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700; text-transform: uppercase; white-space: nowrap;">Co-Fund</span>
+                </div>
+                <div style="font-size: 0.82rem; color: #475569; margin-top: 4px; line-height: 1.35;">Invite a partner or co-buyer to split or complete payment with you.</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Partnered Payment Details Box -->
+          <div id="partneredFieldsBox" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #002b49; border-radius: 8px; padding: 18px 20px; margin-bottom: 24px;">
+            <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <span>Partnered Payment Settings</span>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label for="partnerEmail" style="font-size: 0.85rem;">Partner / Co-Buyer Email</label>
+                <input type="email" id="partnerEmail" class="form-control" placeholder="partner@example.com" value="partner.co-buyer@example.com">
+              </div>
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label for="partnerContribution" style="font-size: 0.85rem;">Partner Payment Split</label>
+                <select id="partnerContribution" class="form-control" style="height: 48px;">
+                  <option value="50_50" selected>50% / 50% Equal Co-Funding Split</option>
+                  <option value="partner_full">Partner Pays Remaining Balance</option>
+                  <option value="custom">Custom Partner Contribution</option>
+                </select>
+              </div>
+            </div>
+            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">
+              Once initiated, a dedicated <strong>Chrysalias Partnered Payment Portal link</strong> will be generated for your partner to complete their share.
+            </p>
+          </div>
+
+          <div class="tx-section-header">Transaction details</div>
+
+          <div class="form-group">
+            <label for="itemCategory">Item category</label>
+            <select id="itemCategory" class="form-control" style="height: 48px;" required>
+              <option value="Domain Names" selected>Domain Names</option>
+              <option value="Motor Vehicles">Motor Vehicles (Cars, Boats, Aircraft)</option>
+              <option value="Estate & Real Estate">Estate & Real Estate (Property, Houses, Land)</option>
+              <option value="General Merchandise">General Merchandise (Luxury Goods, Laptops)</option>
+              <option value="Jewelry & Watches">Jewelry & Watches (Rolex, Fine Diamonds)</option>
+              <option value="Antiques & Collectibles">Antiques & Collectibles</option>
+              <option value="Milestone Services">Milestone Services & Contracts</option>
+              <option value="IPv4 Addresses">IPv4 Addresses</option>
+            </select>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="itemName">Item name / Domain</label>
+              <input type="text" id="itemName" class="form-control" placeholder="e.g. kkd.com" required value="kkd.com">
+            </div>
+
+            <div class="form-group">
+              <label for="itemPrice">Price (USD)</label>
+              <div style="position: relative;">
+                <span style="position: absolute; left: 14px; top: 12px; font-weight: 700; color: #64748b;">$</span>
+                <input type="number" step="0.01" id="itemPrice" class="form-control" style="padding-left: 32px;" placeholder="0.00" value="12.00" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="itemDesc">Item description</label>
+            <textarea id="itemDesc" class="form-control" rows="3" placeholder="Describe the item, domain transfer, or service deliverables...">Full transfer of domain name kkd.com including ICANN auth code to buyer account.</textarea>
+          </div>
+
+          <div style="margin-top: 32px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="dashboard.html" style="color: #64748b; font-weight: 600; font-size: 0.95rem; text-decoration: underline;">
+              Skip to Dashboard
+            </a>
+            <button type="submit" class="btn-escrow-green" style="padding: 14px 36px; font-size: 1.05rem;">
+              Add Item / Proceed →
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- STEP 2: SUMMARY & SELLER DETAILS -->
+      <div id="wizardStep2" style="display: none;">
+        <h1 class="tx-card-title">Transaction summary</h1>
+        <p class="tx-card-subtitle">Review items, add-on services, fee breakdown, and counterparty details.</p>
+
+        <!-- Selected Item Badge Card -->
+        <div style="background: #f1f5f9; border-radius: 8px; padding: 18px 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 id="summaryItemName" style="margin: 0; color: var(--escrow-navy); font-size: 1.2rem;">kkd.com</h3>
+            <p id="summaryCategoryRole" style="margin: 4px 0 0 0; color: #64748b; font-size: 0.88rem;">Domain • Inspection Period: <span id="summaryDays">2</span> Days</p>
+          </div>
+          <div id="summaryPriceTag" style="font-size: 1.4rem; font-weight: 800; color: var(--escrow-green);">$12.00</div>
+        </div>
+
+        <!-- Add-on Services -->
+        <label class="addon-box">
+          <input type="checkbox" id="holdingAddon" style="margin-top: 4px; transform: scale(1.2);">
+          <div>
+            <strong>Use Domain Name Holding service</strong>
+            <p style="margin: 2px 0 0 0; font-size: 0.85rem; color: #64748b;">Keep your domain safely held in Chrysalias protection during extended payout schedules.</p>
+          </div>
+        </label>
+
+        <label class="addon-box recommended">
+          <input type="checkbox" id="conciergeAddon" checked style="margin-top: 4px; transform: scale(1.2);">
+          <div>
+            <strong>Upgrade to Chrysalias concierge service <span class="addon-badge">Recommended</span></strong>
+            <p style="margin: 2px 0 0 0; font-size: 0.85rem; color: #475569;">Ensure a smooth transfer of the domain with our personal assistance. Fees apply.</p>
+          </div>
+        </label>
+
+        <!-- Fee Summary Table -->
+        <div class="summary-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <strong style="color: var(--escrow-navy);">Transaction summary</strong>
+            <span style="font-size: 0.85rem; color: #64748b; text-decoration: underline; cursor: pointer;" onclick="window.EscrowApp.showToast('Chrysalias fee minimum is $50.00, protecting full transaction value.');">How are the totals calculated?</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <strong id="calcSubtotal">$12.00</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Chrysalias fee paid by:</span>
+            <select id="feePayer" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; font-size: 0.88rem;">
+              <option value="buyer" selected>buyer ($50.00)</option>
+              <option value="seller">seller ($50.00)</option>
+              <option value="50/50">50/50 split ($25.00 each)</option>
+            </select>
+          </div>
+
+          <div class="summary-row">
+            <span>Buyer price:</span>
+            <strong id="calcBuyerPrice" style="color: var(--escrow-navy);">$62.00</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Seller proceeds:</span>
+            <strong id="calcSellerProceeds" style="color: var(--escrow-green);">$12.00</strong>
+          </div>
+
+          <div class="summary-row total">
+            <span>Total Buyer Payment:</span>
+            <span id="calcTotalPayment">$62.00 USD</span>
+          </div>
+          <p style="margin: 8px 0 0 0; font-size: 0.8rem; color: #94a3b8; text-align: right;">All prices are in USD. Taxes may apply.</p>
+        </div>
+
+        <!-- Seller Details -->
+        <div class="tx-section-header">Seller details</div>
+
+        <form id="txStep2Form">
+          <div class="form-group">
+            <label for="sellerEmail">Seller Email</label>
+            <input type="email" id="sellerEmail" class="form-control" placeholder="seller@example.com" value="seller.alex@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="sellerPhone">Seller Phone Number</label>
+            <div class="phone-input-group">
+              <span class="phone-prefix">+1</span>
+              <input type="tel" id="sellerPhone" class="form-control phone-input" placeholder="(555) 234-5678" value="(555) 234-5678" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin: 24px 0;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="termsCheck" checked required style="margin-top: 4px; transform: scale(1.2);">
+              <span style="font-size: 0.9rem; color: #475569;">I have read and agree to the <a href="#" onclick="alert('Chrysalias General Terms & Privacy Policy.'); return false;" style="color: var(--escrow-navy); text-decoration: underline;">General Chrysalias Instructions</a> and <a href="#" onclick="alert('Chrysalias Privacy Policy'); return false;" style="color: var(--escrow-navy); text-decoration: underline;">Privacy Policy</a>.</span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px;">
+            <button type="button" class="btn btn--secondary" onclick="showStep1()" style="padding: 12px 24px;">
+              ← Back to Details
+            </button>
+            <div style="display: flex; gap: 16px; align-items: center;">
+              <a href="dashboard.html" style="color: #64748b; font-weight: 600; font-size: 0.95rem; text-decoration: underline;">
+                Skip to Dashboard
+              </a>
+              <button type="submit" class="btn-escrow-green" style="padding: 14px 40px; font-size: 1.1rem;">
+                Start transaction
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/app-custom.js"></script>
+  <script>
+    function togglePaymentType(type) {
+      const isPartnered = type === 'partnered';
+      const box = document.getElementById('partneredFieldsBox');
+      const labelStd = document.getElementById('optLabelStandard');
+      const labelPart = document.getElementById('optLabelPartnered');
+      
+      if (isPartnered) {
+        box.style.display = 'block';
+        labelPart.style.border = '2px solid #3cb95d';
+        labelPart.style.background = '#f0fdf4';
+        labelStd.style.border = '1px solid #cbd5e1';
+        labelStd.style.background = '#ffffff';
+      } else {
+        box.style.display = 'none';
+        labelStd.style.border = '2px solid #3cb95d';
+        labelStd.style.background = '#f0fdf4';
+        labelPart.style.border = '1px solid #cbd5e1';
+        labelPart.style.background = '#ffffff';
+      }
+    }
+
+    function updateCalculations() {
+      const price = parseFloat(document.getElementById('itemPrice').value || '12.00');
+      const feePayer = document.getElementById('feePayer').value;
+      const escrowFee = 50.00;
+
+      let buyerFee = escrowFee;
+      let sellerFee = 0.00;
+
+      if (feePayer === 'seller') {
+        buyerFee = 0.00;
+        sellerFee = escrowFee;
+      } else if (feePayer === '50/50') {
+        buyerFee = 25.00;
+        sellerFee = 25.00;
+      }
+
+      const buyerPrice = price + buyerFee;
+      const sellerProceeds = Math.max(0, price - sellerFee);
+
+      document.getElementById('calcSubtotal').textContent = '$' + price.toFixed(2);
+      document.getElementById('calcBuyerPrice').textContent = '$' + buyerPrice.toFixed(2);
+      document.getElementById('calcSellerProceeds').textContent = '$' + sellerProceeds.toFixed(2);
+      document.getElementById('calcTotalPayment').textContent = '$' + buyerPrice.toFixed(2) + ' USD';
+    }
+
+    function showStep1() {
+      document.getElementById('wizardStep1').style.display = 'block';
+      document.getElementById('wizardStep2').style.display = 'none';
+      document.getElementById('stepIndicator1').classList.add('active');
+      document.getElementById('stepIndicator2').classList.remove('active');
+    }
+
+    function showStep2() {
+      document.getElementById('wizardStep1').style.display = 'none';
+      document.getElementById('wizardStep2').style.display = 'block';
+      document.getElementById('stepIndicator1').classList.remove('active');
+      document.getElementById('stepIndicator2').classList.add('active');
+
+      const itemName = document.getElementById('itemName').value || 'kkd.com';
+      const category = document.getElementById('itemCategory').value;
+      const price = parseFloat(document.getElementById('itemPrice').value || '12.00');
+      const days = document.getElementById('inspectionPeriod').value || '2';
+
+      document.getElementById('summaryItemName').textContent = itemName;
+      document.getElementById('summaryCategoryRole').textContent = category + ' • Inspection Period: ' + days + ' Days';
+      document.getElementById('summaryPriceTag').textContent = '$' + price.toFixed(2);
+
+      updateCalculations();
+    }
+
+    document.getElementById('txStep1Form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      showStep2();
+    });
+
+    document.getElementById('feePayer').addEventListener('change', updateCalculations);
+    document.getElementById('itemPrice').addEventListener('input', updateCalculations);
+
+    document.getElementById('txStep2Form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!document.getElementById('termsCheck').checked) {
+        alert('Please accept the General Chrysalias Instructions and Privacy Policy to proceed.');
+        return;
+      }
+
+      const title = document.getElementById('txTitle').value || 'Domain Purchase: kkd.com';
+      const itemName = document.getElementById('itemName').value || 'kkd.com';
+      const category = document.getElementById('itemCategory').value;
+      const price = parseFloat(document.getElementById('itemPrice').value || '12.00');
+      const role = document.getElementById('myRole').value;
+      const currency = document.getElementById('currency').value.toUpperCase();
+      const inspectionDays = parseInt(document.getElementById('inspectionPeriod').value || '2');
+      const sellerEmail = document.getElementById('sellerEmail').value;
+      const sellerPhone = '+1 ' + document.getElementById('sellerPhone').value;
+
+      const paymentTypeRadios = document.getElementsByName('paymentType');
+      let isPartneredPayment = false;
+      for (let r of paymentTypeRadios) {
+        if (r.checked && r.value === 'partnered') {
+          isPartneredPayment = true;
+          break;
+        }
+      }
+
+      const partnerEmail = isPartneredPayment ? (document.getElementById('partnerEmail').value || 'partner.co-buyer@example.com') : '';
+      const partnerContribution = isPartneredPayment ? document.getElementById('partnerContribution').value : '';
+
+      const feePayer = document.getElementById('feePayer').value;
+      const escrowFee = 50.00;
+      let buyerFee = escrowFee;
+      let sellerFee = 0.00;
+      if (feePayer === 'seller') { buyerFee = 0.00; sellerFee = 50.00; }
+      else if (feePayer === '50/50') { buyerFee = 25.00; sellerFee = 25.00; }
+
+      const buyerPrice = price + buyerFee;
+
+      const txId = 'ESC-' + Math.floor(100000 + Math.random() * 900000);
+
+      const newTx = {
+        id: txId,
+        title: title,
+        item: itemName,
+        category: category,
+        price: price,
+        subtotal: price,
+        escrowFee: escrowFee,
+        buyerPrice: buyerPrice,
+        sellerProceeds: Math.max(0, price - sellerFee),
+        role: role,
+        currency: currency,
+        inspectionDays: inspectionDays,
+        sellerEmail: sellerEmail,
+        sellerPhone: sellerPhone,
+        isPartneredPayment: isPartneredPayment,
+        partnerEmail: partnerEmail,
+        partnerContribution: partnerContribution,
+        status: isPartneredPayment ? 'Partnered Payment Pending' : 'In Progress',
+        statusBadge: isPartneredPayment ? 'Awaiting Partner Co-Funding' : 'Awaiting Seller Acceptance',
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      };
+
+      // Save to localStorage
+      let existingTx = [];
+      try {
+        existingTx = JSON.parse(localStorage.getItem('escrow_transactions') || '[]');
+      } catch (err) {
+        existingTx = [];
+      }
+      existingTx.unshift(newTx);
+      localStorage.setItem('escrow_transactions', JSON.stringify(existingTx));
+
+      if (isPartneredPayment) {
+        if (window.EscrowApp && window.EscrowApp.showToast) {
+          window.EscrowApp.showToast('Partnered Transaction Created! Redirecting to Partnered Payment Portal...');
+        }
+        const currentUser = (window.EscrowApp && window.EscrowApp.getUser()) || { name: 'Alex Mercer' };
+        const ownerName = currentUser.name || 'Alex Mercer';
+        const partnerAmount = buyerPrice;
+        const remainingAmount = Math.round(buyerPrice * 0.5);
+
+        setTimeout(() => {
+          window.location.href = 'partnered-payment.html?id=' + encodeURIComponent(txId) + '&title=' + encodeURIComponent(title) + '&owner=' + encodeURIComponent(ownerName) + '&amount=' + partnerAmount + '&remaining=' + remainingAmount;
+        }, 1200);
+      } else {
+        if (window.EscrowApp && window.EscrowApp.showToast) {
+          window.EscrowApp.showToast('Transaction created successfully! Redirecting to dashboard...');
+        }
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>

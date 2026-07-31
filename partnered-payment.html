@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Partnered Payment Portal | Chrysalias.com</title>
+  <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
+  <link href="css/app-custom.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      background-color: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Top Header with Account Owner Profile */
+    .partner-header {
+      background: #002b49;
+      color: #ffffff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      gap: 12px;
+    }
+    .header-logo-text {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .header-logo-text span {
+      color: #3cb95d;
+    }
+
+    /* Owner Profile Badge */
+    .owner-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
+      border-radius: 30px;
+      margin-left: auto;
+    }
+    .owner-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3cb95d;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+    .owner-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .owner-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .owner-tag {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    /* Container & Layout */
+    .partner-container {
+      max-width: 820px;
+      margin: 28px auto;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .partner-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 26px 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      margin-bottom: 24px;
+      box-sizing: border-box;
+    }
+    
+    /* Responsive Details Grid */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+      background: #f8fafc;
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+    .detail-item label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      display: block;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .detail-item span {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #002b49;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      background: #e2e8f0;
+      border-radius: 8px;
+      height: 12px;
+      width: 100%;
+      overflow: hidden;
+      margin: 12px 0 8px 0;
+    }
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #3cb95d 0%, #22c55e 100%);
+      height: 100%;
+      width: 60%;
+      transition: width 0.8s ease-in-out;
+    }
+
+    /* Center Screen 5-Second Loading Overlay */
+    .center-spinner-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 43, 73, 0.88);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+    }
+    .spinner-modal-box {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+    }
+    .loading-spinner-large {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top: 4px solid #3cb95d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 100% Responsive Payment Action Button */
+    .responsive-pay-btn {
+      width: 100% !important;
+      padding: 13px 16px !important;
+      font-size: clamp(0.88rem, 3.8vw, 1rem) !important;
+      font-weight: 700 !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 14px rgba(60,185,93,0.3) !important;
+      text-align: center !important;
+      line-height: 1.35 !important;
+      white-space: normal !important;
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      box-sizing: border-box !important;
+      display: block !important;
+      margin: 0 auto !important;
+    }
+
+    .btn-text-main {
+      display: inline;
+    }
+    .btn-text-sub {
+      display: inline-block;
+      margin-left: 4px;
+      font-weight: 800;
+    }
+
+    /* Mobile Responsiveness Rules */
+    @media (max-width: 640px) {
+      .partner-header {
+        padding: 12px 14px;
+      }
+      .header-logo-text {
+        font-size: 1.15rem;
+      }
+      .owner-profile-badge {
+        padding: 4px 10px;
+        gap: 6px;
+      }
+      .owner-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+      }
+      .owner-name {
+        font-size: 0.78rem;
+      }
+      .owner-tag {
+        display: none;
+      }
+      .partner-card {
+        padding: 18px 16px;
+        border-radius: 12px;
+      }
+      .details-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 14px;
+        gap: 10px;
+      }
+      .responsive-pay-btn {
+        padding: 12px 12px !important;
+      }
+      .btn-text-sub {
+        display: block !important;
+        margin-left: 0 !important;
+        margin-top: 3px !important;
+        font-size: 0.95em !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header with Brand Logo & Account Owner Profile on the Right -->
+  <header class="partner-header">
+    <a href="index.html" class="header-logo-text">
+      CHRYSALIAS<span>.COM</span>
+    </a>
+
+    <!-- Account Owner Profile Badge -->
+    <div class="owner-profile-badge">
+      <div class="owner-avatar" id="headerOwnerAvatar">AM</div>
+      <div class="owner-info">
+        <div class="owner-name" id="headerOwnerName">Alex Mercer</div>
+        <div class="owner-tag">✓ Primary Buyer</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="partner-container">
+    
+    <!-- Partnered Payment Overview Card -->
+    <div class="partner-card">
+      
+      <!-- Top Title & Price Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 4px 12px; border-radius: 20px;" id="portalTxId">TX-892014</span>
+          <h2 style="margin: 6px 0 3px 0; font-size: clamp(1.2rem, 5vw, 1.5rem); color: #002b49; font-weight: 800; letter-spacing: -0.01em;" id="portalTitle">FintechDomain.com</h2>
+          <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Chrysalias Partnered Payment Protection</p>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Total Transaction Price</div>
+          <div style="font-size: clamp(1.25rem, 5vw, 1.6rem); font-weight: 800; color: #002b49;" id="portalTotalAmount">$5,000.00 USD</div>
+        </div>
+      </div>
+
+      <!-- Rich Transaction Details Grid -->
+      <div class="details-grid">
+        <div class="detail-item">
+          <label>Account Owner</label>
+          <span id="detailOwner">Alex Mercer</span>
+        </div>
+        <div class="detail-item">
+          <label>Category</label>
+          <span id="detailCategory">Domain Names & Websites</span>
+        </div>
+        <div class="detail-item">
+          <label>Seller Email</label>
+          <span id="detailSeller">alex.seller@chrysalias-demo.com</span>
+        </div>
+        <div class="detail-item">
+          <label>Inspection Period</label>
+          <span id="detailInspection">5 Days Inspection</span>
+        </div>
+        <div class="detail-item">
+          <label>Fee Split Terms</label>
+          <span>50/50 Shared Fee</span>
+        </div>
+        <div class="detail-item">
+          <label>Protection Level</label>
+          <span style="color: #3cb95d;">✓ 100% Chrysalias Shield</span>
+        </div>
+      </div>
+
+      <!-- Live Payment Breakdown Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px;">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+          <div style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Total Price</div>
+          <div style="font-size: 1.18rem; font-weight: 800; color: #002b49; margin-top: 3px;" id="breakdownTotal">$5,000.00</div>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+          <div style="font-size: 0.78rem; color: #166534; font-weight: 600;">Primary Buyer Paid</div>
+          <div style="font-size: 1.18rem; font-weight: 800; color: #3cb95d; margin-top: 3px;" id="breakdownPaid">$3,000.00</div>
+        </div>
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px;">
+          <div style="font-size: 0.78rem; color: #1e40af; font-weight: 700;">Your Co-Pay Balance</div>
+          <div style="font-size: 1.22rem; font-weight: 800; color: #1d4ed8; margin-top: 3px;" id="breakdownRemaining">$2,000.00 USD</div>
+        </div>
+      </div>
+
+      <!-- Funding Progress Bar -->
+      <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; color: #475569;">
+        <span>Funding Progress</span>
+        <span id="progressPercentText">60% Funded</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBarFill" style="width: 60%;"></div>
+      </div>
+
+      <!-- Action Button to Trigger 5-Second Centered Loading Overlay & Redirect to Payment Checkout Page -->
+      <div style="margin-top: 22px;" id="triggerPaymentContainer">
+        <button class="btn-escrow-green responsive-pay-btn" onclick="startPaymentFlow()" id="triggerPayBtn">
+          <span class="btn-text-main">Proceed to Pay Remaining Balance</span>
+          <span class="btn-text-sub" id="btnPayAmount">($2,000.00 USD)</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Center Screen 5-Second Loading Overlay -->
+  <div class="center-spinner-overlay" id="loadingSpinnerOverlay">
+    <div class="spinner-modal-box">
+      <div class="loading-spinner-large"></div>
+      <h3 style="margin: 0 0 6px 0; color: #002b49; font-size: 1.2rem; font-weight: 800;">Securing Chrysalias Payment Portal</h3>
+      <p style="margin: 0 0 14px 0; color: #64748b; font-size: 0.88rem; line-height: 1.4;">Verifying account owner credentials & Chrysalias allocation...</p>
+      <div style="font-size: 0.84rem; font-weight: 700; color: #3cb95d; background: #f0fdf4; padding: 8px 16px; border-radius: 20px; display: inline-block;" id="countdownText">Opening Payment Checkout Page in 5s...</div>
+    </div>
+  </div>
+
+  <script src="js/app-custom.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const txId = params.get('id') || 'TX-892014';
+    const txTitle = params.get('title') || 'FintechDomain.com';
+    const ownerName = params.get('owner') || 'Alex Mercer';
+    const totalAmt = parseFloat(params.get('amount')) || 5000;
+    let remainingAmt = parseFloat(params.get('remaining')) || 2000;
+    let paidAmt = totalAmt - remainingAmt;
+
+    document.getElementById('headerOwnerName').textContent = ownerName;
+    document.getElementById('detailOwner').textContent = ownerName;
+    const initials = ownerName.split(' ').map(n => n[0]).join('').toUpperCase();
+    document.getElementById('headerOwnerAvatar').textContent = initials || 'AM';
+
+    document.getElementById('portalTxId').textContent = txId;
+    document.getElementById('portalTitle').textContent = txTitle;
+    document.getElementById('portalTotalAmount').textContent = '$' + totalAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
+    document.getElementById('breakdownTotal').textContent = '$' + totalAmt.toLocaleString(undefined, {minimumFractionDigits: 2});
+    document.getElementById('breakdownPaid').textContent = '$' + paidAmt.toLocaleString(undefined, {minimumFractionDigits: 2});
+    document.getElementById('breakdownRemaining').textContent = '$' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD';
+    document.getElementById('btnPayAmount').textContent = '($' + remainingAmt.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' USD)';
+
+    const initialPercent = Math.round((paidAmt / totalAmt) * 100);
+    document.getElementById('progressBarFill').style.width = initialPercent + '%';
+    document.getElementById('progressPercentText').textContent = initialPercent + '% Funded';
+
+    // 5-Second Centered Loading Overlay before opening NEW Payment Checkout Page
+    function startPaymentFlow() {
+      const spinner = document.getElementById('loadingSpinnerOverlay');
+      const countdownEl = document.getElementById('countdownText');
+      spinner.style.display = 'flex';
+
+      let secondsLeft = 5;
+      const interval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          countdownEl.textContent = 'Opening Payment Checkout Page in ' + secondsLeft + 's...';
+        } else {
+          clearInterval(interval);
+          countdownEl.textContent = 'Redirecting to Secure Payment Checkout...';
+          const checkoutUrl = 'partnered-payment-checkout.html?id=' + encodeURIComponent(txId) + '&title=' + encodeURIComponent(txTitle) + '&owner=' + encodeURIComponent(ownerName) + '&amount=' + totalAmt + '&remaining=' + remainingAmt;
+          window.location.href = checkoutUrl;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
