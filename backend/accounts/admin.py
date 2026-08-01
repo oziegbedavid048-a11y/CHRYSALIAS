@@ -5,7 +5,19 @@ Full-featured admin for user management with KYC controls.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from .models import User, UserProfile
+
+
+class ChrysaliasUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = User
+
+
+class ChrysaliasUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('email', 'username', 'full_name')
 
 
 class UserProfileInline(admin.StackedInline):
@@ -29,6 +41,8 @@ class UserProfileInline(admin.StackedInline):
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
+    form              = ChrysaliasUserChangeForm
+    add_form          = ChrysaliasUserCreationForm
     inlines           = [UserProfileInline]
     list_display      = ('email', 'display_name_col', 'kyc_badge_col', 'is_verified', 'is_active', 'transaction_count_col', 'created_at')
     list_filter       = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
