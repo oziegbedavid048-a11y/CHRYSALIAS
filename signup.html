@@ -207,7 +207,8 @@
             return;
           }
 
-          // SUCCESS — show the confirmation screen, do NOT redirect to dashboard
+          // SUCCESS — store signup user profile and show confirmation screen
+          window.EscrowApp.setUser({ name: fullName || data.user.full_name || email.split('@')[0], email: email });
           document.getElementById('signup-screen').style.display = 'none';
           document.getElementById('success-screen').style.display = 'block';
 

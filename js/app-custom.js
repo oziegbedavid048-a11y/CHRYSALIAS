@@ -201,13 +201,15 @@
           '      <span style="font-family: Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:#002b49;letter-spacing:-0.5px;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>' +
           '    </a>' +
           '    <div class="dashboard-header-right">' +
-          '      <div class="dashboard-user-profile-wrapper" id="userProfileBtn">' +
-          '        <div class="user-avatar-circle">' + initials + '</div>' +
-          '        <span class="user-profile-name">' + user.name + '</span>' +
-          '        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>' +
+          '      <div class="dashboard-user-profile-wrapper" id="userProfileBtn" style="cursor:pointer;" title="View Profile">' +
+          '        <a href="profile.html" style="text-decoration:none;"><div class="user-avatar-circle">' + initials + '</div></a>' +
+          '        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="userDropdownArrow"><path d="M6 9l6 6 6-6"/></svg>' +
           '        <div class="user-profile-dropdown" id="userDropdown">' +
           '          <div class="dropdown-user-info"><strong>' + user.name + '</strong><small>' + user.email + '</small></div>' +
           '          <hr>' +
+          '          <a href="profile.html" class="dropdown-item">' +
+          '            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>My Profile' +
+          '          </a>' +
           '          <a href="dashboard.html" class="dropdown-item">' +
           '            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Dashboard' +
           '          </a>' +
@@ -222,12 +224,14 @@
 
         setTimeout(function () {
           var userBtn = document.getElementById('userProfileBtn');
+          var arrowBtn = document.getElementById('userDropdownArrow');
           var userDd = document.getElementById('userDropdown');
           var logoutBtn = document.getElementById('logoutBtn');
 
-          if (userBtn && userDd) {
-            userBtn.addEventListener('click', function (e) {
+          if (arrowBtn && userDd) {
+            arrowBtn.addEventListener('click', function (e) {
               e.stopPropagation();
+              e.preventDefault();
               userDd.classList.toggle('show');
             });
           }

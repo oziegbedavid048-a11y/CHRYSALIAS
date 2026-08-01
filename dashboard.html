@@ -290,11 +290,6 @@
   <div class="dashboard-layout">
     <!-- Sidebar Navigation with Modern Icons -->
     <aside class="dashboard-sidebar">
-      <div class="sidebar-user">
-        <div class="sidebar-user-name" id="sideUserName">Alex Mercer</div>
-        <div class="sidebar-user-role">Verified Chrysalias Account</div>
-      </div>
-
       <ul class="sidebar-menu">
         <li class="sidebar-item">
           <a class="sidebar-link active" data-tab="overview">
@@ -371,94 +366,31 @@
           <div class="metrics-grid-4">
             <div class="metric-card">
               <div class="metric-label">Active Counterparties</div>
-              <div class="metric-value" id="overviewTotalUsers">3</div>
+              <div class="metric-value" id="overviewTotalUsers">0</div>
               <span class="metric-badge badge-blue">Connected Accounts</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Active Buyers</div>
-              <div class="metric-value" style="color: #0284c7;">2</div>
+              <div class="metric-value" id="overviewActiveBuyers" style="color: #0284c7;">0</div>
               <span class="metric-badge badge-blue">Funded Buyers</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Active Sellers</div>
-              <div class="metric-value" style="color: #3cb95d;">1</div>
+              <div class="metric-value" id="overviewActiveSellers" style="color: #3cb95d;">0</div>
               <span class="metric-badge badge-green">Payout Verified</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">KYC Compliance Rate</div>
               <div class="metric-value" style="color: #002b49;">100%</div>
-              <span class="metric-badge badge-green">Level 2 Verified</span>
+              <span class="metric-badge badge-green">Level 1 Verified</span>
             </div>
           </div>
 
-          <!-- Active Counterparty Cards Preview Grid -->
+          <!-- Active Counterparty Cards Preview Grid (Dynamic empty/active state) -->
           <div style="margin-top: 18px;">
             <div style="font-size: 0.88rem; font-weight: 700; color: #002b49; margin-bottom: 10px;">Primary Deal Counterparties</div>
-            <div class="user-cards-grid">
-              
-              <!-- Counterparty 1 -->
-              <div class="user-card">
-                <div>
-                  <div class="user-card-header">
-                    <div class="user-avatar" style="background: #0284c7;">AI</div>
-                    <div class="user-card-info">
-                      <h4>Alex Investment Co</h4>
-                      <p>alex.buyer@investments.co</p>
-                    </div>
-                  </div>
-                  <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
-                    <span class="metric-badge badge-blue">Buyer</span>
-                    <span class="metric-badge badge-green">✓ Level 2 Verified</span>
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">
-                  <span style="color: #64748b;">Deal: <strong>ESC-892401</strong></span>
-                  <span style="color: #002b49; font-weight: 800;">$15,500.00</span>
-                </div>
-              </div>
-
-              <!-- Counterparty 2 -->
-              <div class="user-card">
-                <div>
-                  <div class="user-card-header">
-                    <div class="user-avatar" style="background: #3cb95d;">MC</div>
-                    <div class="user-card-info">
-                      <h4>Motor Classics Dealer</h4>
-                      <p>motorclassics@dealers.com</p>
-                    </div>
-                  </div>
-                  <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
-                    <span class="metric-badge badge-blue">Seller</span>
-                    <span class="metric-badge badge-green">✓ Level 2 Verified</span>
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">
-                  <span style="color: #64748b;">Deal: <strong>ESC-891904</strong></span>
-                  <span style="color: #002b49; font-weight: 800;">$178,000.00</span>
-                </div>
-              </div>
-
-              <!-- Counterparty 3 -->
-              <div class="user-card">
-                <div>
-                  <div class="user-card-header">
-                    <div class="user-avatar" style="background: #002b49;">TI</div>
-                    <div class="user-card-info">
-                      <h4>Tech Imports Wholesale</h4>
-                      <p>techimports.us@gmail.com</p>
-                    </div>
-                  </div>
-                  <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
-                    <span class="metric-badge badge-blue">Buyer</span>
-                    <span class="metric-badge badge-green">✓ Verified Buyer</span>
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">
-                  <span style="color: #64748b;">Deal: <strong>ESC-889021</strong></span>
-                  <span style="color: #3cb95d; font-weight: 800;">$4,200 (Completed)</span>
-                </div>
-              </div>
-
+            <div class="user-cards-grid" id="counterpartyPreviewGrid">
+              <!-- Dynamically populated from real transactions or clean empty state -->
             </div>
           </div>
 
@@ -487,17 +419,17 @@
           <div class="metrics-grid-4" style="margin-bottom: 18px;">
             <div class="metric-card">
               <div class="metric-label">Total Transactions Created</div>
-              <div class="metric-value" id="overviewTotalTx">3</div>
+              <div class="metric-value" id="overviewTotalTx">0</div>
               <span class="metric-badge badge-blue">Lifetime Total</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Completed Transactions</div>
-              <div class="metric-value" id="overviewCompletedTx" style="color: #3cb95d;">1</div>
+              <div class="metric-value" id="overviewCompletedTx" style="color: #3cb95d;">0</div>
               <span class="metric-badge badge-green">Funds Released</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Ongoing Transactions</div>
-              <div class="metric-value" id="overviewOngoingTx" style="color: #0284c7;">2</div>
+              <div class="metric-value" id="overviewOngoingTx" style="color: #0284c7;">0</div>
               <span class="metric-badge badge-blue">In Chrysalias Shield</span>
             </div>
             <div class="metric-card">
@@ -507,39 +439,21 @@
             </div>
           </div>
 
-          <!-- Interactive Responsive Charts Row -->
-          <div class="charts-grid-row">
-            
-            <!-- Chart 1: Responsive Clickable Line/Area Graph Chart -->
-            <div class="chart-container-card">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.9rem; font-weight: 700; color: #002b49; display: flex; align-items: center; gap: 6px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                  Transaction Volume Trend (USD $)
-                </div>
-                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Click points for details</span>
-              </div>
-              
-              <div class="chart-canvas-wrapper">
-                <canvas id="txTrendChart"></canvas>
-              </div>
-            </div>
-
-            <!-- Chart 2: Responsive Clickable Pie / Donut Chart -->
+          <!-- Pie / Donut Chart Container (Line Graph completely removed) -->
+          <div style="max-width: 480px; margin: 0 auto;">
             <div class="chart-container-card">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="font-size: 0.9rem; font-weight: 700; color: #002b49; display: flex; align-items: center; gap: 6px;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
                   Status Breakdown
                 </div>
-                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Click slices</span>
+                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Status Portfolio</span>
               </div>
 
               <div class="pie-canvas-wrapper">
                 <canvas id="txStatusPieChart"></canvas>
               </div>
             </div>
-
           </div>
 
         </div>
@@ -629,97 +543,37 @@
               </h2>
               <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Overview of buyers, sellers, and verified counterparties in your network</p>
             </div>
-            <button class="btn-escrow-navy" onclick="window.EscrowApp.showToast('User invitation link copied!')" style="padding: 8px 16px; font-size: 0.85rem;">+ Invite Counterparty</button>
+            <button class="btn-escrow-navy" onclick="window.EscrowApp.showToast('Counterparty invite feature active')" style="padding: 8px 16px; font-size: 0.85rem;">+ Invite Counterparty</button>
           </div>
 
           <!-- User Metrics Grid -->
           <div class="metrics-grid-4" style="margin-bottom: 18px;">
             <div class="metric-card">
               <div class="metric-label">Total Network Users</div>
-              <div class="metric-value">3</div>
+              <div class="metric-value" id="usersTabTotalCount">0</div>
               <span class="metric-badge badge-blue">Connected Accounts</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Active Sellers</div>
-              <div class="metric-value" style="color: #3cb95d;">1</div>
+              <div class="metric-value" id="usersTabSellersCount" style="color: #3cb95d;">0</div>
               <span class="metric-badge badge-green">Ready for Payouts</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Active Buyers</div>
-              <div class="metric-value" style="color: #0284c7;">2</div>
+              <div class="metric-value" id="usersTabBuyersCount" style="color: #0284c7;">0</div>
               <span class="metric-badge badge-blue">Funded Accounts</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">KYC Compliance</div>
               <div class="metric-value" style="color: #002b49;">100%</div>
-              <span class="metric-badge badge-green">Level 2 Verified</span>
+              <span class="metric-badge badge-green">Level 1 Verified</span>
             </div>
           </div>
 
           <!-- User Directory Cards Grid -->
           <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Counterparty Profiles</div>
-          <div class="user-cards-grid">
-            
-            <div class="user-card">
-              <div>
-                <div class="user-card-header">
-                  <div class="user-avatar" style="background: #002b49;">AM</div>
-                  <div class="user-card-info">
-                    <h4>Alex Mercer <span style="font-size: 0.72rem; color: #3cb95d; font-weight: 700;">(You)</span></h4>
-                    <p>alex.seller@chrysalias-demo.com</p>
-                  </div>
-                </div>
-                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
-                  <span class="metric-badge badge-blue">Primary Account</span>
-                  <span class="metric-badge badge-green">Level 2 KYC Verified</span>
-                </div>
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
-                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">3 Transactions</span>
-                <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Account profile verified')">Manage Profile</button>
-              </div>
-            </div>
-
-            <div class="user-card">
-              <div>
-                <div class="user-card-header">
-                  <div class="user-avatar" style="background: #0284c7;">AI</div>
-                  <div class="user-card-info">
-                    <h4>Alex Investment Co</h4>
-                    <p>alex.buyer@investments.co</p>
-                  </div>
-                </div>
-                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
-                  <span class="metric-badge badge-blue">Buyer Counterparty</span>
-                  <span class="metric-badge badge-green">Level 2 Verified</span>
-                </div>
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
-                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">1 Transaction ($15,500)</span>
-                <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty details active')">View Activity</button>
-              </div>
-            </div>
-
-            <div class="user-card">
-              <div>
-                <div class="user-card-header">
-                  <div class="user-avatar" style="background: #3cb95d;">MC</div>
-                  <div class="user-card-info">
-                    <h4>Motor Classics Dealer</h4>
-                    <p>motorclassics@dealers.com</p>
-                  </div>
-                </div>
-                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px;">
-                  <span class="metric-badge badge-blue">Seller Counterparty</span>
-                  <span class="metric-badge badge-green">Level 2 Verified</span>
-                </div>
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
-                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">1 Transaction ($178,000)</span>
-                <button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty details active')">View Activity</button>
-              </div>
-            </div>
-
+          <div class="user-cards-grid" id="usersTabCardsGrid">
+            <!-- Dynamically populated from real user data -->
           </div>
 
           <!-- User Directory Table -->
@@ -735,15 +589,14 @@
                   <th style="padding: 12px 14px; text-align: right;">Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 12px 14px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem;">AM</div>
-                      <strong style="font-size: 0.88rem;">Alex Mercer</strong>
-                    </div>
-                  </td>
-                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">alex.seller@chrysalias-demo.com</td>
+              <tbody id="usersTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
                   <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Seller / Buyer</span></td>
                   <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
                   <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Profile active')">View Profile</button></td>
@@ -785,20 +638,21 @@
   <script src="js/app-custom.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // --- Greeting ---
+      // --- Greeting with Signup Name ---
       var hour = new Date().getHours();
       var greeting = hour < 12 ? 'Good morning' : (hour < 18 ? 'Good afternoon' : 'Good evening');
-      var welcomeHeader = document.getElementById('welcomeGreeting');
-      if (welcomeHeader) welcomeHeader.textContent = greeting;
 
-      // --- User Auth Verification ---
       var user = window.EscrowApp.getUser();
       if (!user) {
         window.location.href = 'login.html';
         return;
       }
-      var sideUser = document.getElementById('sideUserName');
-      if (sideUser) sideUser.textContent = user.name;
+
+      var userName = user.name || user.full_name || 'Chrysalias User';
+      var welcomeHeader = document.getElementById('welcomeGreeting');
+      if (welcomeHeader) {
+        welcomeHeader.textContent = greeting + ', ' + userName;
+      }
 
       // --- Ensure only first tab panel is visible initially ---
       document.querySelectorAll('.tab-panel').forEach(function(p, i) {
@@ -825,136 +679,55 @@
         });
       });
 
-      // --- Chart.js Implementations ---
-      var trendChartInstance = null;
+      // --- Responsive Pie / Donut Chart Implementation ---
       var pieChartInstance = null;
 
-      function initDashboardCharts() {
+      function initPieChart() {
         if (typeof Chart === 'undefined') return;
-
-        // 1. Line/Area Chart: Monthly Transaction Trends
-        var ctxTrend = document.getElementById('txTrendChart');
-        if (ctxTrend) {
-          var gradient = ctxTrend.getContext('2d').createLinearGradient(0, 0, 0, 200);
-          gradient.addColorStop(0, 'rgba(60, 185, 93, 0.35)');
-          gradient.addColorStop(1, 'rgba(60, 185, 93, 0.0)');
-
-          trendChartInstance = new Chart(ctxTrend, {
-            type: 'line',
-            data: {
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-              datasets: [{
-                label: 'Monthly Protected Volume ($)',
-                data: [12500, 24000, 18200, 35000, 28000, 42000, 48500, 19700, 15000, 22000, 31000, 45000],
-                borderColor: '#3cb95d',
-                borderWidth: 3,
-                backgroundColor: gradient,
-                fill: true,
-                tension: 0.35,
-                pointBackgroundColor: '#002b49',
-                pointBorderColor: '#3cb95d',
-                pointBorderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 7
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: { display: false },
-                tooltip: {
-                  backgroundColor: '#002b49',
-                  titleFont: { size: 13, weight: 'bold' },
-                  bodyFont: { size: 12 },
-                  padding: 10,
-                  displayColors: false,
-                  callbacks: {
-                    label: function(context) {
-                      return ' Volume: $' + context.raw.toLocaleString() + '.00';
-                    }
-                  }
-                }
-              },
-              onClick: function(e, activeElements) {
-                if (activeElements && activeElements.length > 0) {
-                  var index = activeElements[0].index;
-                  var month = this.data.labels[index];
-                  var val = this.data.datasets[0].data[index];
-                  window.EscrowApp.showToast(month + ' 2026 Volume: $' + val.toLocaleString() + '.00');
-                }
-              },
-              scales: {
-                x: {
-                  grid: { display: false },
-                  ticks: { font: { size: 11 }, color: '#64748b' }
-                },
-                y: {
-                  grid: { color: '#f1f5f9' },
-                  ticks: {
-                    font: { size: 10 },
-                    color: '#64748b',
-                    callback: function(value) { return '$' + (value / 1000) + 'k'; }
-                  }
-                }
-              }
-            }
-          });
-        }
-
-        // 2. Pie / Donut Chart: Status Breakdown
         var ctxPie = document.getElementById('txStatusPieChart');
-        if (ctxPie) {
-          pieChartInstance = new Chart(ctxPie, {
-            type: 'doughnut',
-            data: {
-              labels: ['Completed Deals', 'Ongoing Shield', 'Pending / Draft', 'Cancelled'],
-              datasets: [{
-                data: [1, 2, 0, 0],
-                backgroundColor: ['#3cb95d', '#0284c7', '#f59e0b', '#ef4444'],
-                borderWidth: 2,
-                borderColor: '#ffffff',
-                hoverOffset: 6
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: 'bottom',
-                  labels: {
-                    font: { size: 11, weight: '600' },
-                    boxWidth: 12,
-                    padding: 12
-                  }
-                },
-                tooltip: {
-                  backgroundColor: '#002b49',
-                  padding: 10,
-                  callbacks: {
-                    label: function(context) {
-                      return ' ' + context.label + ': ' + context.raw + ' deals';
-                    }
-                  }
+        if (!ctxPie) return;
+
+        pieChartInstance = new Chart(ctxPie, {
+          type: 'doughnut',
+          data: {
+            labels: ['Completed Deals', 'Ongoing Shield', 'Protected Shield (Ready)', 'Cancelled'],
+            datasets: [{
+              data: [0, 0, 1, 0], // Default visible ring state when 0 transactions exist
+              backgroundColor: ['#3cb95d', '#0284c7', '#002b49', '#ef4444'],
+              borderWidth: 2,
+              borderColor: '#ffffff',
+              hoverOffset: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  font: { size: 11, weight: '600' },
+                  boxWidth: 12,
+                  padding: 12
                 }
               },
-              onClick: function(e, activeElements) {
-                if (activeElements && activeElements.length > 0) {
-                  var index = activeElements[0].index;
-                  var statusLabel = this.data.labels[index];
-                  var count = this.data.datasets[0].data[index];
-                  window.EscrowApp.showToast(statusLabel + ': ' + count + ' deal(s)');
+              tooltip: {
+                backgroundColor: '#002b49',
+                padding: 10,
+                callbacks: {
+                  label: function(context) {
+                    return ' ' + context.label + ': ' + context.raw;
+                  }
                 }
               }
             }
-          });
-        }
+          }
+        });
       }
 
-      initDashboardCharts();
+      initPieChart();
 
-      // --- Transaction Table Renderer ---
+      // --- Dynamic Table & Network Renderer ---
       var currentStatusFilter = 'all';
 
       function renderTable(filterStatus, searchQuery) {
@@ -968,18 +741,29 @@
 
         var totalCreated = txs.length;
         var completed = 0, ongoing = 0, cancelled = 0;
+        var counterpartiesMap = {};
 
         txs.forEach(function(tx) {
           if (tx.status === 'Completed') completed++;
           else if (tx.status === 'Cancelled') cancelled++;
           else ongoing++;
 
+          var cpEmail = tx.counterparty || tx.sellerEmail || '';
+          if (cpEmail) {
+            counterpartiesMap[cpEmail] = {
+              email: cpEmail,
+              role: tx.role === 'Buyer' ? 'Seller' : 'Buyer',
+              txId: tx.id,
+              amount: tx.amount || tx.price || 0
+            };
+          }
+
           if (filterStatus !== 'all' && tx.status !== filterStatus) return;
           if (searchQuery) {
             var q = searchQuery.toLowerCase();
             var matchId = (tx.id || '').toLowerCase().includes(q);
             var matchTitle = (tx.title || '').toLowerCase().includes(q);
-            var matchEmail = (tx.counterparty || tx.sellerEmail || '').toLowerCase().includes(q);
+            var matchEmail = (cpEmail).toLowerCase().includes(q);
             if (!matchId && !matchTitle && !matchEmail) return;
           }
 
@@ -987,7 +771,6 @@
           var partneredBadge = isPartnered ? '<span class="metric-badge badge-blue" style="margin-left:6px;">Partnered Pay</span>' : '';
           var statusClass = tx.status === 'Completed' ? 'badge-green' : (tx.status === 'Cancelled' ? 'badge-red' : 'badge-blue');
           var amount = Number(tx.amount || tx.price || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-          var counterparty = tx.counterparty || tx.sellerEmail || 'seller@example.com';
           var txId = tx.id;
           var txTitle = (tx.title || '').replace(/'/g, "&#39;");
           var txAmount = tx.amount || tx.price || 0;
@@ -1005,7 +788,7 @@
               '<div style="font-size:0.74rem;color:#64748b;margin-top:2px;">' + (tx.category || 'General') + ' &bull; ' + (tx.inspectionPeriod || 2) + ' Day Inspection</div>' +
             '</td>' +
             '<td style="padding:12px 14px;"><span style="font-weight:700;color:#002b49;font-size:0.84rem;">' + tx.role + '</span></td>' +
-            '<td style="padding:12px 14px;color:#475569;font-size:0.84rem;">' + counterparty + '</td>' +
+            '<td style="padding:12px 14px;color:#475569;font-size:0.84rem;">' + (cpEmail || 'N/A') + '</td>' +
             '<td style="padding:12px 14px;font-weight:800;color:#002b49;font-size:0.9rem;">' + (tx.currency || 'USD') + ' $' + amount + '</td>' +
             '<td style="padding:12px 14px;"><span class="metric-badge ' + statusClass + '">' + tx.status + '</span></td>' +
             '<td style="padding:12px 14px;text-align:right;white-space:nowrap;">' +
@@ -1015,7 +798,19 @@
           tbody.appendChild(tr);
         });
 
-        // Update counters
+        // Clean Empty State for Transactions Table
+        if (tbody.children.length === 0) {
+          var emptyTr = document.createElement('tr');
+          emptyTr.innerHTML =
+            '<td colspan="6" style="text-align:center; padding:36px 20px; color:#64748b;">' +
+              '<div style="font-size:1.05rem; font-weight:700; color:#002b49; margin-bottom:6px;">No transactions created yet</div>' +
+              '<div style="font-size:0.84rem; margin-bottom:14px;">Create your first protected deal to start managing escrow agreements here.</div>' +
+              '<a href="start-transaction.html" class="btn-escrow-green" style="padding:8px 18px; text-decoration:none; font-weight:700; display:inline-block; font-size:0.85rem;">+ Start Transaction</a>' +
+            '</td>';
+          tbody.appendChild(emptyTr);
+        }
+
+        // Update Overview & Transaction Counters
         var elTotal = document.getElementById('overviewTotalTx');
         if (elTotal) elTotal.textContent = totalCreated;
         var elComp = document.getElementById('overviewCompletedTx');
@@ -1029,13 +824,22 @@
         var elTabOng = document.getElementById('txTabOngoingCount');
         if (elTabOng) elTabOng.textContent = ongoing;
 
-        // Update pie chart dataset if initialized
+        // Render Pie Chart (Visible even when 0 transactions exist)
         if (pieChartInstance) {
-          pieChartInstance.data.datasets[0].data = [completed, ongoing, 0, cancelled];
+          if (totalCreated === 0) {
+            pieChartInstance.data.labels = ['Completed Deals', 'Ongoing Shield', 'Protected Shield (Ready)', 'Cancelled'];
+            pieChartInstance.data.datasets[0].data = [0, 0, 1, 0];
+          } else {
+            pieChartInstance.data.labels = ['Completed Deals', 'Ongoing Shield', 'Pending / Draft', 'Cancelled'];
+            pieChartInstance.data.datasets[0].data = [completed, ongoing, 0, cancelled];
+          }
           pieChartInstance.update();
         }
 
-        // Update filter pill counts
+        // Render Network / Counterparties Grids
+        renderNetwork(counterpartiesMap);
+
+        // Update Filter Pill Counts
         document.querySelectorAll('.tx-filter-pill').forEach(function(pill) {
           var onclick = pill.getAttribute('onclick') || '';
           if (onclick.includes("'all'")) pill.textContent = 'All Deals (' + totalCreated + ')';
@@ -1043,6 +847,105 @@
           else if (onclick.includes("'Completed'")) pill.textContent = 'Completed (' + completed + ')';
           else if (onclick.includes("'Cancelled'")) pill.textContent = 'Cancelled (' + cancelled + ')';
         });
+      }
+
+      function renderNetwork(cpMap) {
+        var cpKeys = Object.keys(cpMap);
+        var cpGrid = document.getElementById('counterpartyPreviewGrid');
+        var usersGrid = document.getElementById('usersTabCardsGrid');
+        var usersTbody = document.getElementById('usersTableBody');
+
+        var totalUsers = cpKeys.length;
+        var buyersCount = 0, sellersCount = 0;
+
+        cpKeys.forEach(function(k) {
+          if (cpMap[k].role === 'Buyer') buyersCount++;
+          else sellersCount++;
+        });
+
+        var elUsersTotal = document.getElementById('overviewTotalUsers');
+        if (elUsersTotal) elUsersTotal.textContent = totalUsers;
+        var elBuyers = document.getElementById('overviewActiveBuyers');
+        if (elBuyers) elBuyers.textContent = buyersCount;
+        var elSellers = document.getElementById('overviewActiveSellers');
+        if (elSellers) elSellers.textContent = sellersCount;
+
+        var elTabUsersTotal = document.getElementById('usersTabTotalCount');
+        if (elTabUsersTotal) elTabUsersTotal.textContent = totalUsers;
+        var elTabSellers = document.getElementById('usersTabSellersCount');
+        if (elTabSellers) elTabSellers.textContent = sellersCount;
+        var elTabBuyers = document.getElementById('usersTabBuyersCount');
+        if (elTabBuyers) elTabBuyers.textContent = buyersCount;
+
+        // Render Counterparty Cards
+        if (cpGrid) {
+          cpGrid.innerHTML = '';
+          if (totalUsers === 0) {
+            cpGrid.innerHTML =
+              '<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">' +
+                '<div style="font-weight: 700; color: #002b49; font-size: 0.92rem; margin-bottom: 4px;">No counterparties linked yet</div>' +
+                '<div style="font-size: 0.8rem;">Counterparties will automatically appear here when you create or join agreements.</div>' +
+              '</div>';
+          } else {
+            cpKeys.forEach(function(k) {
+              var cp = cpMap[k];
+              var initials = cp.email.substring(0, 2).toUpperCase();
+              var card = document.createElement('div');
+              card.className = 'user-card';
+              card.innerHTML =
+                '<div>' +
+                  '<div class="user-card-header">' +
+                    '<div class="user-avatar" style="background: #01426a;">' + initials + '</div>' +
+                    '<div class="user-card-info">' +
+                      '<h4>' + cp.email.split('@')[0] + '</h4>' +
+                      '<p>' + cp.email + '</p>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">' +
+                    '<span class="metric-badge badge-blue">' + cp.role + '</span>' +
+                    '<span class="metric-badge badge-green">✓ Verified</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">' +
+                  '<span style="color: #64748b;">Deal: <strong>' + cp.txId + '</strong></span>' +
+                  '<span style="color: #002b49; font-weight: 800;">$' + Number(cp.amount).toLocaleString() + '</span>' +
+                '</div>';
+              cpGrid.appendChild(card);
+            });
+          }
+        }
+
+        // Render Users Tab Directory Table
+        if (usersTbody) {
+          usersTbody.innerHTML = '';
+          if (totalUsers === 0) {
+            usersTbody.innerHTML =
+              '<tr>' +
+                '<td colspan="5" style="text-align:center; padding:32px 20px; color:#64748b; font-size:0.86rem;">' +
+                  'No network counterparties found. Start a transaction to connect with buyers and sellers.' +
+                '</td>' +
+              '</tr>';
+          } else {
+            cpKeys.forEach(function(k) {
+              var cp = cpMap[k];
+              var initials = cp.email.substring(0, 2).toUpperCase();
+              var tr = document.createElement('tr');
+              tr.style.borderBottom = '1px solid #f1f5f9';
+              tr.innerHTML =
+                '<td style="padding: 12px 14px;">' +
+                  '<div style="display: flex; align-items: center; gap: 8px;">' +
+                    '<div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #01426a;">' + initials + '</div>' +
+                    '<strong style="font-size: 0.88rem;">' + cp.email.split('@')[0] + '</strong>' +
+                  '</div>' +
+                '</td>' +
+                '<td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">' + cp.email + '</td>' +
+                '<td style="padding: 12px 14px;"><span class="metric-badge badge-blue">' + cp.role + '</span></td>' +
+                '<td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Verified</span></td>' +
+                '<td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast(\'Counterparty active\')">View Profile</button></td>';
+              usersTbody.appendChild(tr);
+            });
+          }
+        }
       }
 
       window.filterTransactions = function(status, pill) {
@@ -1060,8 +963,8 @@
 
       window.sharePartneredPaymentLink = function(txId, title, amount) {
         var remaining = Math.round(amount * 0.4);
-        var currentUser = window.EscrowApp.getUser() || { name: 'Alex Mercer' };
-        var ownerName = currentUser.name || 'Alex Mercer';
+        var currentUser = window.EscrowApp.getUser() || { name: 'Chrysalias User' };
+        var ownerName = currentUser.name || 'Chrysalias User';
         var loc = window.location.href;
         var basePath = loc.substring(0, loc.lastIndexOf('/') + 1);
         var shareUrl = basePath + 'partnered-payment.html?id=' + encodeURIComponent(txId) +
