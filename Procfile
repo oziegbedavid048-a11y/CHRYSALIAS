@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath backend chrysalias.wsgi:application
+web: cd backend && gunicorn chrysalias.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
