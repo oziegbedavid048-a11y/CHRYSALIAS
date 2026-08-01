@@ -11,7 +11,20 @@ admin.site.site_header = 'CHRYSALIAS.COM Administration'
 admin.site.site_title = 'Chrysalias Admin Portal'
 admin.site.index_title = 'Chrysalias Admin Dashboard'
 
+from django.http import JsonResponse
+
+def health_check(request):
+    return JsonResponse({
+        'status': 'online',
+        'service': 'Chrysalias Payment Protection API',
+        'version': '1.0.0'
+    })
+
 urlpatterns = [
+    # ── Health Check & API Status ────────────────────────────
+    path('', health_check, name='health-check'),
+    path('api/', health_check, name='api-health-check'),
+
     # ── Admin Panel ──────────────────────────────────────────
     path('admin/', admin.site.urls),
 
