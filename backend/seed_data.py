@@ -16,20 +16,29 @@ def seed():
     print("=== Seeding Chrysalias Database ===")
 
     # 1. Create Superuser (Admin)
-    admin_email = "admin@chrysalias.com"
-    if not User.objects.filter(email=admin_email).exists():
-        admin = User.objects.create_superuser(
-            username="admin",
-            email=admin_email,
-            password="AdminPass123!",
-            full_name="Chrysalias Admin",
-            kyc_status="level_2",
-            is_verified=True,
-        )
-        print(f"[OK] Superuser created: {admin_email} / AdminPass123!")
-    else:
-        admin = User.objects.get(email=admin_email)
-        print(f"[INFO] Superuser exists: {admin_email}")
+    admin_username = "Chrysalias"
+    admin_email = "info@chrysalias.com"
+    admin_password = "Chrys@768"
+
+    superuser, created = User.objects.get_or_create(
+        username=admin_username,
+        defaults={
+            'email': admin_email,
+            'full_name': "Chrysalias Admin",
+            'kyc_status': "level_2",
+            'is_verified': True,
+            'is_staff': True,
+            'is_superuser': True,
+            'is_active': True,
+        }
+    )
+    superuser.set_password(admin_password)
+    superuser.email = admin_email
+    superuser.is_staff = True
+    superuser.is_superuser = True
+    superuser.is_active = True
+    superuser.save()
+    print(f"[OK] Superuser configured: Username '{admin_username}' / Password '{admin_password}'")
 
     # 2. Create Demo User: Alex Mercer (Seller)
     alex_email = "alex.seller@chrysalias-demo.com"
