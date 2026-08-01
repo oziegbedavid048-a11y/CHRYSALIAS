@@ -480,17 +480,17 @@
           <div class="metrics-grid-4" style="margin-bottom: 18px;">
             <div class="metric-card">
               <div class="metric-label">Total Protected Volume</div>
-              <div class="metric-value" style="font-size: 1.45rem; color: #002b49;">$197,700.00</div>
+              <div class="metric-value" style="font-size: 1.45rem; color: #002b49;" id="txTabTotalVolume">$0.00</div>
               <span class="metric-badge badge-green">100% Chrysalias Protection</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Total Transactions</div>
-              <div class="metric-value" style="font-size: 1.45rem; color: #0284c7;" id="txTabTotalCount">3</div>
+              <div class="metric-value" style="font-size: 1.45rem; color: #0284c7;" id="txTabTotalCount">0</div>
               <span class="metric-badge badge-blue">Active Portfolio</span>
             </div>
             <div class="metric-card">
               <div class="metric-label">Ongoing Transactions</div>
-              <div class="metric-value" style="font-size: 1.45rem; color: #3cb95d;" id="txTabOngoingCount">2</div>
+              <div class="metric-value" style="font-size: 1.45rem; color: #3cb95d;" id="txTabOngoingCount">0</div>
               <span class="metric-badge badge-green">Funds Held</span>
             </div>
           </div>
@@ -498,9 +498,9 @@
           <!-- Filter & Search Control Row -->
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button class="tx-filter-pill active" onclick="filterTransactions('all', this)">All Deals (3)</button>
-              <button class="tx-filter-pill" onclick="filterTransactions('In Progress', this)">Ongoing (2)</button>
-              <button class="tx-filter-pill" onclick="filterTransactions('Completed', this)">Completed (1)</button>
+              <button class="tx-filter-pill active" onclick="filterTransactions('all', this)">All Deals (0)</button>
+              <button class="tx-filter-pill" onclick="filterTransactions('In Progress', this)">Ongoing (0)</button>
+              <button class="tx-filter-pill" onclick="filterTransactions('Completed', this)">Completed (0)</button>
               <button class="tx-filter-pill" onclick="filterTransactions('Cancelled', this)">Cancelled (0)</button>
             </div>
             <input type="text" id="txSearchInput" class="search-input-box" placeholder="🔍 Search transactions..." oninput="onTxSearchInput()">
@@ -591,40 +591,6 @@
               </thead>
               <tbody id="usersTableBody">
                 <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Seller / Buyer</span></td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
-                  <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Profile active')">View Profile</button></td>
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 12px 14px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #0284c7;">AI</div>
-                      <strong style="font-size: 0.88rem;">Alex Investment Co</strong>
-                    </div>
-                  </td>
-                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">alex.buyer@investments.co</td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Buyer</span></td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
-                  <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty active')">View Profile</button></td>
-                </tr>
-                <tr>
-                  <td style="padding: 12px 14px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #3cb95d;">MC</div>
-                      <strong style="font-size: 0.88rem;">Motor Classics Dealer</strong>
-                    </div>
-                  </td>
-                  <td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">motorclassics@dealers.com</td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-blue">Seller</span></td>
-                  <td style="padding: 12px 14px;"><span class="metric-badge badge-green">✓ Level 2 Verified</span></td>
-                  <td style="padding: 12px 14px; text-align: right;"><button class="btn-escrow-navy" style="font-size: 0.75rem; padding: 4px 10px;" onclick="window.EscrowApp.showToast('Counterparty active')">View Profile</button></td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -740,10 +706,12 @@
         tbody.innerHTML = '';
 
         var totalCreated = txs.length;
-        var completed = 0, ongoing = 0, cancelled = 0;
+        var completed = 0, ongoing = 0, cancelled = 0, totalVolume = 0;
         var counterpartiesMap = {};
 
         txs.forEach(function(tx) {
+          var amountNum = Number(tx.amount || tx.price || 0);
+          totalVolume += amountNum;
           if (tx.status === 'Completed') completed++;
           else if (tx.status === 'Cancelled') cancelled++;
           else ongoing++;
@@ -754,7 +722,7 @@
               email: cpEmail,
               role: tx.role === 'Buyer' ? 'Seller' : 'Buyer',
               txId: tx.id,
-              amount: tx.amount || tx.price || 0
+              amount: amountNum
             };
           }
 
@@ -770,10 +738,9 @@
           var isPartnered = tx.isPartneredPayment;
           var partneredBadge = isPartnered ? '<span class="metric-badge badge-blue" style="margin-left:6px;">Partnered Pay</span>' : '';
           var statusClass = tx.status === 'Completed' ? 'badge-green' : (tx.status === 'Cancelled' ? 'badge-red' : 'badge-blue');
-          var amount = Number(tx.amount || tx.price || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+          var amountStr = amountNum.toLocaleString('en-US', { minimumFractionDigits: 2 });
           var txId = tx.id;
           var txTitle = (tx.title || '').replace(/'/g, "&#39;");
-          var txAmount = tx.amount || tx.price || 0;
 
           var tr = document.createElement('tr');
           tr.style.borderBottom = '1px solid #f1f5f9';
@@ -789,11 +756,11 @@
             '</td>' +
             '<td style="padding:12px 14px;"><span style="font-weight:700;color:#002b49;font-size:0.84rem;">' + tx.role + '</span></td>' +
             '<td style="padding:12px 14px;color:#475569;font-size:0.84rem;">' + (cpEmail || 'N/A') + '</td>' +
-            '<td style="padding:12px 14px;font-weight:800;color:#002b49;font-size:0.9rem;">' + (tx.currency || 'USD') + ' $' + amount + '</td>' +
+            '<td style="padding:12px 14px;font-weight:800;color:#002b49;font-size:0.9rem;">' + (tx.currency || 'USD') + ' $' + amountStr + '</td>' +
             '<td style="padding:12px 14px;"><span class="metric-badge ' + statusClass + '">' + tx.status + '</span></td>' +
             '<td style="padding:12px 14px;text-align:right;white-space:nowrap;">' +
               '<button class="btn-escrow-navy" style="font-size:0.74rem;padding:5px 10px;margin-right:4px;" onclick="window.EscrowApp.showToast(\'Details loaded for ' + txId + '\')">View Details</button>' +
-              '<button class="btn-escrow-green" style="font-size:0.74rem;padding:5px 10px;" onclick="sharePartneredPaymentLink(\'' + txId + '\',\'' + txTitle + '\',' + txAmount + ')">Share Pay Link</button>' +
+              '<button class="btn-escrow-green" style="font-size:0.74rem;padding:5px 10px;" onclick="sharePartneredPaymentLink(\'' + txId + '\',\'' + txTitle + '\',' + amountNum + ')">Share Pay Link</button>' +
             '</td>';
           tbody.appendChild(tr);
         });
@@ -811,6 +778,8 @@
         }
 
         // Update Overview & Transaction Counters
+        var elTotalVol = document.getElementById('txTabTotalVolume');
+        if (elTotalVol) elTotalVol.textContent = '$' + totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2 });
         var elTotal = document.getElementById('overviewTotalTx');
         if (elTotal) elTotal.textContent = totalCreated;
         var elComp = document.getElementById('overviewCompletedTx');
