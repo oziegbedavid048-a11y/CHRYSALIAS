@@ -68,16 +68,25 @@ class RegisterView(View):
         login(request, user)
 
         # Trigger account confirmation email via ZeptoMail
+        email_sent = False
+        email_error = None
         try:
             from .emails import send_account_confirmation_email
-            send_account_confirmation_email(user.email, user.display_name)
-        except Exception as e:
+            from django.conf import settings
             import logging
-            logging.getLogger(__name__).error(f"Confirmation email failed: {e}")
+            log = logging.getLogger(__name__)
+            log.info(f"Attempting email to {user.email} via {settings.EMAIL_HOST}:{settings.EMAIL_PORT} as {settings.EMAIL_HOST_USER}")
+            email_sent = send_account_confirmation_email(user.email, user.display_name)
+            log.info(f"Email result for {user.email}: {email_sent}")
+        except Exception as e:
+            import logging, traceback
+            email_error = str(e)
+            logging.getLogger(__name__).error(f"Email FAILED for {user.email}: {type(e).__name__}: {e}\n{traceback.format_exc()}")
 
         return json_response({
             'success': True,
             'message': 'Account created successfully. Please check your email to verify your account.',
+            'email_sent': email_sent,
             'user': {
                 'id':        user.id,
                 'email':     user.email,
@@ -204,3 +213,46 @@ class SendEmailNotificationView(View):
 
         return json_response({'success': sent, 'email': email, 'type': email_type})
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class TestEmailView(View):
+    """Diagnostic endpoint — tests SMTP config from within Render's environment."""
+    def get(self, request):
+        from django.conf import settings
+        import smtplib
+
+        result = {
+            'EMAIL_BACKEND': settings.EMAIL_BACKEND,
+            'EMAIL_HOST': settings.EMAIL_HOST,
+            'EMAIL_PORT': settings.EMAIL_PORT,
+            'EMAIL_HOST_USER': settings.EMAIL_HOST_USER,
+            'EMAIL_HOST_PASSWORD_SET': bool(settings.EMAIL_HOST_PASSWORD),
+            'EMAIL_HOST_PASSWORD_LENGTH': len(settings.EMAIL_HOST_PASSWORD or ''),
+            'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
+        }
+
+        # Test SMTP connection
+        try:
+            server = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT, timeout=15)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+            server.quit()
+            result['smtp_connection'] = 'SUCCESS'
+        except Exception as e:
+            result['smtp_connection'] = f'FAILED: {type(e).__name__}: {e}'
+
+        # Test actual Django email send
+        try:
+            from .emails import send_account_confirmation_email
+            test_to = request.GET.get('to', settings.DEFAULT_FROM_EMAIL)
+            sent = send_account_confirmation_email(test_to, 'Test User')
+            result['email_sent'] = sent
+            result['email_sent_to'] = test_to
+        except Exception as e:
+            import traceback
+            result['email_send_error'] = f'{type(e).__name__}: {e}'
+            result['email_traceback'] = traceback.format_exc()
+
+        return json_response(result)

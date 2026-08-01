@@ -248,21 +248,33 @@
       }
 
       // -------- Public Pages Navigation Header --------
-      var authButtons = realUser
-        ? '<a href="dashboard.html" id="chrys-auth-btn1" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Dashboard</a>' +
-          '<a href="#" id="chrys-logout-link" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:#3cb95d;border:1.5px solid #3cb95d;color:#ffffff;font-weight:700;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Log Out</a>'
-        : '<a href="login.html" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Log In</a>' +
-          '<a href="signup.html" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:#01426a;border:1.5px solid #01426a;color:#ffffff;font-weight:700;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Sign Up</a>';
+      var loginBtn  = '<a href="login.html"  id="chrys-login-btn"  style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Log In</a>';
+      var signupBtn = '<a href="signup.html" id="chrys-signup-btn" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:#01426a;border:1.5px solid #01426a;color:#ffffff;font-weight:700;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Sign Up</a>';
+      var dashBtn   = '<a href="dashboard.html" id="chrys-dash-btn" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Dashboard</a>';
+      var logoutBtn = '<a href="#" id="chrys-logout-link" style="display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:7px;background:#3cb95d;border:1.5px solid #3cb95d;color:#ffffff;font-weight:700;font-size:0.88rem;text-decoration:none;white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;">Log Out</a>';
+
+      var desktopAuth = realUser ? (dashBtn + logoutBtn) : (loginBtn + signupBtn);
+      var mobileAuth  = realUser
+        ? '<a href="dashboard.html" style="display:block;padding:12px 0;color:#01426a;font-weight:600;text-decoration:none;border-bottom:1px solid #e8eef2;font-size:0.95rem;">Dashboard</a>' +
+          '<a href="#" id="chrys-mobile-logout" style="display:block;padding:12px 0;color:#ef4444;font-weight:600;text-decoration:none;font-size:0.95rem;">Log Out</a>'
+        : '<a href="login.html"  style="display:block;text-align:center;margin:6px 0;padding:11px;border-radius:7px;background:transparent;border:1.5px solid #01426a;color:#01426a;font-weight:600;text-decoration:none;font-size:0.95rem;">Log In</a>' +
+          '<a href="signup.html" style="display:block;text-align:center;margin:6px 0;padding:11px;border-radius:7px;background:#01426a;color:#ffffff;font-weight:700;text-decoration:none;font-size:0.95rem;">Sign Up</a>';
 
       headerContainer.innerHTML =
         '<style>' +
         '#chrys-header{position:fixed;top:0;left:0;right:0;z-index:99999;width:100%;box-sizing:border-box;}' +
         '#chrys-navbar{background:#ffffff;padding:0 24px;box-shadow:0 1px 16px rgba(0,0,0,0.09);border-bottom:1px solid #e8eef2;}' +
-        '#chrys-navbar-inner{max-width:1180px;margin:0 auto;display:flex;flex-direction:row;align-items:center;justify-content:space-between;height:66px;}' +
-        '#chrys-logo{display:flex;flex-direction:row;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}' +
-        '#chrys-actions{display:flex;flex-direction:row;align-items:center;gap:12px;flex-shrink:0;}' +
-        '@media(max-width:480px){' +
-          '#chrys-actions a{padding:8px 14px !important;font-size:0.82rem !important;}' +
+        '#chrys-navbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:66px;}' +
+        '#chrys-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}' +
+        '#chrys-desktop-actions{display:flex;align-items:center;gap:12px;flex-shrink:0;}' +
+        /* Hamburger button — hidden on desktop */
+        '#chrys-hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:#01426a;flex-shrink:0;}' +
+        /* Mobile drawer */
+        '#chrys-mobile-drawer{display:none;position:fixed;top:66px;left:0;right:0;background:#ffffff;border-bottom:2px solid #e8eef2;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:16px 24px 24px;z-index:99998;}' +
+        '#chrys-mobile-drawer.open{display:block;}' +
+        '@media(max-width:768px){' +
+          '#chrys-desktop-actions{display:none !important;}' +
+          '#chrys-hamburger{display:flex !important;}' +
         '}' +
         '</style>' +
         '<div id="chrys-header">' +
@@ -272,25 +284,53 @@
         '        <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height:32px;width:32px;object-fit:contain;flex-shrink:0;">' +
         '        <span style="font-family:Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:#01426a;letter-spacing:-0.5px;white-space:nowrap;">CHRYSALIAS<span style="color:#3cb95d;">.COM</span></span>' +
         '      </a>' +
-        '      <div id="chrys-actions">' + authButtons + '</div>' +
+        '      <div id="chrys-desktop-actions">' + desktopAuth + '</div>' +
+        '      <button id="chrys-hamburger" aria-label="Open menu" aria-expanded="false">' +
+        '        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>' +
+        '      </button>' +
         '    </div>' +
         '  </nav>' +
+        '  <div id="chrys-mobile-drawer">' + mobileAuth + '</div>' +
         '</div>';
 
-
-
-
       setTimeout(function () {
-        // Offset body content below fixed header
+        // Body padding for fixed header
         document.body.style.paddingTop = '66px';
 
-        var logoutLink = document.getElementById('chrys-logout-link');
-        if (logoutLink) {
-          logoutLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            window.EscrowApp.logout();
+        // Hamburger toggle
+        var hamburger = document.getElementById('chrys-hamburger');
+        var drawer    = document.getElementById('chrys-mobile-drawer');
+        if (hamburger && drawer) {
+          hamburger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = drawer.classList.contains('open');
+            drawer.classList.toggle('open', !isOpen);
+            hamburger.setAttribute('aria-expanded', String(!isOpen));
+            // Swap icon between hamburger and X
+            hamburger.innerHTML = isOpen
+              ? '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>'
+              : '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+          });
+          // Close drawer when clicking outside
+          document.addEventListener('click', function (e) {
+            if (!drawer.contains(e.target) && e.target !== hamburger && !hamburger.contains(e.target)) {
+              drawer.classList.remove('open');
+              hamburger.setAttribute('aria-expanded', 'false');
+              hamburger.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+            }
           });
         }
+
+        // Logout links (desktop + mobile)
+        ['chrys-logout-link', 'chrys-mobile-logout'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('click', function (e) {
+              e.preventDefault();
+              window.EscrowApp.logout();
+            });
+          }
+        });
       }, 50);
 
 
