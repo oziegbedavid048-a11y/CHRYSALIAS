@@ -62,15 +62,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'chrysalias.wsgi.application'
-
 import dj_database_url
+
+DEFAULT_DB_URL = 'postgresql://postgres:SFw8Jic6bAdLMvr4eGcpXngS@chrysalias-wild-trail.cloud.layerbase.dev/chrysalias'
+DATABASE_URL = config('DATABASE_URL', default=DEFAULT_DB_URL)
+is_postgres = 'postgres' in DATABASE_URL or 'postgresql' in DATABASE_URL
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres:SFw8Jic6bAdLMvr4eGcpXngS@chrysalias-wild-trail.cloud.layerbase.dev/chrysalias?sslmode=require',
+        default=DATABASE_URL,
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=is_postgres
     )
 }
 

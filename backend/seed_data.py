@@ -16,9 +16,9 @@ def seed():
     print("=== Seeding Chrysalias Database ===")
 
     # 1. Create Superuser (Admin)
-    admin_username = "Chrysalias"
-    admin_email = "info@chrysalias.com"
-    admin_password = "Chrys@768"
+    admin_username = os.environ.get("DJANGO_SUPERUSER_USERNAME", "Chrysalias")
+    admin_email    = os.environ.get("DJANGO_SUPERUSER_EMAIL", "info@chrysalias.com")
+    admin_password = os.environ.get("DJANGO_SUPERUSER_PASSWORD", "Chrys@768")
 
     superuser, created = User.objects.get_or_create(
         username=admin_username,
