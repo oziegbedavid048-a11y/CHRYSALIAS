@@ -13,7 +13,7 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "chrysalias.com,www.chrysalias.com,localhost,127.0.0.1"
+        value: "*"
 
       # --- ZeptoMail SMTP ---
       - key: EMAIL_BACKEND

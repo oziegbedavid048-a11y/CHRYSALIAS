@@ -12,11 +12,13 @@ SECRET_KEY = config('SECRET_KEY', default='chrysalias-django-dev-secret-key-chan
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1,0.0.0.0,chrysalias.com,www.chrysalias.com',
-    cast=Csv()
-)
+# Accept all hosts by default — Render assigns a dynamic subdomain (.onrender.com)
+# Override via ALLOWED_HOSTS env var in Render dashboard if you want to restrict.
+_allowed_raw = config('ALLOWED_HOSTS', default='*')
+if _allowed_raw.strip() == '*':
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed_raw.split(',') if h.strip()]
 
 # ─── Applications ───────────────────────────────────────────
 INSTALLED_APPS = [
@@ -169,13 +171,14 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
-# Production HTTPS — only active when DEBUG=False (i.e. on Render)
-# Render terminates SSL at the load balancer, so we use the proxy header
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') if not DEBUG else None
-SECURE_SSL_REDIRECT = not DEBUG
-SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0  # 1 year
+# Production HTTPS — Render terminates SSL at the load balancer.
+# SECURE_SSL_REDIRECT must be False here because Render's proxy already
+# enforces HTTPS. Enabling it causes redirect loops → 400 Bad Request.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False  # Render handles this at the load balancer
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0  # 1 year HSTS once stable
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
-SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_HSTS_PRELOAD = False  # Set True only after confirming HSTS works
 
 # ─── Email / ZeptoMail SMTP ─────────────────────────────────
 # All values read from .env (or Render environment variables)
