@@ -1,16 +1,25 @@
 #!/usr/bin/env bash
-# Chrysalias.com — Build Script (Render / LayerBase)
+# Chrysalias.com — Build Script (Render)
+# Runs on every deploy. Installs deps, migrates DB, fixes data, creates superuser.
 set -o errexit
 
+echo "==> Installing Python dependencies..."
 pip install -r requirements.txt
 
+echo "==> Collecting static files..."
 python manage.py collectstatic --no-input
 
+echo "==> Running database migrations..."
 python manage.py migrate --run-syncdb
 
-# Create superuser if DJANGO_SUPERUSER_EMAIL is set (set these in Render env vars)
-# DJANGO_SUPERUSER_EMAIL, DJANGO_SUPERUSER_PASSWORD, DJANGO_SUPERUSER_USERNAME
+echo "==> Ensuring all users have a UserProfile..."
+python manage.py ensure_profiles
+
+# Auto-create Django admin superuser if env vars are set
+# Set DJANGO_SUPERUSER_EMAIL, DJANGO_SUPERUSER_PASSWORD in Render Dashboard
 if [ -n "$DJANGO_SUPERUSER_EMAIL" ]; then
-    echo "Creating superuser: $DJANGO_SUPERUSER_EMAIL"
-    python manage.py createsuperuser --noinput || echo "Superuser already exists — skipping."
+    echo "==> Creating superuser: $DJANGO_SUPERUSER_EMAIL"
+    python manage.py createsuperuser --noinput 2>/dev/null || echo "Superuser already exists — skipping."
 fi
+
+echo "==> Build complete!"

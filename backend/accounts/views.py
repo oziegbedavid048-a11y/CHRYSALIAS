@@ -256,3 +256,95 @@ class TestEmailView(View):
             result['email_traceback'] = traceback.format_exc()
 
         return json_response(result)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SystemDiagnosticsView(View):
+    """
+    Full system diagnostics endpoint — call this from Render to test everything.
+    GET /api/auth/diagnostics/
+    """
+    def get(self, request):
+        from django.conf import settings
+        from django.db import connection
+        import smtplib
+
+        result = {}
+
+        # 1. Database
+        try:
+            cursor = connection.cursor()
+            cursor.execute('SELECT version();')
+            db_version = cursor.fetchone()[0][:80]
+            from accounts.models import User, UserProfile
+            from transactions.models import Transaction
+            user_count = User.objects.count()
+            tx_count = Transaction.objects.count()
+            users_list = [
+                {
+                    'email': u.email,
+                    'is_staff': u.is_staff,
+                    'is_superuser': u.is_superuser,
+                    'is_active': u.is_active,
+                    'has_profile': UserProfile.objects.filter(user=u).exists(),
+                }
+                for u in User.objects.all()[:20]
+            ]
+            result['database'] = {
+                'status': 'CONNECTED',
+                'version': db_version,
+                'total_users': user_count,
+                'total_transactions': tx_count,
+                'users': users_list,
+            }
+            # Auto-fix any missing UserProfiles
+            fixed = 0
+            for u in User.objects.all():
+                _, created = UserProfile.objects.get_or_create(user=u)
+                if created:
+                    fixed += 1
+            result['database']['profiles_fixed'] = fixed
+        except Exception as e:
+            import traceback
+            result['database'] = {'status': 'FAILED', 'error': str(e), 'traceback': traceback.format_exc()}
+
+        # 2. SMTP / Email
+        result['smtp'] = {
+            'EMAIL_HOST': settings.EMAIL_HOST,
+            'EMAIL_PORT': settings.EMAIL_PORT,
+            'EMAIL_HOST_USER': settings.EMAIL_HOST_USER,
+            'PASSWORD_SET': bool(settings.EMAIL_HOST_PASSWORD),
+            'PASSWORD_LENGTH': len(settings.EMAIL_HOST_PASSWORD or ''),
+            'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
+        }
+        try:
+            server = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT, timeout=20)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+            server.quit()
+            result['smtp']['connection'] = 'SUCCESS'
+        except Exception as e:
+            result['smtp']['connection'] = f'FAILED: {type(e).__name__}: {e}'
+
+        # 3. Send a real test email if ?send=1&to=email@example.com is passed
+        if request.GET.get('send') == '1':
+            test_to = request.GET.get('to', settings.DEFAULT_FROM_EMAIL)
+            try:
+                from .emails import send_account_confirmation_email
+                sent = send_account_confirmation_email(test_to, 'Diagnostics Test')
+                result['email_send'] = {'sent': sent, 'to': test_to}
+            except Exception as e:
+                import traceback
+                result['email_send'] = {'sent': False, 'error': str(e), 'traceback': traceback.format_exc()}
+
+        # 4. Settings summary
+        result['settings'] = {
+            'DEBUG': settings.DEBUG,
+            'ALLOWED_HOSTS': settings.ALLOWED_HOSTS,
+            'SECURE_SSL_REDIRECT': settings.SECURE_SSL_REDIRECT,
+            'AUTH_USER_MODEL': settings.AUTH_USER_MODEL,
+        }
+
+        return json_response(result)
