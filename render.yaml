@@ -3,7 +3,7 @@ services:
     name: chrysalias-backend
     runtime: python
     rootDir: backend
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && python seed_data.py"
+    buildCommand: "bash build.sh"
     startCommand: "gunicorn chrysalias.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
     envVars:
       - key: DATABASE_URL
@@ -13,7 +13,9 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "*"
+        value: "chrysalias.com,www.chrysalias.com,localhost,127.0.0.1"
+
+      # --- ZeptoMail SMTP ---
       - key: EMAIL_BACKEND
         value: django.core.mail.backends.smtp.EmailBackend
       - key: EMAIL_HOST
@@ -22,10 +24,23 @@ services:
         value: "587"
       - key: EMAIL_USE_TLS
         value: "True"
+      - key: EMAIL_USE_SSL
+        value: "False"
       - key: EMAIL_HOST_USER
         value: emailapikey
       - key: EMAIL_HOST_PASSWORD
         value: "wSsVR61y/RWkW/p4yTOpdrhuyAtQB16kEkwp3lP36n+tH6iU8Mc6xRfJDFD0H/gWQDI8EDQbpe8hm0sC0WULhth7mA4ACCiF9mqRe1U4J3x17qnvhDzIX2VfkBSJLoIJzg1imGNnEcsr+g=="
       - key: DEFAULT_FROM_EMAIL
         value: "Chrysalias Support <info@chrysalias.com>"
+
+      # --- Django Admin Superuser (auto-created on first deploy) ---
+      # Set DJANGO_SUPERUSER_EMAIL + DJANGO_SUPERUSER_PASSWORD in Render Dashboard
+      # to auto-create the admin user on build
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: "admin@chrysalias.com"
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: "ChangeMe2026!Admin#"
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: "admin"
+
     healthCheckPath: /

@@ -21,11 +21,12 @@ class ChrysaliasUserCreationForm(UserCreationForm):
 
 
 class UserProfileInline(admin.StackedInline):
-    model       = UserProfile
-    can_delete  = False
+    model        = UserProfile
+    can_delete   = False
     verbose_name = 'Extended Profile'
-    extra       = 0
-    fieldsets   = (
+    extra        = 1   # allow inline creation if profile doesn't exist yet
+    max_num      = 1
+    fieldsets    = (
         ('Personal Info', {
             'fields': ('bio', 'address', 'country'),
         }),
@@ -38,23 +39,39 @@ class UserProfileInline(admin.StackedInline):
         }),
     )
 
+    def get_queryset(self, request):
+        """Ensure profile always exists so inline never errors."""
+        qs = super().get_queryset(request)
+        return qs
+
+    def save_new_objects(self, form, change):
+        """Auto-create profile if inline is empty / missing."""
+        return super().save_new_objects(form, change)
+
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    form              = ChrysaliasUserChangeForm
-    add_form          = ChrysaliasUserCreationForm
-    inlines           = [UserProfileInline]
-    list_display      = ('email', 'display_name_col', 'kyc_badge_col', 'is_verified', 'is_active', 'transaction_count_col', 'created_at')
-    list_filter       = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
-    search_fields     = ('email', 'full_name', 'username', 'phone')
-    ordering          = ('-created_at',)
-    readonly_fields   = ('created_at', 'updated_at', 'initials_col', 'last_login', 'date_joined')
-    list_per_page     = 25
+    form     = ChrysaliasUserChangeForm
+    add_form = ChrysaliasUserCreationForm
+    inlines  = [UserProfileInline]
 
+    list_display  = ('email', 'display_name_col', 'kyc_badge_col', 'is_verified', 'is_active', 'transaction_count_col', 'created_at')
+    list_filter   = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
+    search_fields = ('email', 'full_name', 'username', 'phone')
+    ordering      = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at', 'initials_col', 'last_login', 'date_joined')
+    list_per_page = 25
+
+    # IMPORTANT: Django's BaseUserAdmin requires 'password' to be present in fieldsets.
+    # Without it, the admin change form throws a 500 error when opening a user record.
     fieldsets = (
         ('Account Identity', {
             'fields': ('email', 'username', 'full_name', 'phone'),
             'description': 'Core user account information for Chrysalias.com',
+        }),
+        ('Password', {
+            'fields': ('password',),
+            'classes': ('collapse',),
         }),
         ('KYC & Verification', {
             'fields': ('kyc_status', 'is_verified'),
@@ -70,16 +87,34 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
+    add_fieldsets = (
+        ('Create New User', {
+            'classes': ('wide',),
+            'fields': ('email', 'username', 'full_name', 'password1', 'password2'),
+        }),
+    )
+
     actions = ['approve_kyc_level1', 'approve_kyc_level2', 'reject_kyc', 'activate_accounts', 'deactivate_accounts']
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
+        # Always ensure a UserProfile exists — prevents inline 500 errors
         UserProfile.objects.get_or_create(user=obj)
+
+    def get_object(self, request, object_id, from_field=None):
+        """Ensure UserProfile exists before admin tries to render the inline."""
+        obj = super().get_object(request, object_id, from_field)
+        if obj:
+            UserProfile.objects.get_or_create(user=obj)
+        return obj
 
     @admin.display(description='Name', ordering='full_name')
     def display_name_col(self, obj):
-        initials = obj.initials or 'U'
-        name = obj.display_name or obj.email
+        try:
+            initials = obj.initials or 'U'
+            name = obj.display_name or obj.email
+        except Exception:
+            initials, name = 'U', obj.email
         return format_html(
             '<div style="display:flex;align-items:center;gap:8px;">'
             '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#002b49,#3cb95d);'
@@ -105,10 +140,14 @@ class UserAdmin(BaseUserAdmin):
 
     @admin.display(description='Initials')
     def initials_col(self, obj):
+        try:
+            initials = obj.initials or 'U'
+        except Exception:
+            initials = 'U'
         return format_html(
             '<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#002b49,#3cb95d);'
             'color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;">{}</div>',
-            obj.initials or 'U'
+            initials
         )
 
     @admin.display(description='Transactions')
