@@ -60,11 +60,16 @@ class UserAdmin(BaseUserAdmin):
     inlines  = [UserProfileInline]
 
     list_display  = ('email', 'display_name_col', 'kyc_badge_col', 'verified_badge_col', 'joint_badge_col', 'is_active', 'transaction_count_col', 'created_at')
-    list_filter   = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'profile__is_joint_account', 'created_at')
-    search_fields = ('email', 'full_name', 'username', 'phone', 'profile__joint_partner_email')
+    list_filter   = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
+    search_fields = ('email', 'full_name', 'username', 'phone')
     ordering      = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at', 'initials_col', 'last_login', 'date_joined')
     list_per_page = 25
+
+    def get_queryset(self, request):
+        """Perform select_related to join profile and avoid 500 missing profile errors."""
+        qs = super().get_queryset(request)
+        return qs.select_related('profile')
 
     # IMPORTANT: Django's BaseUserAdmin requires 'password' to be present in fieldsets.
     # Without it, the admin change form throws a 500 error when opening a user record.
@@ -169,7 +174,8 @@ class UserAdmin(BaseUserAdmin):
     @admin.display(description='Account Type')
     def joint_badge_col(self, obj):
         try:
-            if obj.profile.is_joint_account:
+            profile = getattr(obj, 'profile', None)
+            if profile and profile.is_joint_account:
                 return format_html(
                     '<span style="background:#eff6ff;color:#1d4ed8;padding:3px 10px;border-radius:12px;'
                     'font-size:0.78rem;font-weight:700;">Joint</span>'

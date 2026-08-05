@@ -83,3 +83,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'Profile: {self.user.display_name} (Joint: {self.is_joint_account})'
+
+
+# ─── Signals ────────────────────────────────────────────────
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """Guarantees every User in PostgreSQL automatically gets a UserProfile"""
+    if created:
+        UserProfile.objects.get_or_create(user=instance)
+
