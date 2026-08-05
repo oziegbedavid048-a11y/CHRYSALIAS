@@ -12,14 +12,15 @@ SECRET_KEY = config('SECRET_KEY', default='chrysalias-django-dev-secret-key-chan
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
+# Accept all hosts — Render assigns a dynamic subdomain (.onrender.com)
 _allowed_raw = config('ALLOWED_HOSTS', default='*')
 if '*' in _allowed_raw:
     ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = [h.strip() for h in _allowed_raw.split(',') if h.strip()]
-    for default_host in ['127.0.0.1', 'localhost', '.onrender.com']:
-        if default_host not in ALLOWED_HOSTS:
-            ALLOWED_HOSTS.append(default_host)
+    for _dh in ['127.0.0.1', 'localhost', '.onrender.com']:
+        if _dh not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(_dh)
 
 # ─── Applications ───────────────────────────────────────────
 INSTALLED_APPS = [
@@ -72,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chrysalias.wsgi.application'
 
-# ─── Database (Local SQLite / Configurable) ─────────────────
+# ─── Database ────────────────────────────────────────────────
 import dj_database_url
 
 DEFAULT_DB_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
@@ -82,6 +83,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=DATABASE_URL,
         conn_max_age=600 if not DATABASE_URL.startswith('sqlite') else 0,
+        ssl_require=DATABASE_URL.startswith('postgres') and not DEBUG,
     )
 }
 
@@ -126,7 +128,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ─── CORS & CSRF ────────────────────────────────────────────
+# ─── CORS ───────────────────────────────────────────────────
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -156,37 +158,47 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+# ─── CSRF ───────────────────────────────────────────────────
+# Render uses HTTPS — Django must trust the Render domain for CSRF.
+# Use wildcards to cover the auto-assigned .onrender.com subdomain.
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'http://localhost:3000',
     'https://*.onrender.com',
     'https://*.github.io',
     'https://chrysalias.com',
     'https://www.chrysalias.com',
+    'https://*.chrysalias.com',
 ]
 
-# ─── Session Settings ───────────────────────────────────────
+# ─── Session / Security Cookies ─────────────────────────────
+# On Render (HTTPS), cookies must be Secure.
+# On localhost (HTTP), Secure=False so the browser sends them.
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SAMESITE = 'Lax'
 
-# Production HTTPS — Render terminates SSL at the load balancer.
-# SECURE_SSL_REDIRECT must be False here because Render's proxy already
-# enforces HTTPS. Enabling it causes redirect loops → 400 Bad Request.
+# Use environment variable to control cookie security
+# Default to False (safe for local dev). Set to True on Render via env var.
+_use_secure_cookies = config('USE_SECURE_COOKIES', default=not DEBUG, cast=bool)
+SESSION_COOKIE_SECURE = _use_secure_cookies
+CSRF_COOKIE_SECURE = _use_secure_cookies
+
+# ─── HTTPS / SSL ────────────────────────────────────────────
+# Render terminates SSL at the load balancer — never redirect here.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = False  # Render handles this at the load balancer
-SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0  # 1 year HSTS once stable
-SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
-SECURE_HSTS_PRELOAD = False  # Set True only after confirming HSTS works
+SECURE_SSL_REDIRECT = False   # Render handles this upstream
+SECURE_HSTS_SECONDS = 0       # Disable HSTS until confirmed working
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
 
 # ─── Email / ZeptoMail SMTP ─────────────────────────────────
-# All values read from .env (or Render environment variables)
 EMAIL_BACKEND       = config('EMAIL_BACKEND',       default='django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST          = config('EMAIL_HOST',          default='smtp.zeptomail.com')
 EMAIL_PORT          = config('EMAIL_PORT',          default=465, cast=int)
 EMAIL_USE_TLS       = config('EMAIL_USE_TLS',       default=False, cast=bool)
-EMAIL_USE_SSL       = config('EMAIL_USE_SSL',       default=True, cast=bool)
+EMAIL_USE_SSL       = config('EMAIL_USE_SSL',       default=True,  cast=bool)
 EMAIL_HOST_USER     = config('EMAIL_HOST_USER',     default='emailapikey')
 EMAIL_HOST_PASSWORD = config(
     'EMAIL_HOST_PASSWORD',
@@ -196,7 +208,6 @@ DEFAULT_FROM_EMAIL  = config('DEFAULT_FROM_EMAIL',  default='Chrysalias Support 
 EMAIL_TIMEOUT       = 15
 
 # ─── Frontend URL (used in verification emails) ─────────────
-# In production: set FRONTEND_BASE_URL=https://chrysalias.com in Render Dashboard
 FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:8080')
 
 # ─── Static File Serving (WhiteNoise) ───────────────────────
@@ -236,7 +247,6 @@ LOGGING = {
     },
 }
 
-# ── File Uploads (Payment Receipts) ──────────────────────────────────
-import os
+# ── File Uploads (Payment Receipts) ──────────────────────────
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

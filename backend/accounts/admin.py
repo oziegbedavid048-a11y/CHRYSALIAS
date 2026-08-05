@@ -1,6 +1,7 @@
 """
 Chrysalias Accounts Admin
-Full-featured admin for user management with KYC controls.
+Full-featured admin for user management, KYC controls, and transaction oversight.
+All display columns are wrapped in try/except to prevent 500 errors on Render.
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -8,6 +9,8 @@ from django.utils.html import format_html
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from .models import User, UserProfile
 
+
+# ─── Custom Auth Forms ───────────────────────────────────────
 
 class ChrysaliasUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
@@ -20,11 +23,13 @@ class ChrysaliasUserCreationForm(UserCreationForm):
         fields = ('email', 'username', 'full_name')
 
 
+# ─── UserProfile Inline ──────────────────────────────────────
+
 class UserProfileInline(admin.StackedInline):
     model        = UserProfile
     can_delete   = False
     verbose_name = 'Extended Profile'
-    extra        = 1
+    extra        = 0
     max_num      = 1
     fieldsets    = (
         ('Personal Info', {
@@ -32,7 +37,7 @@ class UserProfileInline(admin.StackedInline):
         }),
         ('Joint Account', {
             'fields': ('is_joint_account', 'joint_partner_name', 'joint_partner_email'),
-            'description': 'Co-managed account settings — set when user registers as a Joint Account holder.',
+            'description': 'Co-managed account settings.',
         }),
         ('KYC Documents', {
             'fields': ('id_document', 'selfie_photo'),
@@ -42,16 +47,13 @@ class UserProfileInline(admin.StackedInline):
             'fields': ('notes',),
         }),
     )
+    readonly_fields = ()
 
     def get_queryset(self, request):
-        """Ensure profile always exists so inline never errors."""
-        qs = super().get_queryset(request)
-        return qs
+        return super().get_queryset(request)
 
-    def save_new_objects(self, form, change):
-        """Auto-create profile if inline is empty / missing."""
-        return super().save_new_objects(form, change)
 
+# ─── UserAdmin ───────────────────────────────────────────────
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
@@ -59,24 +61,17 @@ class UserAdmin(BaseUserAdmin):
     add_form = ChrysaliasUserCreationForm
     inlines  = [UserProfileInline]
 
-    list_display  = ('email', 'display_name_col', 'kyc_badge_col', 'verified_badge_col', 'joint_badge_col', 'is_active', 'transaction_count_col', 'created_at')
-    list_filter   = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
-    search_fields = ('email', 'full_name', 'username', 'phone')
-    ordering      = ('-created_at',)
-    readonly_fields = ('created_at', 'updated_at', 'initials_col', 'last_login', 'date_joined')
-    list_per_page = 25
+    list_display    = ('email', 'display_name_col', 'phone', 'kyc_badge_col', 'verified_badge_col', 'joint_badge_col', 'is_active', 'is_staff', 'created_at')
+    list_filter     = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
+    search_fields   = ('email', 'full_name', 'username', 'phone')
+    ordering        = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at', 'last_login', 'date_joined')
+    list_per_page   = 25
 
-    def get_queryset(self, request):
-        """Perform select_related to join profile and avoid 500 missing profile errors."""
-        qs = super().get_queryset(request)
-        return qs.select_related('profile')
-
-    # IMPORTANT: Django's BaseUserAdmin requires 'password' to be present in fieldsets.
-    # Without it, the admin change form throws a 500 error when opening a user record.
+    # Django BaseUserAdmin REQUIRES 'password' in fieldsets or it raises FieldError.
     fieldsets = (
         ('Account Identity', {
             'fields': ('email', 'username', 'full_name', 'phone'),
-            'description': 'Core user account information for Chrysalias.com',
         }),
         ('Password', {
             'fields': ('password',),
@@ -84,7 +79,6 @@ class UserAdmin(BaseUserAdmin):
         }),
         ('KYC & Verification', {
             'fields': ('kyc_status', 'is_verified'),
-            'classes': ('wide',),
         }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
@@ -103,100 +97,106 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
-    actions = ['approve_kyc_level1', 'approve_kyc_level2', 'reject_kyc', 'activate_accounts', 'deactivate_accounts']
+    actions = [
+        'approve_kyc_level1',
+        'approve_kyc_level2',
+        'reject_kyc',
+        'activate_accounts',
+        'deactivate_accounts',
+    ]
+
+    def get_queryset(self, request):
+        """
+        Use select_related to avoid N+1 queries and prevent
+        RelatedObjectDoesNotExist errors when accessing user.profile.
+        """
+        qs = super().get_queryset(request)
+        return qs.select_related('profile')
 
     def save_model(self, request, obj, form, change):
+        """Auto-ensure a UserProfile exists whenever a user is saved from admin."""
         super().save_model(request, obj, form, change)
-        # Always ensure a UserProfile exists — prevents inline 500 errors
         UserProfile.objects.get_or_create(user=obj)
 
     def get_object(self, request, object_id, from_field=None):
-        """Ensure UserProfile exists before admin tries to render the inline."""
+        """Ensure UserProfile exists before admin renders the inline."""
         obj = super().get_object(request, object_id, from_field)
-        if obj:
+        if obj is not None:
             UserProfile.objects.get_or_create(user=obj)
         return obj
+
+    # ── Display Columns ──────────────────────────────────────
 
     @admin.display(description='Name', ordering='full_name')
     def display_name_col(self, obj):
         try:
             initials = obj.initials or 'U'
-            name = obj.display_name or obj.email
+            name     = obj.display_name or obj.email
         except Exception:
             initials, name = 'U', obj.email
         return format_html(
             '<div style="display:flex;align-items:center;gap:8px;">'
-            '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#002b49,#3cb95d);'
-            'color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;">{}</div>'
+            '<div style="width:32px;height:32px;border-radius:50%;'
+            'background:linear-gradient(135deg,#002b49,#3cb95d);'
+            'color:#fff;display:flex;align-items:center;justify-content:center;'
+            'font-weight:700;font-size:0.75rem;flex-shrink:0;">{}</div>'
             '<strong>{}</strong></div>',
             initials, name
         )
 
     @admin.display(description='KYC Status')
     def kyc_badge_col(self, obj):
-        status = obj.kyc_status or 'pending'
+        try:
+            status = obj.kyc_status or 'pending'
+        except Exception:
+            status = 'pending'
         colours = {
-            'pending':  ('#f59e0b', '#fffbeb', 'Pending'),
-            'level_1':  ('#3b82f6', '#eff6ff', 'Level 1'),
-            'level_2':  ('#22c55e', '#f0fdf4', 'Level 2'),
-            'rejected': ('#ef4444', '#fef2f2', 'Rejected'),
+            'pending':  ('#fffbeb', '#b45309', 'Pending'),
+            'level_1':  ('#eff6ff', '#1d4ed8', 'Level 1'),
+            'level_2':  ('#f0fdf4', '#166534', 'Level 2'),
+            'rejected': ('#fef2f2', '#991b1b', 'Rejected'),
         }
-        c, bg, label = colours.get(status, ('#94a3b8', '#f8fafc', status))
+        bg, c, label = colours.get(status, ('#f8fafc', '#475569', status))
         return format_html(
             '<span style="background:{};color:{};padding:3px 10px;border-radius:12px;'
-            'font-size:0.78rem;font-weight:700;">{}</span>', bg, c, label
-        )
-
-    @admin.display(description='Initials')
-    def initials_col(self, obj):
-        try:
-            initials = obj.initials or 'U'
-        except Exception:
-            initials = 'U'
-        return format_html(
-            '<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#002b49,#3cb95d);'
-            'color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;">{}</div>',
-            initials
+            'font-size:0.78rem;font-weight:700;">{}</span>',
+            bg, c, label
         )
 
     @admin.display(description='Verified', ordering='is_verified')
     def verified_badge_col(self, obj):
-        if obj.is_verified:
+        try:
+            verified = obj.is_verified
+        except Exception:
+            verified = False
+        if verified:
             return format_html(
-                '<span style="background:#f0fdf4;color:#166534;padding:3px 10px;border-radius:12px;'
-                'font-size:0.78rem;font-weight:700;">Verified</span>'
+                '<span style="background:#f0fdf4;color:#166534;padding:3px 10px;'
+                'border-radius:12px;font-size:0.78rem;font-weight:700;">Verified</span>'
             )
         return format_html(
-            '<span style="background:#fef2f2;color:#991b1b;padding:3px 10px;border-radius:12px;'
-            'font-size:0.78rem;font-weight:700;">Unverified</span>'
+            '<span style="background:#fef2f2;color:#991b1b;padding:3px 10px;'
+            'border-radius:12px;font-size:0.78rem;font-weight:700;">Unverified</span>'
         )
 
     @admin.display(description='Account Type')
     def joint_badge_col(self, obj):
         try:
             profile = getattr(obj, 'profile', None)
-            if profile and profile.is_joint_account:
-                return format_html(
-                    '<span style="background:#eff6ff;color:#1d4ed8;padding:3px 10px;border-radius:12px;'
-                    'font-size:0.78rem;font-weight:700;">Joint</span>'
-                )
+            is_joint = profile.is_joint_account if profile else False
         except Exception:
-            pass
+            is_joint = False
+        if is_joint:
+            return format_html(
+                '<span style="background:#eff6ff;color:#1d4ed8;padding:3px 10px;'
+                'border-radius:12px;font-size:0.78rem;font-weight:700;">Joint</span>'
+            )
         return format_html(
-            '<span style="background:#f8fafc;color:#64748b;padding:3px 10px;border-radius:12px;'
-            'font-size:0.78rem;font-weight:700;">Personal</span>'
+            '<span style="background:#f8fafc;color:#64748b;padding:3px 10px;'
+            'border-radius:12px;font-size:0.78rem;font-weight:700;">Personal</span>'
         )
 
-    @admin.display(description='Transactions')
-    def transaction_count_col(self, obj):
-        try:
-            from transactions.models import Transaction
-            count = Transaction.objects.filter(buyer=obj).count() + Transaction.objects.filter(seller=obj).count()
-            if count > 0:
-                return format_html('<strong style="color:#002b49;">{}</strong>', count)
-        except Exception:
-            pass
-        return format_html('<span style="color:#94a3b8;">0</span>')
+    # ── Admin Actions ────────────────────────────────────────
 
     @admin.action(description='Approve KYC — Level 1 (Email Verified)')
     def approve_kyc_level1(self, request, queryset):
@@ -222,3 +222,14 @@ class UserAdmin(BaseUserAdmin):
     def deactivate_accounts(self, request, queryset):
         queryset.update(is_active=False)
         self.message_user(request, 'Selected accounts deactivated.')
+
+
+# ─── UserProfile Admin ───────────────────────────────────────
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display  = ('user', 'country', 'is_joint_account', 'joint_partner_email', 'created_at')
+    list_filter   = ('is_joint_account', 'country', 'created_at')
+    search_fields = ('user__email', 'user__full_name', 'joint_partner_email', 'country')
+    raw_id_fields = ('user',)
+    readonly_fields = ('created_at',)

@@ -17,6 +17,12 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: "*"
+
+      # --- Cookie Security (True on HTTPS, False on HTTP) ---
+      - key: USE_SECURE_COOKIES
+        value: "True"
+
+      # --- Frontend URL for email links ---
       - key: FRONTEND_BASE_URL
         value: "https://chrysalias.com"
 
@@ -42,7 +48,7 @@ services:
       - key: DEFAULT_FROM_EMAIL
         value: "Chrysalias Support <info@chrysalias.com>"
 
-      # --- Django Admin Superuser (auto-created on first deploy) ---
+      # --- Django Admin Superuser ---
       - key: DJANGO_SUPERUSER_EMAIL
         value: "info@chrysalias.com"
       - key: DJANGO_SUPERUSER_PASSWORD
