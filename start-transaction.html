@@ -8,501 +8,1052 @@
   <link href="css/app-custom.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
     body.tx-wizard-bg {
-      background-color: var(--escrow-bg-webapp);
+      background-color: #f8fafc;
       min-height: 100vh;
-      padding-bottom: 60px;
+      padding-bottom: 80px;
       margin: 0;
       font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      color: #0f172a;
     }
-    .tx-wizard-container {
-      max-width: 740px;
-      margin: 30px auto;
-      padding: 0 16px;
-      box-sizing: border-box;
-    }
-    .tx-step-bar {
+
+    /* ── Top Nav ── */
+    .tx-topnav {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
-      position: relative;
-      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     }
-    .tx-step-bar::before {
-      content: '';
+    .tx-topnav-brand {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .tx-topnav-brand span {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #002b49;
+      letter-spacing: -0.5px;
+    }
+    .tx-back-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #64748b;
+      transition: color 0.15s;
+    }
+    .tx-back-link:hover { color: #002b49; }
+
+    /* ── Container ── */
+    .tx-wizard-container {
+      max-width: 700px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+
+    /* ── Step Progress ── */
+    .tx-step-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .tx-step-track {
       position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 3px;
+      left: 16px;
+      right: 16px;
+      height: 2px;
       background: #e2e8f0;
-      z-index: 1;
-      transform: translateY(-50%);
+      z-index: 0;
+    }
+    .tx-step-track-fill {
+      height: 2px;
+      background: #3cb95d;
+      transition: width 0.4s ease;
+      width: 0%;
     }
     .tx-step-item {
       position: relative;
-      z-index: 2;
-      background: var(--escrow-bg-webapp);
-      padding: 0 12px;
+      z-index: 1;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 700;
-      font-size: 0.88rem;
-      color: #94a3b8;
+      flex: 1;
     }
-    .tx-step-item.active {
-      color: var(--escrow-navy);
-    }
+    .tx-step-item:last-child { justify-content: flex-end; }
     .tx-step-num {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: #cbd5e1;
-      color: #ffffff;
+      background: #e2e8f0;
+      color: #94a3b8;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       flex-shrink: 0;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
     }
     .tx-step-item.active .tx-step-num {
-      background: var(--escrow-green);
+      background: #002b49;
+      color: #ffffff;
+      border-color: #002b49;
     }
+    .tx-step-item.done .tx-step-num {
+      background: #3cb95d;
+      color: #ffffff;
+      border-color: #3cb95d;
+    }
+    .tx-step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      transition: color 0.3s ease;
+    }
+    .tx-step-item.active .tx-step-label,
+    .tx-step-item.done .tx-step-label { color: #002b49; }
+
+    /* ── Card ── */
     .tx-card {
       background: #ffffff;
       border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
       border: 1px solid #e2e8f0;
-      padding: 28px;
-      box-sizing: border-box;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+    .tx-card-head {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid #f1f5f9;
     }
     .tx-card-title {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 800;
-      color: var(--escrow-navy);
-      margin: 0 0 6px 0;
+      color: #002b49;
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+    .tx-card-title svg { flex-shrink: 0; }
     .tx-card-subtitle {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: #64748b;
-      margin-bottom: 24px;
+      margin: 0;
+      padding-left: 30px;
     }
-    .tx-section-header {
-      font-size: 1.05rem;
+    .tx-card-body {
+      padding: 24px 28px 28px;
+    }
+
+    /* ── Section Divider ── */
+    .tx-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 24px 0 16px;
+    }
+    .tx-section-line {
+      flex: 1;
+      height: 1px;
+      background: #f1f5f9;
+    }
+    .tx-section-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
+    }
+
+    /* ── Form Elements ── */
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.83rem;
       font-weight: 700;
-      color: var(--escrow-navy);
-      border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 8px;
-      margin: 24px 0 16px 0;
+      color: #374151;
+      margin-bottom: 6px;
     }
+    .form-label svg { flex-shrink: 0; }
+    .form-label .required-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #ef4444;
+      display: inline-block;
+      margin-left: 2px;
+    }
+    .form-input {
+      width: 100%;
+      height: 46px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0 14px;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif !important;
+      color: #0f172a;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-input:focus {
+      border-color: #002b49;
+      box-shadow: 0 0 0 3px rgba(0, 43, 73, 0.08);
+    }
+    .form-input::placeholder { color: transparent; }
+    .form-textarea {
+      width: 100%;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif !important;
+      color: #0f172a;
+      background: #ffffff;
+      outline: none;
+      resize: vertical;
+      min-height: 90px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-textarea:focus {
+      border-color: #002b49;
+      box-shadow: 0 0 0 3px rgba(0, 43, 73, 0.08);
+    }
+    .form-textarea::placeholder { color: transparent; }
+    .form-select {
+      width: 100%;
+      height: 46px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0 36px 0 14px;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif !important;
+      color: #0f172a;
+      background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-select:focus {
+      border-color: #002b49;
+      box-shadow: 0 0 0 3px rgba(0, 43, 73, 0.08);
+    }
+    .form-hint {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* ── Prefix input ── */
+    .input-prefix-group {
+      display: flex;
+      align-items: stretch;
+    }
+    .input-prefix {
+      display: flex;
+      align-items: center;
+      padding: 0 13px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #475569;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .input-prefix-group .form-input {
+      border-radius: 0 8px 8px 0;
+    }
+    .input-currency-group {
+      display: flex;
+      align-items: stretch;
+    }
+    .input-currency {
+      display: flex;
+      align-items: center;
+      padding: 0 13px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #475569;
+    }
+    .input-currency-group .form-input {
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ── Form Grid ── */
     .form-grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
+
+    /* ── Payment Type Options ── */
+    .pay-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .pay-option:last-child { margin-bottom: 0; }
+    .pay-option.selected {
+      border-color: #002b49;
+      background: #f0f7ff;
+    }
+    .pay-option input[type="radio"] {
+      display: none;
+    }
+    .pay-option-radio {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #cbd5e1;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .pay-option.selected .pay-option-radio {
+      border-color: #002b49;
+    }
+    .pay-option-radio::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #002b49;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .pay-option.selected .pay-option-radio::after { opacity: 1; }
+    .pay-option-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .pay-option.selected .pay-option-icon { background: #dbeafe; }
+    .pay-option-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #002b49;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pay-option-desc {
+      font-size: 0.8rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .badge-joint {
+      background: #002b49;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Co-Funded Box ── */
+    .cofund-box {
+      display: none;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-left: 4px solid #002b49;
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+    .cofund-box-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #002b49;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cofund-total-row {
+      display: none;
+      background: #e0f2fe;
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #002b49;
+      margin-top: 8px;
+    }
+
+    /* ── Summary Box ── */
     .summary-box {
       background: #f8fafc;
       border-radius: 10px;
-      padding: 18px;
       border: 1px solid #e2e8f0;
-      margin: 20px 0;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .summary-box-head {
+      padding: 13px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .summary-box-head strong {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #002b49;
     }
     .summary-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px dashed #e2e8f0;
-      font-size: 0.9rem;
+      padding: 12px 18px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.88rem;
+      color: #475569;
     }
-    .summary-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row strong { color: #002b49; font-weight: 700; }
     .summary-row.total {
-      font-size: 1.1rem;
+      background: #f0f7ff;
+      border-top: 1.5px solid #e2e8f0;
+      font-size: 1rem;
       font-weight: 800;
-      color: var(--escrow-navy);
-      border-top: 2px solid #cbd5e1;
-      padding-top: 12px;
-      margin-top: 6px;
+      color: #002b49;
     }
-    .phone-input-group {
-      display: flex;
-      align-items: center;
-    }
-    .phone-prefix {
-      background: #e2e8f0;
-      color: #334155;
-      padding: 12px 14px;
-      border: 1px solid var(--escrow-border);
-      border-right: none;
-      border-radius: 6px 0 0 6px;
-      font-weight: 700;
-    }
-    .phone-input {
-      border-radius: 0 6px 6px 0 !important;
-      flex: 1;
+    .summary-row select {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 5px 30px 5px 10px;
+      font-size: 0.84rem;
+      background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 8px center;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      outline: none;
+      color: #002b49;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    /* Mobile Responsive Rules */
+    /* ── Item Badge in Step 2 ── */
+    .item-badge-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .item-badge-label { font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+
+    /* ── Checkbox ── */
+    .terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .terms-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #3cb95d;
+      margin-top: 2px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .terms-row span { font-size: 0.83rem; color: #475569; line-height: 1.45; }
+    .terms-row a { color: #002b49; font-weight: 700; }
+
+    /* ── Action Buttons ── */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .action-row.right { justify-content: flex-end; }
+    .btn-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 20px;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-back:hover { border-color: #002b49; color: #002b49; }
+    .btn-proceed {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 32px;
+      background: #3cb95d;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-proceed:hover { background: #2fa050; transform: translateY(-1px); }
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 32px;
+      background: #002b49;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-submit:hover { background: #01426a; transform: translateY(-1px); }
+
+    /* ── Responsive ── */
     @media (max-width: 640px) {
-      .tx-wizard-container {
-        padding: 0 12px !important;
-        margin: 16px auto !important;
-      }
-      .tx-card {
-        padding: 18px 16px !important;
-      }
-      .form-grid-2 {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-      }
-      .tx-step-item span {
-        display: none;
-      }
-      .tx-step-bar {
-        justify-content: space-around;
-      }
-      .action-btn-row {
-        flex-direction: column !important;
-        gap: 10px !important;
-      }
-      .action-btn-row button {
-        width: 100% !important;
-      }
+      .tx-wizard-container { padding: 0 12px; margin: 16px auto; }
+      .tx-card-head, .tx-card-body { padding: 18px 16px; }
+      .form-grid-2 { grid-template-columns: 1fr; gap: 12px; }
+      .tx-step-label { display: none; }
+      .action-row { flex-direction: column; gap: 10px; }
+      .action-row .btn-back, .action-row .btn-proceed, .action-row .btn-submit { width: 100%; justify-content: center; }
     }
   </style>
 </head>
+
 <body class="tx-wizard-bg">
-  <!-- Top Header -->
-  <div style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
-    <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
-      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 32px; width: 32px; object-fit: contain;">
-      <span style="font-family: 'Inter', sans-serif !important; font-weight: 800; font-size: 1.35rem; color: #002b49; letter-spacing: -0.5px;">CHRYSALIAS<span style="color: #3cb95d;">.COM</span></span>
+
+  <!-- Top Navigation -->
+  <nav class="tx-topnav">
+    <a href="index.html" class="tx-topnav-brand">
+      <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 30px; width: 30px; object-fit: contain;">
+      <span>CHRYSALIAS<span style="color: #3cb95d;">.COM</span></span>
     </a>
-  </div>
+    <a href="dashboard.html" class="tx-back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Back to Dashboard
+    </a>
+  </nav>
 
   <div class="tx-wizard-container">
-    
-    <!-- Wizard Progress Bar -->
+
+    <!-- Step Progress Bar -->
     <div class="tx-step-bar">
+      <div class="tx-step-track"><div class="tx-step-track-fill" id="stepTrackFill"></div></div>
       <div class="tx-step-item active" id="stepIndicator1">
-        <div class="tx-step-num">1</div>
-        <span>Transaction & Item Details</span>
+        <div class="tx-step-num" id="stepNum1">1</div>
+        <span class="tx-step-label">Transaction &amp; Item Details</span>
       </div>
-      <div class="tx-step-item" id="stepIndicator2">
-        <div class="tx-step-num">2</div>
-        <span>Summary & Seller Details</span>
+      <div class="tx-step-item" id="stepIndicator2" style="flex: 0; gap: 8px;">
+        <div class="tx-step-num" id="stepNum2">2</div>
+        <span class="tx-step-label">Review &amp; Confirm</span>
       </div>
     </div>
 
+    <!-- CARD -->
     <div class="tx-card">
-      
-      <!-- STEP 1: FORM INPUTS -->
+
+      <!-- ═══ STEP 1 ═══ -->
       <div id="wizardStep1">
-        <h1 class="tx-card-title">Start Transaction</h1>
-        <p class="tx-card-subtitle">Set up protected Chrysalias terms for your purchase or sale.</p>
+        <div class="tx-card-head">
+          <h1 class="tx-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+            </svg>
+            Start a Transaction
+          </h1>
+          <p class="tx-card-subtitle">Set up protected Chrysalias terms for your purchase or sale agreement.</p>
+        </div>
 
-        <form id="txStep1Form">
-          <div class="form-group">
-            <label for="txTitle" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Transaction Title</label>
-            <input type="text" id="txTitle" class="form-control" placeholder="e.g. Domain Purchase: kkd.com" required value="Domain Purchase: kkd.com">
-          </div>
+        <div class="tx-card-body">
+          <form id="txStep1Form" novalidate>
 
-          <div class="form-grid-2">
+            <!-- Transaction Title -->
             <div class="form-group">
-              <label for="myRole" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">My Role</label>
-              <select id="myRole" class="form-control" style="height: 48px;" required>
-                <option value="buyer" selected>Buyer</option>
-                <option value="seller">Seller</option>
-                <option value="broker">Broker</option>
-              </select>
+              <label class="form-label" for="txTitle">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Transaction Title <span class="required-dot"></span>
+              </label>
+              <input type="text" id="txTitle" class="form-input" required autocomplete="off">
+              <div class="form-hint">Give this agreement a clear, descriptive name.</div>
             </div>
 
-            <div class="form-group">
-              <label for="currency" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Currency</label>
-              <select id="currency" class="form-control" style="height: 48px;" required>
-                <option value="usd" selected>USD ($)</option>
-                <option value="eur">EUR (€)</option>
-                <option value="gbp">GBP (£)</option>
-                <option value="cad">CAD ($)</option>
-                <option value="aud">AUD ($)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="inspectionPeriod" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Inspection Period (Days)</label>
-            <input type="number" id="inspectionPeriod" class="form-control" min="1" max="30" value="2" required>
-          </div>
-
-          <div class="tx-section-header">Payment & Co-Funding Option</div>
-
-          <div class="payment-option-grid" style="margin-bottom: 20px;">
-            <label id="optLabelStandard" class="pay-option-card" style="border: 2px solid #3cb95d; background: #f0fdf4; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box; width: 100%;">
-              <input type="radio" name="paymentType" value="standard" checked onclick="togglePaymentType('standard')" style="margin-top: 4px; accent-color: #3cb95d; flex-shrink: 0;">
-              <div style="flex: 1; min-width: 0;">
-                <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; line-height: 1.3;">Standard Chrysalias Payment</div>
-                <div style="font-size: 0.82rem; color: #475569; margin-top: 4px; line-height: 1.35;">Single buyer completes full transaction payment.</div>
-              </div>
-            </label>
-
-            <label id="optLabelPartnered" class="pay-option-card" style="border: 1px solid #cbd5e1; background: #ffffff; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box; width: 100%; margin-top: 10px;">
-              <input type="radio" name="paymentType" value="partnered" onclick="togglePaymentType('partnered')" style="margin-top: 4px; accent-color: #3cb95d; flex-shrink: 0;">
-              <div style="flex: 1; min-width: 0;">
-                <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; line-height: 1.3;">
-                  Partnered Payment
-                  <span style="background: #002b49; color: #ffffff; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700; text-transform: uppercase; white-space: nowrap;">Co-Fund</span>
-                </div>
-                <div style="font-size: 0.82rem; color: #475569; margin-top: 4px; line-height: 1.35;">Invite a partner or co-buyer to split or complete payment with you.</div>
-              </div>
-            </label>
-          </div>
-
-          <!-- Partnered Payment Details Box -->
-          <div id="partneredFieldsBox" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #002b49; border-radius: 8px; padding: 18px 20px; margin-bottom: 24px;">
-            <div style="font-weight: 700; color: #002b49; font-size: 0.95rem; margin-bottom: 12px;">
-              <span>Partnered Payment Settings</span>
-            </div>
+            <!-- Role + Currency -->
             <div class="form-grid-2">
-              <div class="form-group" style="margin-bottom: 12px;">
-                <label for="partnerEmail" style="font-size: 0.85rem;">Partner / Co-Buyer Email</label>
-                <input type="email" id="partnerEmail" class="form-control" placeholder="partner@example.com" value="partner.co-buyer@example.com">
+              <div class="form-group">
+                <label class="form-label" for="myRole">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  My Role <span class="required-dot"></span>
+                </label>
+                <select id="myRole" class="form-select" required>
+                  <option value="buyer">Buyer</option>
+                  <option value="seller">Seller</option>
+                  <option value="broker">Broker</option>
+                </select>
               </div>
-              <div class="form-group" style="margin-bottom: 12px;">
-                <label for="partnerContribution" style="font-size: 0.85rem;">Partner Payment Split</label>
-                <select id="partnerContribution" class="form-control" style="height: 48px;">
-                  <option value="50_50" selected>50% / 50% Equal Co-Funding Split</option>
-                  <option value="partner_full">Partner Pays Remaining Balance</option>
-                  <option value="custom">Custom Partner Contribution</option>
+              <div class="form-group">
+                <label class="form-label" for="currency">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="18" x2="12" y2="20"/></svg>
+                  Currency <span class="required-dot"></span>
+                </label>
+                <select id="currency" class="form-select" required>
+                  <option value="USD">USD — US Dollar ($)</option>
+                  <option value="EUR">EUR — Euro (€)</option>
+                  <option value="GBP">GBP — British Pound (£)</option>
+                  <option value="CAD">CAD — Canadian Dollar ($)</option>
+                  <option value="AUD">AUD — Australian Dollar ($)</option>
                 </select>
               </div>
             </div>
-            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">
-              Once initiated, a dedicated <strong>Chrysalias Partnered Payment Portal link</strong> will be generated for your partner to complete their share.
-            </p>
-          </div>
 
-          <div class="tx-section-header">Transaction Details</div>
-
-          <div class="form-group">
-            <label for="itemCategory" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Item Category</label>
-            <select id="itemCategory" class="form-control" style="height: 48px;" required>
-              <option value="Domain Names" selected>Domain Names</option>
-              <option value="Motor Vehicles">Motor Vehicles (Cars, Boats, Aircraft)</option>
-              <option value="Estate & Real Estate">Estate & Real Estate (Property, Houses, Land)</option>
-              <option value="General Merchandise">General Merchandise (Luxury Goods, Laptops)</option>
-              <option value="Jewelry & Watches">Jewelry & Watches (Rolex, Fine Diamonds)</option>
-              <option value="Antiques & Collectibles">Antiques & Collectibles</option>
-              <option value="Milestone Services">Milestone Services & Contracts</option>
-              <option value="IPv4 Addresses">IPv4 Addresses</option>
-            </select>
-          </div>
-
-          <div class="form-grid-2">
+            <!-- Inspection Period -->
             <div class="form-group">
-              <label for="itemName" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Item Name / Domain</label>
-              <input type="text" id="itemName" class="form-control" placeholder="e.g. kkd.com" required value="kkd.com">
+              <label class="form-label" for="inspectionPeriod">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Inspection Period (Days) <span class="required-dot"></span>
+              </label>
+              <input type="number" id="inspectionPeriod" class="form-input" min="1" max="30" required autocomplete="off">
+              <div class="form-hint">Number of days the buyer has to inspect after delivery (1–30 days).</div>
             </div>
 
-            <div class="form-group">
-              <label for="itemPrice" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Price (USD)</label>
-              <div style="position: relative;">
-                <span style="position: absolute; left: 14px; top: 12px; font-weight: 700; color: #64748b;">$</span>
-                <input type="number" step="0.01" id="itemPrice" class="form-control" style="padding-left: 32px;" placeholder="0.00" value="12.00" required>
+            <!-- Payment Method Section -->
+            <div class="tx-section">
+              <span class="tx-section-line"></span>
+              <span class="tx-section-label">Payment Method</span>
+              <span class="tx-section-line"></span>
+            </div>
+
+            <label class="pay-option selected" id="optLabelStandard" onclick="selectPaymentType(this, 'standard')">
+              <input type="radio" name="paymentType" value="standard" checked>
+              <div class="pay-option-radio"></div>
+              <div class="pay-option-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div class="pay-option-title">Standard Payment</div>
+                <div class="pay-option-desc">Single buyer completes the full transaction payment amount.</div>
+              </div>
+            </label>
+
+            <label class="pay-option" id="optLabelPartnered" onclick="selectPaymentType(this, 'partnered')">
+              <input type="radio" name="paymentType" value="partnered">
+              <div class="pay-option-radio"></div>
+              <div class="pay-option-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div class="pay-option-title">Co-Funded Payment <span class="badge-joint">Joint</span></div>
+                <div class="pay-option-desc">Invite a partner to contribute a specified portion of the total payment.</div>
+              </div>
+            </label>
+
+            <!-- Co-Funded Configuration Box -->
+            <div class="cofund-box" id="partneredFieldsBox">
+              <div class="cofund-box-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Co-Funded Payment Configuration
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label class="form-label" for="partnerEmail">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Partner / Co-Buyer Email
+                </label>
+                <input type="email" id="partnerEmail" class="form-input" autocomplete="off">
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="myContributionAmount">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/></svg>
+                    My Contribution
+                  </label>
+                  <div class="input-currency-group">
+                    <div class="input-currency">$</div>
+                    <input type="number" step="0.01" id="myContributionAmount" class="form-input" oninput="syncPartnerAmount()" autocomplete="off">
+                  </div>
+                  <div class="form-hint">Amount you will pay</div>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="partnerContributionAmount">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/></svg>
+                    Partner Contribution
+                  </label>
+                  <div class="input-currency-group">
+                    <div class="input-currency">$</div>
+                    <input type="number" step="0.01" id="partnerContributionAmount" class="form-input" oninput="syncTotalFromContributions()" autocomplete="off">
+                  </div>
+                  <div class="form-hint">Amount your partner will pay</div>
+                </div>
+              </div>
+              <div class="cofund-total-row" id="contributionTotalRow">
+                Combined Total: <span id="contributionTotalAmt">$0.00</span>
               </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label for="itemDesc" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Item Description</label>
-            <textarea id="itemDesc" class="form-control" rows="3" placeholder="Describe the item, domain transfer, or service deliverables...">Full transfer of domain name kkd.com including ICANN auth code to buyer account.</textarea>
-          </div>
+            <!-- Transaction Details Section -->
+            <div class="tx-section">
+              <span class="tx-section-line"></span>
+              <span class="tx-section-label">Item Details</span>
+              <span class="tx-section-line"></span>
+            </div>
 
-          <div class="action-btn-row" style="margin-top: 28px; display: flex; justify-content: flex-end;">
-            <button type="submit" class="btn-escrow-green" style="padding: 13px 36px; font-size: 1rem; font-weight: 700;">
-              Add Item / Proceed →
-            </button>
-          </div>
-        </form>
+            <!-- Category -->
+            <div class="form-group">
+              <label class="form-label" for="itemCategory">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                Item Category <span class="required-dot"></span>
+              </label>
+              <select id="itemCategory" class="form-select" required>
+                <option value="">Select a category</option>
+                <option value="Domain Names">Domain Names</option>
+                <option value="Motor Vehicles">Motor Vehicles (Cars, Boats, Aircraft)</option>
+                <option value="Estate &amp; Real Estate">Estate &amp; Real Estate (Property, Houses, Land)</option>
+                <option value="General Merchandise">General Merchandise (Luxury Goods, Electronics)</option>
+                <option value="Jewelry &amp; Watches">Jewelry &amp; Watches (Rolex, Fine Diamonds)</option>
+                <option value="Antiques &amp; Collectibles">Antiques &amp; Collectibles</option>
+                <option value="Milestone Services">Milestone Services &amp; Contracts</option>
+                <option value="IPv4 Addresses">IPv4 Addresses</option>
+              </select>
+            </div>
+
+            <!-- Item Name + Price -->
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="itemName">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  Item Name <span class="required-dot"></span>
+                </label>
+                <input type="text" id="itemName" class="form-input" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="itemPrice">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="18" x2="12" y2="20"/></svg>
+                  Price (USD) <span class="required-dot"></span>
+                </label>
+                <div class="input-currency-group">
+                  <div class="input-currency">$</div>
+                  <input type="number" step="0.01" id="itemPrice" class="form-input" required autocomplete="off">
+                </div>
+              </div>
+            </div>
+
+            <!-- Item Description -->
+            <div class="form-group">
+              <label class="form-label" for="itemDesc">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Item Description
+              </label>
+              <textarea id="itemDesc" class="form-textarea" rows="3"></textarea>
+              <div class="form-hint">Describe deliverables, transfer conditions, or any relevant specification.</div>
+            </div>
+
+            <div class="action-row right">
+              <button type="submit" class="btn-proceed">
+                Continue to Review
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <!-- STEP 2: SUMMARY & SELLER DETAILS -->
+      <!-- ═══ STEP 2 ═══ -->
       <div id="wizardStep2" style="display: none;">
-        <h1 class="tx-card-title">Transaction Summary</h1>
-        <p class="tx-card-subtitle">Review items, fee breakdown, and counterparty details.</p>
-
-        <!-- Selected Item Badge Card -->
-        <div style="background: #f1f5f9; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <h3 id="summaryItemName" style="margin: 0; color: var(--escrow-navy); font-size: 1.15rem; font-weight: 800;">kkd.com</h3>
-            <p id="summaryCategoryRole" style="margin: 4px 0 0 0; color: #64748b; font-size: 0.85rem;">Domain • Inspection Period: <span id="summaryDays">2</span> Days</p>
-          </div>
-          <div id="summaryPriceTag" style="font-size: 1.35rem; font-weight: 800; color: var(--escrow-green);">$12.00</div>
+        <div class="tx-card-head">
+          <h1 class="tx-card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            Review &amp; Confirm
+          </h1>
+          <p class="tx-card-subtitle">Verify the transaction details and enter seller information before confirming.</p>
         </div>
 
-        <!-- Fee Summary Table -->
-        <div class="summary-box">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-            <strong style="color: var(--escrow-navy); font-size: 0.95rem;">Transaction Summary Breakdown</strong>
-            <span style="font-size: 0.8rem; color: #64748b; text-decoration: underline; cursor: pointer;" onclick="window.EscrowApp.showToast('Chrysalias fee minimum is $50.00, protecting full transaction value.');">How are totals calculated?</span>
-          </div>
+        <div class="tx-card-body">
 
-          <div class="summary-row">
-            <span>Subtotal:</span>
-            <strong id="calcSubtotal">$12.00</strong>
-          </div>
-
-          <div class="summary-row">
-            <span>Chrysalias fee paid by:</span>
-            <select id="feePayer" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; font-size: 0.85rem;">
-              <option value="buyer" selected>Buyer ($50.00)</option>
-              <option value="seller">Seller ($50.00)</option>
-              <option value="50/50">50/50 Split ($25.00 each)</option>
-            </select>
-          </div>
-
-          <div class="summary-row">
-            <span>Buyer Price:</span>
-            <strong id="calcBuyerPrice" style="color: var(--escrow-navy);">$62.00</strong>
-          </div>
-
-          <div class="summary-row">
-            <span>Seller Proceeds:</span>
-            <strong id="calcSellerProceeds" style="color: var(--escrow-green);">$12.00</strong>
-          </div>
-
-          <div class="summary-row total">
-            <span>Total Buyer Payment:</span>
-            <span id="calcTotalPayment">$62.00 USD</span>
-          </div>
-          <p style="margin: 8px 0 0 0; font-size: 0.78rem; color: #94a3b8; text-align: right;">All prices are in USD. Taxes may apply.</p>
-        </div>
-
-        <!-- Seller Details -->
-        <div class="tx-section-header">Seller Details</div>
-
-        <form id="txStep2Form">
-          <div class="form-group">
-            <label for="sellerEmail" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Seller Email</label>
-            <input type="email" id="sellerEmail" class="form-control" placeholder="seller@example.com" value="seller.alex@example.com" required>
-          </div>
-
-          <div class="form-group">
-            <label for="sellerPhone" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Seller Phone Number</label>
-            <div class="phone-input-group">
-              <span class="phone-prefix">+1</span>
-              <input type="tel" id="sellerPhone" class="form-control phone-input" placeholder="(555) 234-5678" value="(555) 234-5678" required>
+          <!-- Item Summary Badge -->
+          <div class="item-badge-card">
+            <div>
+              <div class="item-badge-label">Item</div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: #002b49;" id="summaryItemName">—</div>
+              <div style="font-size: 0.82rem; color: #64748b; margin-top: 3px;" id="summaryCategoryRole">—</div>
+            </div>
+            <div style="text-align: right;">
+              <div class="item-badge-label">Agreed Price</div>
+              <div style="font-size: 1.3rem; font-weight: 900; color: #3cb95d;" id="summaryPriceTag">—</div>
             </div>
           </div>
 
-          <div class="form-group" style="margin: 20px 0;">
-            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-              <input type="checkbox" id="termsCheck" checked required style="margin-top: 3px; accent-color: #3cb95d; width: 16px; height: 16px; flex-shrink: 0;">
-              <span style="font-size: 0.84rem; color: #475569; line-height: 1.35;">I have read and agree to the <a href="#" onclick="alert('Chrysalias General Terms & Privacy Policy.'); return false;" style="color: var(--escrow-navy); font-weight: 700; text-decoration: underline;">General Chrysalias Instructions</a> and <a href="#" onclick="alert('Chrysalias Privacy Policy'); return false;" style="color: var(--escrow-navy); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.</span>
-            </label>
+          <!-- Fee Breakdown Summary -->
+          <div class="summary-box">
+            <div class="summary-box-head">
+              <strong>Transaction Cost Breakdown</strong>
+              <span style="font-size: 0.78rem; color: #94a3b8; cursor: pointer;" onclick="window.EscrowApp && window.EscrowApp.showToast('Chrysalias protection fee is a minimum of $50.00, applied to the full transaction value.');">How are fees calculated?</span>
+            </div>
+            <div class="summary-row">
+              <span>Item Subtotal</span>
+              <strong id="calcSubtotal">—</strong>
+            </div>
+            <div class="summary-row">
+              <span>Chrysalias fee paid by</span>
+              <select id="feePayer">
+                <option value="buyer">Buyer ($50.00)</option>
+                <option value="seller">Seller ($50.00)</option>
+              </select>
+            </div>
+            <div class="summary-row">
+              <span>Buyer Payment Total</span>
+              <strong id="calcBuyerPrice" style="color: #002b49;">—</strong>
+            </div>
+            <div class="summary-row">
+              <span>Seller Receives</span>
+              <strong id="calcSellerProceeds" style="color: #3cb95d;">—</strong>
+            </div>
+            <div class="summary-row total">
+              <span>Total Payment Due</span>
+              <span id="calcTotalPayment">—</span>
+            </div>
           </div>
 
-          <div class="action-btn-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 28px;">
-            <button type="button" class="btn btn--secondary" onclick="showStep1()" style="padding: 11px 20px; font-weight: 600; font-size: 0.9rem;">
-              ← Back to Details
-            </button>
-            <button type="submit" class="btn-escrow-green" style="padding: 13px 36px; font-size: 1rem; font-weight: 700;">
-              Start Transaction
-            </button>
-          </div>
-        </form>
+          <!-- Seller Details -->
+          <form id="txStep2Form" novalidate>
+
+            <div class="tx-section">
+              <span class="tx-section-line"></span>
+              <span class="tx-section-label">Seller Details</span>
+              <span class="tx-section-line"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sellerEmail">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Seller Email Address <span class="required-dot"></span>
+              </label>
+              <input type="email" id="sellerEmail" class="form-input" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sellerPhone">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Seller Phone Number <span class="required-dot"></span>
+              </label>
+              <div class="input-prefix-group">
+                <div class="input-prefix">+1</div>
+                <input type="tel" id="sellerPhone" class="form-input" required autocomplete="off">
+              </div>
+            </div>
+
+            <div class="terms-row">
+              <input type="checkbox" id="termsCheck" required>
+              <span>I confirm I have read and agree to the <a href="#" onclick="window.EscrowApp && window.EscrowApp.showToast('Chrysalias General Terms & Privacy Policy'); return false;">General Chrysalias Instructions</a> and <a href="#" onclick="window.EscrowApp && window.EscrowApp.showToast('Chrysalias Privacy Policy'); return false;">Privacy Policy</a>.</span>
+            </div>
+
+            <div class="action-row">
+              <button type="button" class="btn-back" onclick="showStep1()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Back
+              </button>
+              <button type="submit" class="btn-submit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                Create Transaction
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
-    </div>
-  </div>
+    </div><!-- /tx-card -->
+  </div><!-- /tx-wizard-container -->
 
   <script src="js/app-custom.js"></script>
   <script>
-    function togglePaymentType(type) {
-      const isPartnered = type === 'partnered';
-      const box = document.getElementById('partneredFieldsBox');
-      const labelStd = document.getElementById('optLabelStandard');
-      const labelPart = document.getElementById('optLabelPartnered');
-      
-      if (isPartnered) {
-        box.style.display = 'block';
-        labelPart.style.border = '2px solid #3cb95d';
-        labelPart.style.background = '#f0fdf4';
-        labelStd.style.border = '1px solid #cbd5e1';
-        labelStd.style.background = '#ffffff';
-      } else {
-        box.style.display = 'none';
-        labelStd.style.border = '2px solid #3cb95d';
-        labelStd.style.background = '#f0fdf4';
-        labelPart.style.border = '1px solid #cbd5e1';
-        labelPart.style.background = '#ffffff';
-      }
+    /* ── Payment Type Toggle ── */
+    function selectPaymentType(el, type) {
+      document.querySelectorAll('.pay-option').forEach(function(o) {
+        o.classList.remove('selected');
+        o.querySelector('input[type="radio"]').checked = false;
+      });
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+      document.getElementById('partneredFieldsBox').style.display = (type === 'partnered') ? 'block' : 'none';
     }
 
+    /* ── Co-Funded Amount Sync ── */
+    function syncPartnerAmount() {
+      var price  = parseFloat(document.getElementById('itemPrice').value || '0');
+      var myAmt  = parseFloat(document.getElementById('myContributionAmount').value || '0');
+      var rem    = Math.max(0, price - myAmt);
+      document.getElementById('partnerContributionAmount').value = rem > 0 ? rem.toFixed(2) : '';
+      updateContributionTotal();
+    }
+    function syncTotalFromContributions() { updateContributionTotal(); }
+    function updateContributionTotal() {
+      var my = parseFloat(document.getElementById('myContributionAmount').value || '0');
+      var pt = parseFloat(document.getElementById('partnerContributionAmount').value || '0');
+      var total = my + pt;
+      var row = document.getElementById('contributionTotalRow');
+      var span = document.getElementById('contributionTotalAmt');
+      if (total > 0) { span.textContent = '$' + total.toFixed(2); row.style.display = 'block'; }
+      else { row.style.display = 'none'; }
+    }
+
+    /* ── Fee Calculations ── */
     function updateCalculations() {
-      const price = parseFloat(document.getElementById('itemPrice').value || '12.00');
-      const feePayer = document.getElementById('feePayer').value;
-      const escrowFee = 50.00;
-
-      let buyerFee = escrowFee;
-      let sellerFee = 0.00;
-
-      if (feePayer === 'seller') {
-        buyerFee = 0.00;
-        sellerFee = escrowFee;
-      } else if (feePayer === '50/50') {
-        buyerFee = 25.00;
-        sellerFee = 25.00;
-      }
-
-      const buyerPrice = price + buyerFee;
-      const sellerProceeds = Math.max(0, price - sellerFee);
-
-      document.getElementById('calcSubtotal').textContent = '$' + price.toFixed(2);
-      document.getElementById('calcBuyerPrice').textContent = '$' + buyerPrice.toFixed(2);
-      document.getElementById('calcSellerProceeds').textContent = '$' + sellerProceeds.toFixed(2);
-      document.getElementById('calcTotalPayment').textContent = '$' + buyerPrice.toFixed(2) + ' USD';
+      var price    = parseFloat(document.getElementById('itemPrice').value || '0');
+      var feePayer = document.getElementById('feePayer').value;
+      var fee      = 50.00;
+      var buyerFee = (feePayer === 'seller') ? 0 : fee;
+      var sellerFee = (feePayer === 'seller') ? fee : 0;
+      var buyerPrice = price + buyerFee;
+      var sellerProceeds = Math.max(0, price - sellerFee);
+      var fmt = function(n) { return '$' + n.toFixed(2); };
+      document.getElementById('calcSubtotal').textContent     = fmt(price);
+      document.getElementById('calcBuyerPrice').textContent   = fmt(buyerPrice);
+      document.getElementById('calcSellerProceeds').textContent = fmt(sellerProceeds);
+      document.getElementById('calcTotalPayment').textContent = fmt(buyerPrice) + ' USD';
     }
 
+    /* ── Step Navigation ── */
     function showStep1() {
       document.getElementById('wizardStep1').style.display = 'block';
       document.getElementById('wizardStep2').style.display = 'none';
-      document.getElementById('stepIndicator1').classList.add('active');
-      document.getElementById('stepIndicator2').classList.remove('active');
+      document.getElementById('stepIndicator1').className = 'tx-step-item active';
+      document.getElementById('stepIndicator2').className = 'tx-step-item';
+      document.getElementById('stepTrackFill').style.width = '0%';
     }
 
     function showStep2() {
-      document.getElementById('wizardStep1').style.display = 'none';
-      document.getElementById('wizardStep2').style.display = 'block';
-      document.getElementById('stepIndicator1').classList.remove('active');
-      document.getElementById('stepIndicator2').classList.add('active');
+      var itemName = document.getElementById('itemName').value;
+      var category = document.getElementById('itemCategory').value;
+      var price    = parseFloat(document.getElementById('itemPrice').value || '0');
+      var days     = document.getElementById('inspectionPeriod').value;
 
-      const itemName = document.getElementById('itemName').value || 'kkd.com';
-      const category = document.getElementById('itemCategory').value;
-      const price = parseFloat(document.getElementById('itemPrice').value || '12.00');
-      const days = document.getElementById('inspectionPeriod').value || '2';
-
-      document.getElementById('summaryItemName').textContent = itemName;
-      document.getElementById('summaryCategoryRole').textContent = category + ' • Inspection Period: ' + days + ' Days';
-      document.getElementById('summaryPriceTag').textContent = '$' + price.toFixed(2);
+      document.getElementById('summaryItemName').textContent = itemName || '—';
+      document.getElementById('summaryCategoryRole').textContent = (category || '—') + '  ·  Inspection: ' + (days || '—') + ' Days';
+      document.getElementById('summaryPriceTag').textContent = price > 0 ? '$' + price.toFixed(2) : '—';
 
       updateCalculations();
+
+      document.getElementById('wizardStep1').style.display = 'none';
+      document.getElementById('wizardStep2').style.display = 'block';
+      document.getElementById('stepIndicator1').className = 'tx-step-item done';
+      document.getElementById('stepNum1').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+      document.getElementById('stepIndicator2').className = 'tx-step-item active';
+      document.getElementById('stepTrackFill').style.width = '100%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    document.getElementById('txStep1Form').addEventListener('submit', function (e) {
+    /* ── Step 1 Submit ── */
+    document.getElementById('txStep1Form').addEventListener('submit', function(e) {
       e.preventDefault();
+      var title    = document.getElementById('txTitle').value.trim();
+      var itemName = document.getElementById('itemName').value.trim();
+      var price    = parseFloat(document.getElementById('itemPrice').value || '0');
+      var category = document.getElementById('itemCategory').value;
+      var days     = document.getElementById('inspectionPeriod').value;
+
+      if (!title)    { alert('Please enter a Transaction Title.'); return; }
+      if (!category) { alert('Please select an Item Category.'); return; }
+      if (!itemName) { alert('Please enter an Item Name.'); return; }
+      if (price <= 0){ alert('Please enter a valid Item Price.'); return; }
+      if (!days || days < 1) { alert('Please enter a valid Inspection Period (1–30 days).'); return; }
+
+      var isPartnered = document.querySelector('input[name="paymentType"]:checked').value === 'partnered';
+      if (isPartnered) {
+        var myAmt = parseFloat(document.getElementById('myContributionAmount').value || '0');
+        var ptAmt = parseFloat(document.getElementById('partnerContributionAmount').value || '0');
+        var pEmail = document.getElementById('partnerEmail').value.trim();
+        if (!pEmail) { alert('Please enter the partner email address.'); return; }
+        if (myAmt <= 0 || ptAmt <= 0) { alert('Please enter valid contribution amounts for both parties.'); return; }
+        if (Math.abs((myAmt + ptAmt) - price) > 0.01) { alert('My contribution + Partner contribution must equal the item price ($' + price.toFixed(2) + ').'); return; }
+      }
+
       showStep2();
     });
 
     document.getElementById('feePayer').addEventListener('change', updateCalculations);
-    document.getElementById('itemPrice').addEventListener('input', updateCalculations);
 
-    document.getElementById('txStep2Form').addEventListener('submit', function (e) {
+    /* ── Step 2 Submit ── */
+    document.getElementById('txStep2Form').addEventListener('submit', function(e) {
       e.preventDefault();
 
       if (!document.getElementById('termsCheck').checked) {
@@ -510,40 +1061,32 @@
         return;
       }
 
-      const title = document.getElementById('txTitle').value || 'Domain Purchase: kkd.com';
-      const itemName = document.getElementById('itemName').value || 'kkd.com';
-      const category = document.getElementById('itemCategory').value;
-      const price = parseFloat(document.getElementById('itemPrice').value || '12.00');
-      const role = document.getElementById('myRole').value;
-      const currency = document.getElementById('currency').value.toUpperCase();
-      const inspectionDays = parseInt(document.getElementById('inspectionPeriod').value || '2');
-      const sellerEmail = document.getElementById('sellerEmail').value;
-      const sellerPhone = '+1 ' + document.getElementById('sellerPhone').value;
+      var sellerEmail = document.getElementById('sellerEmail').value.trim();
+      var sellerPhone = document.getElementById('sellerPhone').value.trim();
+      if (!sellerEmail) { alert('Please enter the seller email address.'); return; }
+      if (!sellerPhone) { alert('Please enter the seller phone number.'); return; }
 
-      const paymentTypeRadios = document.getElementsByName('paymentType');
-      let isPartneredPayment = false;
-      for (let r of paymentTypeRadios) {
-        if (r.checked && r.value === 'partnered') {
-          isPartneredPayment = true;
-          break;
-        }
-      }
+      var title         = document.getElementById('txTitle').value.trim();
+      var itemName      = document.getElementById('itemName').value.trim();
+      var category      = document.getElementById('itemCategory').value;
+      var price         = parseFloat(document.getElementById('itemPrice').value || '0');
+      var role          = document.getElementById('myRole').value;
+      var currency      = document.getElementById('currency').value;
+      var inspectionDays = parseInt(document.getElementById('inspectionPeriod').value || '2');
+      var feePayer      = document.getElementById('feePayer').value;
+      var escrowFee     = 50.00;
+      var buyerFee      = (feePayer === 'seller') ? 0 : escrowFee;
+      var sellerFee     = (feePayer === 'seller') ? escrowFee : 0;
+      var buyerPrice    = price + buyerFee;
 
-      const partnerEmail = isPartneredPayment ? (document.getElementById('partnerEmail').value || 'partner.co-buyer@example.com') : '';
-      const partnerContribution = isPartneredPayment ? document.getElementById('partnerContribution').value : '';
+      var isPartneredPayment = document.querySelector('input[name="paymentType"]:checked').value === 'partnered';
+      var partnerEmail   = isPartneredPayment ? (document.getElementById('partnerEmail').value.trim() || '') : '';
+      var myContribAmt   = isPartneredPayment ? parseFloat(document.getElementById('myContributionAmount').value || '0') : 0;
+      var partnerContribAmt = isPartneredPayment ? parseFloat(document.getElementById('partnerContributionAmount').value || '0') : 0;
 
-      const feePayer = document.getElementById('feePayer').value;
-      const escrowFee = 50.00;
-      let buyerFee = escrowFee;
-      let sellerFee = 0.00;
-      if (feePayer === 'seller') { buyerFee = 0.00; sellerFee = 50.00; }
-      else if (feePayer === '50/50') { buyerFee = 25.00; sellerFee = 25.00; }
+      var txId = 'CHR-' + Math.floor(100000 + Math.random() * 900000);
 
-      const buyerPrice = price + buyerFee;
-
-      const txId = 'ESC-' + Math.floor(100000 + Math.random() * 900000);
-
-      const newTx = {
+      var newTx = {
         id: txId,
         title: title,
         item: itemName,
@@ -553,72 +1096,54 @@
         escrowFee: escrowFee,
         buyerPrice: buyerPrice,
         sellerProceeds: Math.max(0, price - sellerFee),
-        role: role,
+        role: role.charAt(0).toUpperCase() + role.slice(1),
         currency: currency,
         inspectionDays: inspectionDays,
+        inspectionPeriod: inspectionDays,
         sellerEmail: sellerEmail,
-        sellerPhone: sellerPhone,
+        sellerPhone: '+1 ' + sellerPhone,
         isPartneredPayment: isPartneredPayment,
         partnerEmail: partnerEmail,
-        partnerContribution: partnerContribution,
-        status: isPartneredPayment ? 'Partnered Payment Pending' : 'In Progress',
-        statusBadge: isPartneredPayment ? 'Awaiting Partner Co-Funding' : 'Awaiting Seller Acceptance',
+        myContribution: myContribAmt,
+        partnerContribution: partnerContribAmt,
+        status: isPartneredPayment ? 'Co-Funded Payment Pending' : 'In Progress',
+        statusBadge: isPartneredPayment ? 'Awaiting Partner Payment' : 'Awaiting Seller Acceptance',
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       };
 
-      // Save to localStorage
-      let existingTx = [];
-      try {
-        existingTx = JSON.parse(localStorage.getItem('escrow_transactions') || '[]');
-      } catch (err) {
-        existingTx = [];
-      }
-      existingTx.unshift(newTx);
-      localStorage.setItem('escrow_transactions', JSON.stringify(existingTx));
+      /* Submit to PostgreSQL API */
+      if (window.EscrowApp && window.EscrowApp.addTransaction) {
+        window.EscrowApp.addTransaction(newTx).then(function () {
+          /* Send emails via backend */
+          var currentUser = (window.EscrowApp && window.EscrowApp.getUser()) || {};
+          var ownerName  = currentUser.name || currentUser.full_name || 'Account Holder';
+          var userEmail  = currentUser.email || '';
 
-      // Dispatch Email Notifications via ZeptoMail SMTP backend
-      const currentUser = (window.EscrowApp && window.EscrowApp.getUser()) || { name: 'Alex Mercer', email: 'alex.seller@chrysalias-demo.com' };
-      const ownerName = currentUser.name || 'Alex Mercer';
-      const userEmail = currentUser.email || 'alex.seller@chrysalias-demo.com';
+          if (window.EscrowApp && window.EscrowApp.sendEmail && userEmail) {
+            window.EscrowApp.sendEmail('tx_created', userEmail, {
+              name: ownerName,
+              tx_data: { id: txId, title: title, amount: buyerPrice, role: role, inspectionPeriod: inspectionDays, category: category, isPartneredPayment: isPartneredPayment, myContribution: myContribAmt, partnerContribution: partnerContribAmt, partnerEmail: partnerEmail }
+            });
+          }
 
-      // 1. Send Transaction Creation Confirmation Email to User
-      if (window.EscrowApp && window.EscrowApp.sendEmail) {
-        window.EscrowApp.sendEmail('tx_created', userEmail, {
-          name: ownerName,
-          tx_data: { id: txId, title: title, amount: buyerPrice, role: role, inspectionPeriod: inspectionDays }
+          if (isPartneredPayment && partnerEmail) {
+            var basePath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+            var partnerLink = basePath + 'checkout.html?tx_id=' + encodeURIComponent(txId) + '&role=partner';
+            if (window.EscrowApp && window.EscrowApp.sendEmail) {
+              window.EscrowApp.sendEmail('partnered_invitation', partnerEmail, {
+                initiator_name: ownerName,
+                partner_link: partnerLink,
+                tx_data: { id: txId, title: title, amount: buyerPrice, myContribution: myContribAmt, partnerContribution: partnerContribAmt, category: category, role: role, inspectionPeriod: inspectionDays }
+              });
+            }
+          }
+
+          if (window.EscrowApp && window.EscrowApp.showToast) {
+            window.EscrowApp.showToast(isPartneredPayment ? 'Co-funded transaction created. Partner invitation sent.' : 'Transaction created successfully.');
+          }
+
+          setTimeout(function() { window.location.href = 'dashboard.html'; }, 900);
         });
-      }
-
-      if (isPartneredPayment) {
-        const partnerAmount = buyerPrice;
-        const remainingAmount = Math.round(buyerPrice * 0.5);
-        const loc = window.location.href;
-        const basePath = loc.substring(0, loc.lastIndexOf('/') + 1);
-        const partnerLink = basePath + 'partnered-payment.html?id=' + encodeURIComponent(txId) + '&title=' + encodeURIComponent(title) + '&owner=' + encodeURIComponent(ownerName) + '&amount=' + partnerAmount + '&remaining=' + remainingAmount;
-
-        // 2. Send Partnered Payment Invitation Email to Partner
-        if (window.EscrowApp && window.EscrowApp.sendEmail && partnerEmail) {
-          window.EscrowApp.sendEmail('partnered_invitation', partnerEmail, {
-            initiator_name: ownerName,
-            partner_link: partnerLink,
-            tx_data: { id: txId, title: title, amount: buyerPrice, partnerContribution: partnerContribution }
-          });
-        }
-
-        if (window.EscrowApp && window.EscrowApp.showToast) {
-          window.EscrowApp.showToast('Partnered Transaction Created! Email invitation sent to partner.');
-        }
-
-        setTimeout(() => {
-          window.location.href = 'partnered-payment.html?id=' + encodeURIComponent(txId) + '&title=' + encodeURIComponent(title) + '&owner=' + encodeURIComponent(ownerName) + '&amount=' + partnerAmount + '&remaining=' + remainingAmount;
-        }, 1200);
-      } else {
-        if (window.EscrowApp && window.EscrowApp.showToast) {
-          window.EscrowApp.showToast('Transaction created successfully! Confirmation email sent.');
-        }
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1000);
       }
     });
   </script>

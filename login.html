@@ -12,6 +12,20 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
       background-color: var(--escrow-bg-webapp);
     }
+    @keyframes btnSpin {
+      to { transform: rotate(360deg); }
+    }
+    .btn-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: btnSpin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body style="background-color: var(--escrow-bg-webapp);">
@@ -27,10 +41,13 @@
         <p style="font-size: 0.86rem; color: #64748b; margin: 0;">Access your transactions, balances, and safe payment portal</p>
       </div>
 
-      <form id="loginForm">
+      <!-- Status & Error Banner -->
+      <div id="verificationBanner" style="display: none; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.88rem; font-weight: 500;"></div>
+
+      <form id="loginForm" novalidate>
         <div class="form-group">
           <label for="emailInput" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Email Address</label>
-          <input type="email" id="emailInput" class="form-control" placeholder="name@company.com" required>
+          <input type="email" id="emailInput" class="form-control" placeholder="name@company.com" required autocomplete="email">
         </div>
 
         <div class="form-group">
@@ -38,10 +55,10 @@
             <label for="passwordInput" style="margin:0; font-size: 0.85rem; font-weight: 600; color: #1e293b;">Password</label>
             <a href="#" id="forgotPassLink" style="font-size: 0.78rem; color: var(--escrow-navy); text-decoration: none; font-weight: 600;">Forgot Password?</a>
           </div>
-          <input type="password" id="passwordInput" class="form-control" placeholder="••••••••" required>
+          <input type="password" id="passwordInput" class="form-control" placeholder="••••••••" required autocomplete="current-password">
         </div>
 
-        <button type="submit" class="btn-escrow-green" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px; font-weight: 700; border-radius: 6px; box-shadow: 0 4px 12px rgba(60,185,93,0.25); margin-top: 8px;">
+        <button type="submit" id="btnLoginSubmit" class="btn-escrow-green" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px; font-weight: 700; border-radius: 6px; box-shadow: 0 4px 12px rgba(60,185,93,0.25); margin-top: 8px;">
           Sign In
         </button>
 
@@ -58,6 +75,43 @@
       const form = document.getElementById('loginForm');
       const emailInput = document.getElementById('emailInput');
       const passwordInput = document.getElementById('passwordInput');
+      const submitBtn = document.getElementById('btnLoginSubmit');
+      const banner = document.getElementById('verificationBanner');
+
+      // Check URL parameters for email verification link (uid & token)
+      const urlParams = new URLSearchParams(window.location.search);
+      const uid = urlParams.get('uid');
+      const token = urlParams.get('token');
+
+      if (uid && token) {
+        banner.style.display = 'block';
+        banner.style.background = '#f0f9ff';
+        banner.style.border = '1px solid #bae6fd';
+        banner.style.color = '#0369a1';
+        banner.innerHTML = '<span class="btn-spinner" style="border-top-color:#0369a1;border-color:rgba(3,105,161,0.2);"></span> Verifying your email address, please wait…';
+
+        fetch(window.EscrowApp.API_BASE + '/auth/verify-email/?uid=' + encodeURIComponent(uid) + '&token=' + encodeURIComponent(token))
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              banner.style.background = '#f0fdf4';
+              banner.style.border = '1px solid #bbf7d0';
+              banner.style.color = '#166534';
+              banner.innerHTML = '✓ <strong>Email Verified Successfully!</strong> You can now sign in to your Chrysalias account below.';
+            } else {
+              banner.style.background = '#fef2f2';
+              banner.style.border = '1px solid #fecaca';
+              banner.style.color = '#b91c1c';
+              banner.innerHTML = '✗ <strong>Verification Failed:</strong> ' + (data.error || 'Link is invalid or has expired.');
+            }
+          })
+          .catch(() => {
+            banner.style.background = '#fef2f2';
+            banner.style.border = '1px solid #fecaca';
+            banner.style.color = '#b91c1c';
+            banner.innerHTML = '✗ Could not complete verification. Please try again.';
+          });
+      }
 
       document.getElementById('forgotPassLink').addEventListener('click', function (e) {
         e.preventDefault();
@@ -68,7 +122,22 @@
         e.preventDefault();
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
-        const name = email.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+        banner.style.display = 'none';
+
+        if (!email || !password) {
+          banner.style.display = 'block';
+          banner.style.background = '#fef2f2';
+          banner.style.border = '1px solid #fecaca';
+          banner.style.color = '#b91c1c';
+          banner.innerHTML = 'Please enter your email address and password.';
+          return;
+        }
+
+        // Show loading spinner on button
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.85';
+        submitBtn.innerHTML = '<span class="btn-spinner"></span> Signing In...';
 
         try {
           const resp = await fetch(window.EscrowApp.API_BASE + '/auth/login/', {
@@ -77,20 +146,40 @@
             body: JSON.stringify({ email: email, password: password })
           });
           const data = await resp.json();
-          if (resp.ok && data.user) {
-            window.EscrowApp.setUser({ name: data.user.full_name || data.user.name || name, email: data.user.email });
+
+          if (resp.ok && data.success && data.user) {
+            if (data.token) window.EscrowApp.setToken(data.token);
+            window.EscrowApp.setUser({
+              name: data.user.full_name || data.user.name || data.user.email.split('@')[0],
+              email: data.user.email
+            });
+            window.EscrowApp.showToast('Logged in successfully! Redirecting...');
+            setTimeout(function () {
+              window.location.href = 'dashboard.html';
+            }, 600);
           } else {
-            window.EscrowApp.setUser({ name: name || 'User', email: email });
+            // Authentication failed — reset button & show error banner
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.innerHTML = 'Sign In';
+
+            banner.style.display = 'block';
+            banner.style.background = '#fef2f2';
+            banner.style.border = '1px solid #fecaca';
+            banner.style.color = '#b91c1c';
+            banner.innerHTML = '<strong>Sign in failed:</strong> ' + (data.error || 'Invalid email or password. Please check your credentials.');
           }
         } catch (err) {
-          window.EscrowApp.setUser({ name: name || 'User', email: email });
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+          submitBtn.innerHTML = 'Sign In';
+
+          banner.style.display = 'block';
+          banner.style.background = '#fef2f2';
+          banner.style.border = '1px solid #fecaca';
+          banner.style.color = '#b91c1c';
+          banner.innerHTML = 'Network error — please check your connection or server status.';
         }
-
-        window.EscrowApp.showToast('Logged in successfully! Redirecting...');
-
-        setTimeout(function () {
-          window.location.href = 'dashboard.html';
-        }, 800);
       });
     });
   </script>

@@ -25,22 +25,24 @@ class Transaction(models.Model):
     Core Chrysalias escrow transaction.
     Represents a full payment protection agreement between buyer and seller.
     """
-    STATUS_DRAFT       = 'Draft'
-    STATUS_FUNDED      = 'Funded'
-    STATUS_INSPECTION  = 'In Inspection'
-    STATUS_IN_PROGRESS = 'In Progress'
-    STATUS_COMPLETED   = 'Completed'
-    STATUS_CANCELLED   = 'Cancelled'
-    STATUS_DISPUTED    = 'Disputed'
+    STATUS_DRAFT           = 'Draft'
+    STATUS_RECEIPT_PENDING = 'Pending Verification'
+    STATUS_FUNDED          = 'Funded'
+    STATUS_INSPECTION      = 'In Inspection'
+    STATUS_IN_PROGRESS     = 'In Progress'
+    STATUS_COMPLETED       = 'Completed'
+    STATUS_CANCELLED       = 'Cancelled'
+    STATUS_DISPUTED        = 'Disputed'
 
     STATUS_CHOICES = [
-        (STATUS_DRAFT,       'Draft — Awaiting Funding'),
-        (STATUS_FUNDED,      'Funded — Payment Held'),
-        (STATUS_INSPECTION,  'In Inspection Period'),
-        (STATUS_IN_PROGRESS, 'In Progress'),
-        (STATUS_COMPLETED,   'Completed — Funds Released'),
-        (STATUS_CANCELLED,   'Cancelled'),
-        (STATUS_DISPUTED,    'Disputed — Under Review'),
+        (STATUS_DRAFT,           'Draft — Awaiting Funding'),
+        (STATUS_RECEIPT_PENDING, 'Pending Verification — Receipt Uploaded'),
+        (STATUS_FUNDED,          'Funded — Payment Confirmed'),
+        (STATUS_INSPECTION,      'In Inspection Period'),
+        (STATUS_IN_PROGRESS,     'In Progress'),
+        (STATUS_COMPLETED,       'Completed — Funds Released'),
+        (STATUS_CANCELLED,       'Cancelled'),
+        (STATUS_DISPUTED,        'Disputed — Under Review'),
     ]
 
     CATEGORY_CHOICES = [
@@ -101,6 +103,14 @@ class Transaction(models.Model):
     updated_at         = models.DateTimeField(auto_now=True)
     completed_at       = models.DateTimeField(null=True, blank=True)
 
+    # Payment Receipt Uploads (for crypto payment verification)
+    primary_receipt    = models.FileField(upload_to='payment_receipts/', blank=True, null=True)
+    partner_receipt    = models.FileField(upload_to='payment_receipts/', blank=True, null=True)
+
+    # Split tracking for Joint Accounts
+    primary_amount_paid  = models.DecimalField(max_digits=18, decimal_places=2, default=0)
+    partner_amount_paid  = models.DecimalField(max_digits=18, decimal_places=2, default=0)
+
     # Admin Notes
     admin_notes        = models.TextField(blank=True)
 
@@ -137,13 +147,14 @@ class Transaction(models.Model):
     @property
     def status_colour(self):
         colours = {
-            'Draft':         '#94a3b8',
-            'Funded':        '#3b82f6',
-            'In Inspection': '#f59e0b',
-            'In Progress':   '#3b82f6',
-            'Completed':     '#22c55e',
-            'Cancelled':     '#ef4444',
-            'Disputed':      '#f97316',
+            'Draft':                '#94a3b8',
+            'Pending Verification': '#f59e0b',
+            'Funded':               '#3b82f6',
+            'In Inspection':        '#f59e0b',
+            'In Progress':          '#3b82f6',
+            'Completed':            '#22c55e',
+            'Cancelled':            '#ef4444',
+            'Disputed':             '#f97316',
         }
         return colours.get(self.status, '#94a3b8')
 

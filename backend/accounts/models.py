@@ -65,18 +65,21 @@ class User(AbstractUser):
 
 class UserProfile(models.Model):
     """Extended profile for Chrysalias users"""
-    user           = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    bio            = models.TextField(blank=True)
-    address        = models.TextField(blank=True)
-    country        = models.CharField(max_length=100, blank=True)
-    id_document    = models.FileField(upload_to='kyc_docs/', blank=True, null=True)
-    selfie_photo   = models.ImageField(upload_to='kyc_selfies/', blank=True, null=True)
-    notes          = models.TextField(blank=True, help_text='Internal admin notes')
-    created_at     = models.DateTimeField(auto_now_add=True)
+    user                 = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio                  = models.TextField(blank=True)
+    address              = models.TextField(blank=True)
+    country              = models.CharField(max_length=100, blank=True)
+    id_document          = models.FileField(upload_to='kyc_docs/', blank=True, null=True)
+    selfie_photo         = models.ImageField(upload_to='kyc_selfies/', blank=True, null=True)
+    is_joint_account     = models.BooleanField(default=False)
+    joint_partner_name   = models.CharField(max_length=200, blank=True)
+    joint_partner_email  = models.EmailField(blank=True)
+    notes                = models.TextField(blank=True, help_text='Internal admin notes')
+    created_at           = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name       = 'User Profile'
         verbose_name_plural = 'User Profiles'
 
     def __str__(self):
-        return f'Profile: {self.user.display_name}'
+        return f'Profile: {self.user.display_name} (Joint: {self.is_joint_account})'

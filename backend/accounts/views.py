@@ -32,10 +32,13 @@ class RegisterView(View):
         except (json.JSONDecodeError, Exception):
             return json_response({'error': 'Invalid JSON body.'}, 400)
 
-        email     = data.get('email', '').strip().lower()
-        password  = data.get('password', '').strip()
-        full_name = data.get('full_name', '').strip()
-        username  = data.get('username', email.split('@')[0])
+        email        = data.get('email', '').strip().lower()
+        password     = data.get('password', '').strip()
+        full_name    = data.get('full_name', '').strip()
+        username     = data.get('username', email.split('@')[0])
+        is_joint     = bool(data.get('is_joint', False))
+        partner_name  = data.get('partner_name', '').strip()
+        partner_email = data.get('partner_email', '').strip().lower()
 
         if not email or not password:
             return json_response({'error': 'Email and password are required.'}, 400)
@@ -45,6 +48,9 @@ class RegisterView(View):
 
         if len(password) < 6:
             return json_response({'error': 'Password must be at least 6 characters.'}, 400)
+
+        if is_joint and not partner_email:
+            return json_response({'error': 'Joint Account requires a partner email address.'}, 400)
 
         # Make username unique
         base_username = username
@@ -59,44 +65,136 @@ class RegisterView(View):
             password=password,
             full_name=full_name,
             kyc_status='level_1',
-            is_verified=False,  # User must verify email before full access
-            is_active=True,     # Account is active so login can work after verification
+            is_verified=False,
+            is_active=True,
         )
-        UserProfile.objects.get_or_create(user=user)
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+
+        # Save joint account details to profile
+        if is_joint:
+            profile.is_joint_account    = True
+            profile.joint_partner_name  = partner_name
+            profile.joint_partner_email = partner_email
+            profile.save()
 
         token, _ = Token.objects.get_or_create(user=user)
         login(request, user)
 
-        # Trigger account confirmation email via ZeptoMail
-        email_sent = False
-        email_error = None
+        # Send account confirmation email to primary user (async)
         try:
-            from .emails import send_account_confirmation_email
-            from django.conf import settings
-            import logging
-            log = logging.getLogger(__name__)
-            log.info(f"Attempting email to {user.email} via {settings.EMAIL_HOST}:{settings.EMAIL_PORT} as {settings.EMAIL_HOST_USER}")
-            email_sent = send_account_confirmation_email(user.email, user.display_name)
-            log.info(f"Email result for {user.email}: {email_sent}")
+            from .emails import send_account_confirmation_email, send_joint_partner_notification_email
+            from django.conf import settings as django_settings
+            base_url = getattr(django_settings, 'FRONTEND_BASE_URL', None)
+            send_account_confirmation_email(user, base_url=base_url)
+            # Send joint partner notification email
+            if is_joint and partner_email:
+                send_joint_partner_notification_email(
+                    partner_email=partner_email,
+                    primary_name=user.display_name,
+                    partner_name=partner_name or 'Partner',
+                )
         except Exception as e:
-            import logging, traceback
-            email_error = str(e)
-            logging.getLogger(__name__).error(f"Email FAILED for {user.email}: {type(e).__name__}: {e}\n{traceback.format_exc()}")
+            import logging
+            logging.getLogger(__name__).error(f"Failed to dispatch email(s): {e}")
 
         return json_response({
             'success': True,
             'message': 'Account created successfully. Please check your email to verify your account.',
-            'email_sent': email_sent,
+            'email_sent': True,
+            'is_joint': is_joint,
             'user': {
-                'id':        user.id,
-                'email':     user.email,
-                'name':      user.display_name,
-                'full_name': user.full_name,
-                'initials':  user.initials,
-                'kyc':       user.kyc_status,
-                'verified':  user.is_verified,
+                'id':             user.id,
+                'email':          user.email,
+                'name':           user.display_name,
+                'full_name':      user.full_name,
+                'initials':       user.initials,
+                'kyc':            user.kyc_status,
+                'verified':       user.is_verified,
+                'is_joint':       is_joint,
+                'partner_name':   partner_name,
+                'partner_email':  partner_email,
             }
         }, 201)
+
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class VerifyEmailView(View):
+    """
+    Verifies user email token from email link.
+    GET /api/auth/verify-email/?uid=<uid>&token=<token>
+    """
+    def get(self, request):
+        from django.utils.http import urlsafe_base64_decode
+        from django.utils.encoding import force_str
+        from django.contrib.auth.tokens import default_token_generator
+
+        uidb64 = request.GET.get('uid', '')
+        token = request.GET.get('token', '')
+
+        if not uidb64 or not token:
+            return json_response({'error': 'Verification UID and token are required.'}, 400)
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return json_response({'error': 'Invalid verification link or user does not exist.'}, 400)
+
+        if user.is_verified:
+            return json_response({
+                'success': True,
+                'already_verified': True,
+                'message': 'Account is already verified.'
+            })
+
+        if default_token_generator.check_token(user, token):
+            user.is_verified = True
+            if user.kyc_status == 'pending':
+                user.kyc_status = 'level_1'
+            user.save()
+            return json_response({
+                'success': True,
+                'message': 'Email address verified successfully! You can now access full features.'
+            })
+        else:
+            return json_response({'error': 'Verification link is invalid or has expired.'}, 400)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ResendVerificationView(View):
+    """
+    Resends account confirmation email to unverified user.
+    POST /api/auth/resend-verification/ {'email': '...'}
+    """
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            return json_response({'error': 'Invalid JSON.'}, 400)
+
+        email = data.get('email', '').strip().lower()
+        if not email:
+            return json_response({'error': 'Email address is required.'}, 400)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # Return generic message to prevent email enumeration
+            return json_response({'success': True, 'message': 'If an account exists with this email, a verification link has been sent.'})
+
+        if user.is_verified:
+            return json_response({'success': True, 'message': 'This account is already verified.'})
+
+        from .emails import send_account_confirmation_email
+        origin = request.headers.get('origin') or request.headers.get('referer') or ''
+        base_url = origin.rstrip('/') if origin else None
+        send_account_confirmation_email(user, base_url=base_url)
+
+        return json_response({
+            'success': True,
+            'message': 'Verification email dispatched. Please check your inbox and spam folder.'
+        })
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -157,17 +255,31 @@ class MeView(View):
         if not request.user.is_authenticated:
             return json_response({'authenticated': False}, 401)
         user = request.user
+        # Fetch joint account details from profile
+        is_joint = False
+        joint_partner_name = ''
+        joint_partner_email = ''
+        try:
+            profile = user.profile
+            is_joint = profile.is_joint_account
+            joint_partner_name = profile.joint_partner_name or ''
+            joint_partner_email = profile.joint_partner_email or ''
+        except Exception:
+            pass
         return json_response({
             'authenticated': True,
             'user': {
-                'id':        user.id,
-                'email':     user.email,
-                'name':      user.display_name,
-                'full_name': user.full_name,
-                'initials':  user.initials,
-                'kyc':       user.kyc_status,
-                'verified':  user.is_verified,
-                'is_staff':  user.is_staff,
+                'id':                  user.id,
+                'email':               user.email,
+                'name':                user.display_name,
+                'full_name':           user.full_name,
+                'initials':            user.initials,
+                'kyc':                 user.kyc_status,
+                'verified':            user.is_verified,
+                'is_staff':            user.is_staff,
+                'is_joint':            is_joint,
+                'joint_partner_name':  joint_partner_name,
+                'joint_partner_email': joint_partner_email,
             }
         })
 

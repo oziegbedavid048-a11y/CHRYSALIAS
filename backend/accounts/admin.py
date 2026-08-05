@@ -24,11 +24,15 @@ class UserProfileInline(admin.StackedInline):
     model        = UserProfile
     can_delete   = False
     verbose_name = 'Extended Profile'
-    extra        = 1   # allow inline creation if profile doesn't exist yet
+    extra        = 1
     max_num      = 1
     fieldsets    = (
         ('Personal Info', {
             'fields': ('bio', 'address', 'country'),
+        }),
+        ('Joint Account', {
+            'fields': ('is_joint_account', 'joint_partner_name', 'joint_partner_email'),
+            'description': 'Co-managed account settings — set when user registers as a Joint Account holder.',
         }),
         ('KYC Documents', {
             'fields': ('id_document', 'selfie_photo'),
@@ -55,9 +59,9 @@ class UserAdmin(BaseUserAdmin):
     add_form = ChrysaliasUserCreationForm
     inlines  = [UserProfileInline]
 
-    list_display  = ('email', 'display_name_col', 'kyc_badge_col', 'is_verified', 'is_active', 'transaction_count_col', 'created_at')
-    list_filter   = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
-    search_fields = ('email', 'full_name', 'username', 'phone')
+    list_display  = ('email', 'display_name_col', 'kyc_badge_col', 'verified_badge_col', 'joint_badge_col', 'is_active', 'transaction_count_col', 'created_at')
+    list_filter   = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'profile__is_joint_account', 'created_at')
+    search_fields = ('email', 'full_name', 'username', 'phone', 'profile__joint_partner_email')
     ordering      = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at', 'initials_col', 'last_login', 'date_joined')
     list_per_page = 25
@@ -148,6 +152,33 @@ class UserAdmin(BaseUserAdmin):
             '<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#002b49,#3cb95d);'
             'color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;">{}</div>',
             initials
+        )
+
+    @admin.display(description='Verified', ordering='is_verified')
+    def verified_badge_col(self, obj):
+        if obj.is_verified:
+            return format_html(
+                '<span style="background:#f0fdf4;color:#166534;padding:3px 10px;border-radius:12px;'
+                'font-size:0.78rem;font-weight:700;">Verified</span>'
+            )
+        return format_html(
+            '<span style="background:#fef2f2;color:#991b1b;padding:3px 10px;border-radius:12px;'
+            'font-size:0.78rem;font-weight:700;">Unverified</span>'
+        )
+
+    @admin.display(description='Account Type')
+    def joint_badge_col(self, obj):
+        try:
+            if obj.profile.is_joint_account:
+                return format_html(
+                    '<span style="background:#eff6ff;color:#1d4ed8;padding:3px 10px;border-radius:12px;'
+                    'font-size:0.78rem;font-weight:700;">Joint</span>'
+                )
+        except Exception:
+            pass
+        return format_html(
+            '<span style="background:#f8fafc;color:#64748b;padding:3px 10px;border-radius:12px;'
+            'font-size:0.78rem;font-weight:700;">Personal</span>'
         )
 
     @admin.display(description='Transactions')

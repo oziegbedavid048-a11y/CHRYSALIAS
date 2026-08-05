@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -18,7 +19,7 @@
       margin: 0;
       padding: 0;
     }
-    
+
     .dash-welcome-card {
       background: linear-gradient(135deg, #002b49 0%, #01426a 100%);
       color: #ffffff;
@@ -32,6 +33,7 @@
       flex-wrap: wrap;
       gap: 14px;
     }
+
     .dash-welcome-card h1 {
       margin: 0 0 4px 0;
       font-size: 1.45rem;
@@ -39,6 +41,7 @@
       letter-spacing: -0.01em;
       font-family: 'Inter', sans-serif !important;
     }
+
     .dash-welcome-card p {
       margin: 0;
       color: #cbd5e1;
@@ -53,10 +56,11 @@
       border-radius: 12px;
       padding: 20px 22px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
       max-width: 100%;
       box-sizing: border-box;
     }
+
     .dash-card-header {
       display: flex;
       justify-content: space-between;
@@ -67,6 +71,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
+
     .dash-card-title {
       font-family: 'Inter', sans-serif !important;
       font-size: 1.1rem;
@@ -77,6 +82,7 @@
       align-items: center;
       gap: 10px;
     }
+
     .dash-link {
       color: #3cb95d;
       font-weight: 700;
@@ -87,6 +93,7 @@
       align-items: center;
       gap: 4px;
     }
+
     .dash-link:hover {
       color: #002b49;
       text-decoration: underline;
@@ -98,6 +105,7 @@
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 14px;
     }
+
     .metric-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -105,18 +113,21 @@
       padding: 16px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
     .metric-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
       background: #ffffff;
       border-color: #cbd5e1;
     }
+
     .metric-label {
       font-size: 0.8rem;
       color: #64748b;
       font-weight: 600;
       margin-bottom: 6px;
     }
+
     .metric-value {
       font-family: 'Inter', sans-serif !important;
       font-size: 1.6rem;
@@ -124,6 +135,7 @@
       color: #002b49;
       line-height: 1.1;
     }
+
     .metric-badge {
       display: inline-block;
       margin-top: 6px;
@@ -132,10 +144,31 @@
       font-size: 0.72rem;
       font-weight: 700;
     }
-    .badge-green { background: #dcfce7; color: #166534; }
-    .badge-blue { background: #e0f2fe; color: #075985; }
-    .badge-gray { background: #f1f5f9; color: #475569; }
-    .badge-red { background: #fee2e2; color: #991b1b; }
+
+    .badge-green {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-blue {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .badge-yellow {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .badge-gray {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .badge-red {
+      background: #fee2e2;
+      color: #991b1b;
+    }
 
     /* Responsive Touch Table Wrapper */
     .responsive-table-wrapper {
@@ -156,6 +189,7 @@
       gap: 18px;
       margin-top: 18px;
     }
+
     .chart-container-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -166,12 +200,14 @@
       flex-direction: column;
       justify-content: space-between;
     }
+
     .chart-canvas-wrapper {
       position: relative;
       width: 100%;
       height: 250px;
       margin-top: 10px;
     }
+
     .pie-canvas-wrapper {
       position: relative;
       width: 100%;
@@ -186,6 +222,7 @@
       gap: 14px;
       margin-top: 16px;
     }
+
     .user-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
@@ -196,16 +233,19 @@
       justify-content: space-between;
       transition: all 0.2s ease;
     }
+
     .user-card:hover {
-      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
       border-color: #cbd5e1;
     }
+
     .user-card-header {
       display: flex;
       align-items: center;
       gap: 12px;
       margin-bottom: 10px;
     }
+
     .user-avatar {
       width: 40px;
       height: 40px;
@@ -220,12 +260,14 @@
       font-family: 'Inter', sans-serif !important;
       flex-shrink: 0;
     }
+
     .user-card-info h4 {
       margin: 0 0 2px 0;
       font-size: 0.92rem;
       color: #002b49;
       font-family: 'Inter', sans-serif !important;
     }
+
     .user-card-info p {
       margin: 0;
       font-size: 0.78rem;
@@ -245,11 +287,14 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .tx-filter-pill.active, .tx-filter-pill:hover {
+
+    .tx-filter-pill.active,
+    .tx-filter-pill:hover {
       background: #002b49;
       color: #ffffff;
       border-color: #002b49;
     }
+
     .search-input-box {
       border: 1px solid #cbd5e1;
       border-radius: 6px;
@@ -260,9 +305,10 @@
       outline: none;
       transition: border-color 0.2s ease;
     }
+
     .search-input-box:focus {
       border-color: #3cb95d;
-      box-shadow: 0 0 0 3px rgba(60,185,93,0.12);
+      box-shadow: 0 0 0 3px rgba(60, 185, 93, 0.12);
     }
 
     /* Mobile Responsive Rules */
@@ -271,17 +317,49 @@
         grid-template-columns: 1fr !important;
       }
     }
+
     @media (max-width: 640px) {
       .user-cards-grid {
         grid-template-columns: 1fr !important;
       }
+
       .metrics-grid-4 {
         grid-template-columns: 1fr 1fr !important;
         gap: 10px !important;
       }
     }
+
+    .joint-pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 20px;
+      align-items: stretch;
+      margin-top: 10px;
+    }
+
+    .joint-pillars-divider {
+      width: 2px;
+      background: #0284c7;
+      border-radius: 2px;
+      align-self: stretch;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 768px) {
+      .joint-pillars-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
+      .joint-pillars-divider {
+        width: 100% !important;
+        height: 2px !important;
+        margin: 4px 0 !important;
+      }
+    }
   </style>
 </head>
+
 <body class="dashboard-page-bg">
 
   <!-- Top Navigation Header -->
@@ -293,7 +371,8 @@
       <ul class="sidebar-menu">
         <li class="sidebar-item">
           <a class="sidebar-link active" data-tab="overview">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7" rx="1"></rect>
               <rect x="14" y="3" width="7" height="7" rx="1"></rect>
               <rect x="14" y="14" width="7" height="7" rx="1"></rect>
@@ -304,22 +383,12 @@
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" data-tab="transactions">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               <polyline points="9 12 11 14 15 10"></polyline>
             </svg>
             Transactions
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" data-tab="users">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-            Users & Network
           </a>
         </li>
       </ul>
@@ -328,75 +397,158 @@
     <!-- Main Content Panel -->
     <main class="dashboard-main">
 
-      <!-- Dynamic Welcome Banner -->
-      <div class="dash-welcome-card">
-        <div>
-          <h1 id="welcomeGreeting">Good evening</h1>
-          <p>Welcome to your Chrysalias dashboard where you can have an overview of your transactions, counterparties, and activities.</p>
+      <!-- Dynamic Welcome Banner (Simple Minimal Greeting Card) -->
+      <div class="dash-welcome-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div id="greetingWeatherIcon" style="width: 44px; height: 44px; border-radius: 10px; background: #f0f7ff; color: #002b49; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+          <div>
+            <h1 id="welcomeGreeting" style="font-size: 1.25rem; font-weight: 800; color: #002b49; margin: 0 0 2px 0;">Good evening</h1>
+            <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Chrysalias Account Dashboard Overview</p>
+          </div>
         </div>
-        <button class="btn-escrow-green" onclick="window.location.href='start-transaction.html'" style="padding: 8px 16px; font-weight: 700; font-size: 0.85rem;">
-          + Start Transaction
-        </button>
       </div>
 
       <!-- TAB 1: OVERVIEW -->
       <div id="tab-overview" class="tab-panel">
-        
-        <!-- Redesigned Users & Network Overview Section -->
-        <div class="dash-card">
+
+        <!-- Joint Account Dual-Pillar Side-by-Side Summary Card -->
+        <div class="dash-card" id="jointDualPillarCard" style="margin-bottom: 20px;">
           <div class="dash-card-header">
             <div>
               <h2 class="dash-card-title">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <line x1="12" y1="3" x2="12" y2="21" />
                 </svg>
-                Users & Network Overview
+                Joint Account Co-Funding Summary
               </h2>
               <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
-                Verified counterparties and business contacts linked to your active agreements
+                Side-by-side breakdown of Primary Account Holder and Joint Partner contributions, balances, and pending payments.
               </div>
             </div>
-            <a href="#" class="dash-link" onclick="switchTab('users'); return false;">Manage network →</a>
           </div>
 
-          <!-- 4 User Metric Cards -->
-          <div class="metrics-grid-4">
-            <div class="metric-card">
-              <div class="metric-label">Active Counterparties</div>
-              <div class="metric-value" id="overviewTotalUsers">0</div>
-              <span class="metric-badge badge-blue">Connected Accounts</span>
+          <div class="joint-pillars-grid">
+            <!-- LEFT PILLAR: Primary Account Holder -->
+            <div class="joint-pillar-box" style="background: #f8fafc; border: 1.5px solid #002b4925; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                  <span style="font-size: 0.72rem; font-weight: 800; color: #002b49; text-transform: uppercase; letter-spacing: 0.05em; background: #e0f2fe; padding: 3px 9px; border-radius: 10px;">PRIMARY ACCOUNT HOLDER</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+
+                <div id="pillarPrimaryName" style="font-size: 1.05rem; font-weight: 800; color: #002b49; margin-bottom: 12px;">Primary User</div>
+
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                      <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">Amount To Be Paid</div>
+                      <div id="pillarPrimaryTotal" style="font-size: 1rem; font-weight: 800; color: #002b49;">—</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">Amount Paid</div>
+                      <div id="pillarPrimaryBalance" style="font-size: 1rem; font-weight: 800; color: #3cb95d;">—</div>
+                    </div>
+                  </div>
+                  <div style="padding-top: 10px; border-top: 1px dashed #e2e8f0;">
+                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">Pending Balance</div>
+                    <div id="pillarPrimaryPending" style="font-size: 1.05rem; font-weight: 800; color: #0284c7;">—</div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="pillarPrimaryAction">
+                <a id="pillarPrimaryBtn" href="checkout.html" class="btn-escrow-navy" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; font-weight: 700; font-size: 0.85rem; text-decoration: none; box-sizing: border-box; text-align: center;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                    <line x1="1" y1="10" x2="23" y2="10" />
+                  </svg>
+                  Fund ($0.00)
+                </a>
+              </div>
             </div>
-            <div class="metric-card">
-              <div class="metric-label">Active Buyers</div>
-              <div class="metric-value" id="overviewActiveBuyers" style="color: #0284c7;">0</div>
-              <span class="metric-badge badge-blue">Funded Buyers</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Active Sellers</div>
-              <div class="metric-value" id="overviewActiveSellers" style="color: #3cb95d;">0</div>
-              <span class="metric-badge badge-green">Payout Verified</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">KYC Compliance Rate</div>
-              <div class="metric-value" style="color: #002b49;">100%</div>
-              <span class="metric-badge badge-green">Level 1 Verified</span>
+
+            <!-- BLUE DEMARCATION LINE -->
+            <div class="joint-pillars-divider"></div>
+
+            <!-- RIGHT PILLAR: Joint Account Partner -->
+            <div class="joint-pillar-box" style="background: #f0fdf4; border: 1.5px solid #3cb95d40; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                  <span style="font-size: 0.72rem; font-weight: 800; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; background: #dcfce7; padding: 3px 9px; border-radius: 10px;">JOINT ACCOUNT PARTNER</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </div>
+
+                <div id="pillarPartnerName" style="font-size: 1.05rem; font-weight: 800; color: #002b49; margin-bottom: 12px;">Partner Not Assigned</div>
+
+                <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                      <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">Amount To Be Paid</div>
+                      <div id="pillarPartnerTotal" style="font-size: 1rem; font-weight: 800; color: #002b49;">—</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">Amount Paid</div>
+                      <div id="pillarPartnerBalance" style="font-size: 1rem; font-weight: 800; color: #166534;">—</div>
+                    </div>
+                  </div>
+                  <div style="padding-top: 10px; border-top: 1px dashed #bbf7d0;">
+                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">Pending Balance</div>
+                    <div id="pillarPartnerPending" style="font-size: 1.05rem; font-weight: 800; color: #166534;">—</div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="pillarPartnerAction">
+                <a id="pillarPartnerBtn" href="checkout.html" class="btn-escrow-green" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; font-weight: 700; font-size: 0.85rem; text-decoration: none; box-sizing: border-box; text-align: center;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                    <line x1="1" y1="10" x2="23" y2="10" />
+                  </svg>
+                  Fund ($0.00)
+                </a>
+              </div>
             </div>
           </div>
-
-          <!-- Active Counterparty Cards Preview Grid (Dynamic empty/active state) -->
-          <div style="margin-top: 18px;">
-            <div style="font-size: 0.88rem; font-weight: 700; color: #002b49; margin-bottom: 10px;">Primary Deal Counterparties</div>
-            <div class="user-cards-grid" id="counterpartyPreviewGrid">
-              <!-- Dynamically populated from real transactions or clean empty state -->
-            </div>
-          </div>
-
         </div>
 
-        <!-- Transactions Overview Section -->
+        <!-- Agreement Details Section -->
+        <div class="dash-card" id="agreementDetailsCard">
+          <div class="dash-card-header">
+            <div>
+              <h2 class="dash-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                Agreement Details
+              </h2>
+              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                Co-managed agreement terms, item specifications, and party payment commitments
+              </div>
+            </div>
+            <a href="start-transaction.html" class="dash-link">+ New Agreement →</a>
+          </div>
+
+          <div id="agreementDetailsContent">
+            <!-- Dynamically populated by JS or clean empty state -->
+          </div>
+        </div>
+
+        <!-- Transactions Performance & Metrics Section -->
         <div class="dash-card">
           <div class="dash-card-header">
             <div>
@@ -409,53 +561,54 @@
                 Transactions Performance & Metrics
               </h2>
               <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
-                <span class="metric-badge badge-blue" style="margin-top:0;">2026 Analytics</span> Real-time Chrysalias protected volume & status breakdown
+                Real-time Chrysalias protected volume & status breakdown
               </div>
             </div>
             <a href="#" class="dash-link" onclick="switchTab('transactions'); return false;">View all transactions →</a>
           </div>
 
-          <!-- 4 Main Transaction Stat Cards -->
-          <div class="metrics-grid-4" style="margin-bottom: 18px;">
-            <div class="metric-card">
-              <div class="metric-label">Total Transactions Created</div>
-              <div class="metric-value" id="overviewTotalTx">0</div>
-              <span class="metric-badge badge-blue">Lifetime Total</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Completed Transactions</div>
-              <div class="metric-value" id="overviewCompletedTx" style="color: #3cb95d;">0</div>
-              <span class="metric-badge badge-green">Funds Released</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Ongoing Transactions</div>
-              <div class="metric-value" id="overviewOngoingTx" style="color: #0284c7;">0</div>
-              <span class="metric-badge badge-blue">In Chrysalias Shield</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Cancelled / Disputes</div>
-              <div class="metric-value" id="overviewCancelledTx" style="color: #94a3b8;">0</div>
-              <span class="metric-badge badge-gray">No Activity</span>
-            </div>
-          </div>
-
-          <!-- Pie / Donut Chart Container (Line Graph completely removed) -->
-          <div style="max-width: 480px; margin: 0 auto;">
-            <div class="chart-container-card">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.9rem; font-weight: 700; color: #002b49; display: flex; align-items: center; gap: 6px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                  Status Breakdown
+          <!-- Pie / Donut Chart at Top -->
+          <div style="max-width: 400px; margin: 0 auto 22px auto;">
+            <div class="chart-container-card" style="border: none; background: transparent; padding: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #002b49; display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                  </svg>
+                  Deal Status Distribution
                 </div>
-                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Status Portfolio</span>
+                <span style="font-size: 0.74rem; color: #64748b; font-weight: 600;">Portfolio Breakdown</span>
               </div>
-
-              <div class="pie-canvas-wrapper">
+              <div class="pie-canvas-wrapper" style="height: 240px;">
                 <canvas id="txStatusPieChart"></canvas>
               </div>
             </div>
           </div>
 
+          <!-- 4 Main Transaction Stat Cards Below Chart -->
+          <div class="metrics-grid-4">
+            <div class="metric-card">
+              <div class="metric-label">Total Transactions</div>
+              <div class="metric-value" id="overviewTotalTx">0</div>
+              <span class="metric-badge badge-blue">Lifetime Total</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Completed</div>
+              <div class="metric-value" id="overviewCompletedTx" style="color: #3cb95d;">0</div>
+              <span class="metric-badge badge-green">Funds Released</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Ongoing</div>
+              <div class="metric-value" id="overviewOngoingTx" style="color: #0284c7;">0</div>
+              <span class="metric-badge badge-blue">Chrysalias Shield</span>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Cancelled</div>
+              <div class="metric-value" id="overviewCancelledTx" style="color: #94a3b8;">0</div>
+              <span class="metric-badge badge-gray">No Activity</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -465,15 +618,18 @@
           <div class="dash-card-header">
             <div>
               <h2 class="dash-card-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                   <polyline points="9 12 11 14 15 10"></polyline>
                 </svg>
                 Transactions Directory
               </h2>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Track and manage all active, completed, and cancelled Chrysalias agreements</p>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Track and manage all active, completed,
+                and cancelled Chrysalias agreements</p>
             </div>
-            <button class="btn-escrow-green" onclick="window.location.href='start-transaction.html'" style="padding: 8px 16px; font-weight: 700; font-size: 0.85rem;">+ Start Transaction</button>
+            <button class="btn-escrow-green" onclick="window.location.href='start-transaction.html'"
+              style="padding: 8px 16px; font-weight: 700; font-size: 0.85rem;">+ Start Transaction</button>
           </div>
 
           <!-- Top Summary Metrics Bar -->
@@ -496,21 +652,24 @@
           </div>
 
           <!-- Filter & Search Control Row -->
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
               <button class="tx-filter-pill active" onclick="filterTransactions('all', this)">All Deals (0)</button>
               <button class="tx-filter-pill" onclick="filterTransactions('In Progress', this)">Ongoing (0)</button>
               <button class="tx-filter-pill" onclick="filterTransactions('Completed', this)">Completed (0)</button>
               <button class="tx-filter-pill" onclick="filterTransactions('Cancelled', this)">Cancelled (0)</button>
             </div>
-            <input type="text" id="txSearchInput" class="search-input-box" placeholder="🔍 Search transactions..." oninput="onTxSearchInput()">
+            <input type="text" id="txSearchInput" class="search-input-box" placeholder="Search transactions..."
+              oninput="onTxSearchInput()">
           </div>
 
           <!-- Strictly Responsive Data Table Container -->
           <div class="responsive-table-wrapper">
             <table class="tx-table" style="width: 100%; border-collapse: collapse; min-width: 620px;">
               <thead>
-                <tr style="background: #f8fafc; text-align: left; font-size: 0.76rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.04em;">
+                <tr
+                  style="background: #f8fafc; text-align: left; font-size: 0.76rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.04em;">
                   <th style="padding: 12px 14px;">Transaction ID & Details</th>
                   <th style="padding: 12px 14px;">My Role</th>
                   <th style="padding: 12px 14px;">Counterparty Email</th>
@@ -524,77 +683,6 @@
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-
-      <!-- TAB 3: USERS -->
-      <div id="tab-users" class="tab-panel" style="display: none;">
-        <div class="dash-card">
-          <div class="dash-card-header">
-            <div>
-              <h2 class="dash-card-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#002b49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                Users & Counterparties Management
-              </h2>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.82rem;">Overview of buyers, sellers, and verified counterparties in your network</p>
-            </div>
-            <button class="btn-escrow-navy" onclick="window.EscrowApp.showToast('Counterparty invite feature active')" style="padding: 8px 16px; font-size: 0.85rem;">+ Invite Counterparty</button>
-          </div>
-
-          <!-- User Metrics Grid -->
-          <div class="metrics-grid-4" style="margin-bottom: 18px;">
-            <div class="metric-card">
-              <div class="metric-label">Total Network Users</div>
-              <div class="metric-value" id="usersTabTotalCount">0</div>
-              <span class="metric-badge badge-blue">Connected Accounts</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Active Sellers</div>
-              <div class="metric-value" id="usersTabSellersCount" style="color: #3cb95d;">0</div>
-              <span class="metric-badge badge-green">Ready for Payouts</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Active Buyers</div>
-              <div class="metric-value" id="usersTabBuyersCount" style="color: #0284c7;">0</div>
-              <span class="metric-badge badge-blue">Funded Accounts</span>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">KYC Compliance</div>
-              <div class="metric-value" style="color: #002b49;">100%</div>
-              <span class="metric-badge badge-green">Level 1 Verified</span>
-            </div>
-          </div>
-
-          <!-- User Directory Cards Grid -->
-          <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Counterparty Profiles</div>
-          <div class="user-cards-grid" id="usersTabCardsGrid">
-            <!-- Dynamically populated from real user data -->
-          </div>
-
-          <!-- User Directory Table -->
-          <div style="font-size: 0.92rem; font-weight: 700; color: #002b49; margin-top: 20px; margin-bottom: 12px; font-family: 'Inter', sans-serif !important;">Full User Directory</div>
-          <div class="responsive-table-wrapper">
-            <table class="tx-table" style="width: 100%; border-collapse: collapse; min-width: 580px;">
-              <thead>
-                <tr style="background: #f8fafc; text-align: left; font-size: 0.76rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.04em;">
-                  <th style="padding: 12px 14px;">User Name</th>
-                  <th style="padding: 12px 14px;">Email Address</th>
-                  <th style="padding: 12px 14px;">Role</th>
-                  <th style="padding: 12px 14px;">KYC Status</th>
-                  <th style="padding: 12px 14px; text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-
         </div>
       </div>
 
@@ -621,24 +709,24 @@
       }
 
       // --- Ensure only first tab panel is visible initially ---
-      document.querySelectorAll('.tab-panel').forEach(function(p, i) {
+      document.querySelectorAll('.tab-panel').forEach(function (p, i) {
         p.style.display = (i === 0) ? 'block' : 'none';
       });
 
       // --- Tab Switching ---
-      window.switchTab = function(tabId) {
-        document.querySelectorAll('.sidebar-link[data-tab]').forEach(function(l) {
+      window.switchTab = function (tabId) {
+        document.querySelectorAll('.sidebar-link[data-tab]').forEach(function (l) {
           if (l.getAttribute('data-tab') === tabId) l.classList.add('active');
           else l.classList.remove('active');
         });
-        document.querySelectorAll('.tab-panel').forEach(function(p) {
+        document.querySelectorAll('.tab-panel').forEach(function (p) {
           p.style.display = 'none';
         });
         var targetPanel = document.getElementById('tab-' + tabId);
         if (targetPanel) targetPanel.style.display = 'block';
       };
 
-      document.querySelectorAll('.sidebar-link[data-tab]').forEach(function(link) {
+      document.querySelectorAll('.sidebar-link[data-tab]').forEach(function (link) {
         link.addEventListener('click', function (e) {
           e.preventDefault();
           switchTab(this.getAttribute('data-tab'));
@@ -681,7 +769,7 @@
                 backgroundColor: '#002b49',
                 padding: 10,
                 callbacks: {
-                  label: function(context) {
+                  label: function (context) {
                     return ' ' + context.label + ': ' + context.raw;
                   }
                 }
@@ -696,11 +784,14 @@
       // --- Dynamic Table & Network Renderer ---
       var currentStatusFilter = 'all';
 
-      function renderTable(filterStatus, searchQuery) {
+      async function renderTable(filterStatus, searchQuery) {
         filterStatus = filterStatus || 'all';
         searchQuery = searchQuery || '';
 
-        var txs = window.EscrowApp.getTransactions();
+        // Fetch fresh user profile & transactions from PostgreSQL
+        var user = await window.EscrowApp.fetchMe();
+        var txs = await window.EscrowApp.fetchBackendTransactions();
+
         var tbody = document.getElementById('txTableBody');
         if (!tbody) return;
         tbody.innerHTML = '';
@@ -709,7 +800,7 @@
         var completed = 0, ongoing = 0, cancelled = 0, totalVolume = 0;
         var counterpartiesMap = {};
 
-        txs.forEach(function(tx) {
+        txs.forEach(function (tx) {
           var amountNum = Number(tx.amount || tx.price || 0);
           totalVolume += amountNum;
           if (tx.status === 'Completed') completed++;
@@ -735,32 +826,37 @@
             if (!matchId && !matchTitle && !matchEmail) return;
           }
 
-          var isPartnered = tx.isPartneredPayment;
-          var partneredBadge = isPartnered ? '<span class="metric-badge badge-blue" style="margin-left:6px;">Partnered Pay</span>' : '';
-          var statusClass = tx.status === 'Completed' ? 'badge-green' : (tx.status === 'Cancelled' ? 'badge-red' : 'badge-blue');
+          var isPartnered = tx.isPartneredPayment || tx.is_partnered || tx.is_joint;
+          var partneredBadge = isPartnered ? '<span class="metric-badge badge-blue" style="margin-left:6px;">Co-Funded</span>' : '';
+          var statusClass = 'badge-blue';
+          if (tx.status === 'Completed') statusClass = 'badge-green';
+          else if (tx.status === 'Cancelled') statusClass = 'badge-red';
+          else if (tx.status === 'Pending Verification') statusClass = 'badge-yellow';
+
           var amountStr = amountNum.toLocaleString('en-US', { minimumFractionDigits: 2 });
-          var txId = tx.id;
+          var txId = tx.id || tx.tx_id;
           var txTitle = (tx.title || '').replace(/'/g, "&#39;");
 
           var tr = document.createElement('tr');
           tr.style.borderBottom = '1px solid #f1f5f9';
           tr.innerHTML =
             '<td style="padding:12px 14px;max-width:240px;">' +
-              '<div style="font-weight:700;color:#002b49;font-size:0.86rem;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">' +
-                '<span>' + txId + '</span>' +
-                '<span style="font-weight:500;color:#475569;">-</span>' +
-                '<span style="overflow:hidden;text-overflow:ellipsis;">' + tx.title + '</span>' +
-                partneredBadge +
-              '</div>' +
-              '<div style="font-size:0.74rem;color:#64748b;margin-top:2px;">' + (tx.category || 'General') + ' &bull; ' + (tx.inspectionPeriod || 2) + ' Day Inspection</div>' +
+            '<div style="font-weight:700;color:#002b49;font-size:0.86rem;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">' +
+            '<span>' + txId + '</span>' +
+            '<span style="font-weight:500;color:#475569;">-</span>' +
+            '<span style="overflow:hidden;text-overflow:ellipsis;">' + tx.title + '</span>' +
+            partneredBadge +
+            '</div>' +
+            '<div style="font-size:0.74rem;color:#64748b;margin-top:2px;">' + (tx.category || 'General') + ' &bull; ' + (tx.inspectionPeriod || 2) + ' Day Inspection</div>' +
             '</td>' +
             '<td style="padding:12px 14px;"><span style="font-weight:700;color:#002b49;font-size:0.84rem;">' + tx.role + '</span></td>' +
             '<td style="padding:12px 14px;color:#475569;font-size:0.84rem;">' + (cpEmail || 'N/A') + '</td>' +
             '<td style="padding:12px 14px;font-weight:800;color:#002b49;font-size:0.9rem;">' + (tx.currency || 'USD') + ' $' + amountStr + '</td>' +
             '<td style="padding:12px 14px;"><span class="metric-badge ' + statusClass + '">' + tx.status + '</span></td>' +
             '<td style="padding:12px 14px;text-align:right;white-space:nowrap;">' +
-              '<button class="btn-escrow-navy" style="font-size:0.74rem;padding:5px 10px;margin-right:4px;" onclick="window.EscrowApp.showToast(\'Details loaded for ' + txId + '\')">View Details</button>' +
-              '<button class="btn-escrow-green" style="font-size:0.74rem;padding:5px 10px;" onclick="sharePartneredPaymentLink(\'' + txId + '\',\'' + txTitle + '\',' + amountNum + ')">Share Pay Link</button>' +
+            '<a href="checkout.html?tx_id=' + txId + '" class="btn-escrow-green" style="font-size:0.74rem;padding:5px 10px;margin-right:4px;text-decoration:none;display:inline-block;">💳 Pay / Receipt</a>' +
+            '<button class="btn-escrow-navy" style="font-size:0.74rem;padding:5px 10px;margin-right:4px;" onclick="window.EscrowApp.showToast(\'Details loaded for ' + txId + '\')">Details</button>' +
+            '<button class="btn-escrow-green" style="font-size:0.74rem;padding:5px 10px;" onclick="sharePartneredPaymentLink(\'' + txId + '\',\'' + txTitle + '\',' + amountNum + ')">Share Pay Link</button>' +
             '</td>';
           tbody.appendChild(tr);
         });
@@ -770,9 +866,9 @@
           var emptyTr = document.createElement('tr');
           emptyTr.innerHTML =
             '<td colspan="6" style="text-align:center; padding:36px 20px; color:#64748b;">' +
-              '<div style="font-size:1.05rem; font-weight:700; color:#002b49; margin-bottom:6px;">No transactions created yet</div>' +
-              '<div style="font-size:0.84rem; margin-bottom:14px;">Create your first protected deal to start managing escrow agreements here.</div>' +
-              '<a href="start-transaction.html" class="btn-escrow-green" style="padding:8px 18px; text-decoration:none; font-weight:700; display:inline-block; font-size:0.85rem;">+ Start Transaction</a>' +
+            '<div style="font-size:1.05rem; font-weight:700; color:#002b49; margin-bottom:6px;">No transactions created yet</div>' +
+            '<div style="font-size:0.84rem; margin-bottom:14px;">Create your first protected deal to start managing Chrysalias payment agreements here.</div>' +
+            '<a href="start-transaction.html" class="btn-escrow-green" style="padding:8px 18px; text-decoration:none; font-weight:700; display:inline-block; font-size:0.85rem;">+ Start Transaction</a>' +
             '</td>';
           tbody.appendChild(emptyTr);
         }
@@ -805,16 +901,294 @@
           pieChartInstance.update();
         }
 
+        // Render Joint Funding Section & Dual-Pillar Summary
+        renderJointFunding(txs);
+        updateJointAccountOverview(txs, user);
+
         // Render Network / Counterparties Grids
         renderNetwork(counterpartiesMap);
 
         // Update Filter Pill Counts
-        document.querySelectorAll('.tx-filter-pill').forEach(function(pill) {
+        document.querySelectorAll('.tx-filter-pill').forEach(function (pill) {
           var onclick = pill.getAttribute('onclick') || '';
           if (onclick.includes("'all'")) pill.textContent = 'All Deals (' + totalCreated + ')';
           else if (onclick.includes("'In Progress'") || onclick.includes("Ongoing")) pill.textContent = 'Ongoing (' + ongoing + ')';
           else if (onclick.includes("'Completed'")) pill.textContent = 'Completed (' + completed + ')';
           else if (onclick.includes("'Cancelled'")) pill.textContent = 'Cancelled (' + cancelled + ')';
+        });
+      }
+
+      function updateJointAccountOverview(txs, user) {
+        var pillarCard = document.getElementById('jointDualPillarCard');
+        if (pillarCard) pillarCard.style.display = 'block';
+
+        // Primary user info
+        var primaryName = (user && (user.full_name || user.name)) || 'Primary Account Owner';
+        var primaryEmail = (user && user.email) || '';
+
+        // Joint partner info
+        var partnerName = (user && (user.joint_partner_name || user.partner_name)) || 'Partner';
+        var partnerEmail = (user && (user.joint_partner_email || user.partner_email)) || '';
+
+        // Find joint/co-funded transactions
+        var jointDeals = txs.filter(function (t) {
+          return t.is_joint || t.is_partnered || t.isPartneredPayment || t.status === 'Draft' || t.status === 'Pending Verification' || t.status === 'Co-Funded Payment Pending';
+        });
+
+        if (jointDeals.length > 0 && (!partnerEmail || partnerName === 'Partner')) {
+          var latestDeal = jointDeals[0];
+          if (latestDeal.partnerEmail) partnerEmail = latestDeal.partnerEmail;
+        }
+
+        // Calculate Primary & Partner amounts from active deals
+        var primaryAmountDue = 0;   // Amount To Be Paid (total obligation)
+        var primaryAmountPaid = 0;  // Amount Paid so far (from completed txs)
+        var primaryPending = 0;     // Pending Balance = due - paid
+
+        var partnerAmountDue = 0;
+        var partnerAmountPaid = 0;
+        var partnerPending = 0;
+
+        var activeDeal = null;
+
+        jointDeals.forEach(function (tx) {
+          var totalAmt = Number(tx.amount || tx.buyerPrice || tx.price || 0);
+          var myContrib = Number(tx.myContribution || (totalAmt > 0 ? totalAmt / 2 : 0));
+          var ptContrib = Number(tx.partnerContribution || (totalAmt > 0 ? totalAmt - myContrib : 0));
+
+          if (myContrib <= 0 && ptContrib <= 0 && totalAmt > 0) {
+            myContrib = totalAmt / 2;
+            ptContrib = totalAmt / 2;
+          }
+
+          primaryAmountDue += myContrib;
+          partnerAmountDue += ptContrib;
+
+          if (tx.status === 'Completed') {
+            primaryAmountPaid += myContrib;
+            partnerAmountPaid += ptContrib;
+          } else {
+            if (!activeDeal) activeDeal = tx;
+          }
+        });
+
+        primaryPending = Math.max(0, primaryAmountDue - primaryAmountPaid);
+        partnerPending = Math.max(0, partnerAmountDue - partnerAmountPaid);
+
+        var fmt = function(n) { return n > 0 ? '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD' : '\u2014'; };
+
+        // Populate Primary Pillar (Left)
+        var pNameEl = document.getElementById('pillarPrimaryName');
+        if (pNameEl) pNameEl.textContent = primaryName;
+
+        var pTotalEl = document.getElementById('pillarPrimaryTotal');
+        if (pTotalEl) pTotalEl.textContent = fmt(primaryAmountDue);
+
+        var pBalEl = document.getElementById('pillarPrimaryBalance');
+        if (pBalEl) pBalEl.textContent = fmt(primaryAmountPaid);
+
+        var pPendEl = document.getElementById('pillarPrimaryPending');
+        if (pPendEl) pPendEl.textContent = fmt(primaryPending);
+
+        var primaryBtn = document.getElementById('pillarPrimaryBtn');
+        if (primaryBtn) {
+          if (primaryPending > 0 && activeDeal) {
+            var txId = activeDeal.id || activeDeal.tx_id;
+            primaryBtn.href = 'checkout.html?tx_id=' + txId + '&role=primary';
+            primaryBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Fund ($' + primaryPending.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ')';
+            primaryBtn.className = 'btn-escrow-navy';
+          } else {
+            primaryBtn.href = 'start-transaction.html';
+            primaryBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Fund';
+            primaryBtn.className = 'btn-escrow-navy';
+          }
+        }
+
+        // Populate Partner Pillar (Right)
+        var ptNameEl = document.getElementById('pillarPartnerName');
+        if (ptNameEl) ptNameEl.textContent = (partnerName && partnerName !== 'Partner') ? partnerName : 'Joint Account Partner';
+
+        var ptTotalEl = document.getElementById('pillarPartnerTotal');
+        if (ptTotalEl) ptTotalEl.textContent = fmt(partnerAmountDue);
+
+        var ptBalEl = document.getElementById('pillarPartnerBalance');
+        if (ptBalEl) ptBalEl.textContent = fmt(partnerAmountPaid);
+
+        var ptPendEl = document.getElementById('pillarPartnerPending');
+        if (ptPendEl) ptPendEl.textContent = fmt(partnerPending);
+
+        var partnerBtn = document.getElementById('pillarPartnerBtn');
+        if (partnerBtn) {
+          if (partnerPending > 0 && activeDeal) {
+            var txId = activeDeal.id || activeDeal.tx_id;
+            partnerBtn.href = 'checkout.html?tx_id=' + txId + '&role=partner';
+            partnerBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Fund ($' + partnerPending.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ')';
+            partnerBtn.className = 'btn-escrow-green';
+          } else {
+            partnerBtn.href = 'start-transaction.html';
+            partnerBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Fund';
+            partnerBtn.className = 'btn-escrow-green';
+          }
+        }
+
+        // Render Agreement Details Section (#agreementDetailsContent)
+        var agreeContainer = document.getElementById('agreementDetailsContent');
+        if (agreeContainer) {
+          if (activeDeal) {
+            var totalAmt = Number(activeDeal.amount || activeDeal.buyerPrice || activeDeal.price || 0);
+            var myAmt    = Number(activeDeal.myContribution || (totalAmt > 0 ? totalAmt / 2 : 0));
+            var ptAmt    = Number(activeDeal.partnerContribution || (totalAmt > 0 ? totalAmt - myAmt : 0));
+            if (myAmt <= 0 && ptAmt <= 0 && totalAmt > 0) { myAmt = totalAmt / 2; ptAmt = totalAmt / 2; }
+
+            var totalStr = totalAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            var myStr    = myAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            var ptStr    = ptAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            var txId     = activeDeal.id || activeDeal.tx_id;
+            var title    = activeDeal.title || 'Co-Funded Agreement';
+            var cat      = activeDeal.category || 'General Merchandise';
+            var days     = activeDeal.inspectionDays || activeDeal.inspectionPeriod || 2;
+
+            agreeContainer.innerHTML =
+              '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:20px;">' +
+
+                '<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">' +
+                  '<div>' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.04em;">Agreement Ref: ' + txId + '</div>' +
+                    '<div style="font-size:1.15rem; font-weight:900; color:#002b49; margin-top:2px;">' + title + '</div>' +
+                    '<div style="font-size:0.8rem; color:#475569; margin-top:4px;">Category: <strong>' + cat + '</strong> &bull; Inspection Period: <strong>' + days + ' Days</strong></div>' +
+                  '</div>' +
+                  '<div style="text-align:right;">' +
+                    '<div style="font-size:1.2rem; font-weight:900; color:#002b49;">$' + totalStr + ' USD</div>' +
+                    '<span class="metric-badge badge-blue" style="margin-top:4px; font-weight:700;">Active Agreement</span>' +
+                  '</div>' +
+                '</div>' +
+
+                '<div style="background:#eff6ff; border:1px solid #bfdbfe; border-left:4px solid #002b49; border-radius:8px; padding:14px 16px; margin-bottom:18px;">' +
+                  '<div style="font-size:0.84rem; font-weight:800; color:#002b49; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+                    'Important Payment &amp; Holding Terms' +
+                  '</div>' +
+                  '<div style="font-size:0.82rem; color:#1e3a8a; line-height:1.5;">' +
+                    'Due to high demand and limited availability for this property/item, both parties &mdash; <strong>' + primaryName + '</strong> (Primary) and <strong>' + (partnerName !== 'Partner' ? partnerName : 'Joint Partner') + '</strong> &mdash; are required to complete their agreed contribution payments to secure and lock this agreement.' +
+                  '</div>' +
+                '</div>' +
+
+                '<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px;">' +
+                  '<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:14px;">' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:#002b49; text-transform:uppercase; margin-bottom:6px;">Primary Owner Contribution</div>' +
+                    '<div style="font-size:1.05rem; font-weight:900; color:#002b49;">$' + myStr + ' USD</div>' +
+                    '<div style="font-size:0.76rem; color:#64748b; margin-top:4px;">Party: ' + primaryName + '</div>' +
+                  '</div>' +
+                  '<div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:8px; padding:14px;">' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:#166534; text-transform:uppercase; margin-bottom:6px;">Joint Partner Contribution</div>' +
+                    '<div style="font-size:1.05rem; font-weight:900; color:#166534;">$' + ptStr + ' USD</div>' +
+                    '<div style="font-size:0.76rem; color:#64748b; margin-top:4px;">Party: ' + (partnerName !== 'Partner' ? partnerName : 'Joint Partner') + '</div>' +
+                  '</div>' +
+                '</div>' +
+
+                '<div style="display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">' +
+                  '<a href="checkout.html?tx_id=' + txId + '&role=primary" class="btn-escrow-navy" style="padding:8px 18px; font-weight:700; font-size:0.83rem; text-decoration:none;">Fund Primary Amount ($' + myStr + ')</a>' +
+                  '<a href="checkout.html?tx_id=' + txId + '&role=partner" class="btn-escrow-green" style="padding:8px 18px; font-weight:700; font-size:0.83rem; text-decoration:none;">Fund Partner Share ($' + ptStr + ')</a>' +
+                '</div>' +
+
+              '</div>';
+          } else {
+            agreeContainer.innerHTML =
+              '<div style="padding: 24px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;">' +
+                '<div style="font-weight: 800; color: #002b49; font-size: 0.95rem; margin-bottom: 4px;">No Active Agreement Established</div>' +
+                '<div style="font-size: 0.82rem; max-width: 480px; margin: 0 auto 14px auto;">Start a transaction to configure co-managed agreement terms, item specifications, and custom party funding allocations.</div>' +
+                '<a href="start-transaction.html" class="btn-escrow-green" style="padding: 8px 18px; font-size: 0.84rem; text-decoration: none; font-weight: 700; display: inline-block;">+ Start Agreement</a>' +
+              '</div>';
+          }
+        }
+      }
+
+      function renderJointFunding(txs) {
+        var container = document.getElementById('jointFundingList');
+        if (!container) return;
+        container.innerHTML = '';
+
+        var jointDeals = txs.filter(function (t) {
+          return t.is_joint || t.is_partnered || t.isPartneredPayment || t.status === 'Draft' || t.status === 'Pending Verification' || t.status === 'Co-Funded Payment Pending';
+        });
+
+        if (jointDeals.length === 0) {
+          container.innerHTML =
+            '<div style="padding: 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;">' +
+            '<div style="font-weight: 700; color: #002b49; font-size: 0.9rem; margin-bottom: 4px;">No Pending Co-Funded Payments</div>' +
+            '<div style="font-size: 0.8rem; max-width: 480px; margin: 0 auto 12px auto;">Create a co-funded Chrysalias transaction to allow your partner to contribute their agreed portion directly through a secure payment portal.</div>' +
+            '<a href="start-transaction.html" class="btn-escrow-green" style="padding: 6px 14px; font-size: 0.8rem; text-decoration: none; font-weight: 700; display: inline-block;">+ Start Joint Deal</a>' +
+            '</div>';
+          return;
+        }
+
+        jointDeals.forEach(function (tx) {
+          var amountNum = Number(tx.amount || tx.buyerPrice || tx.price || 0);
+
+          // Determine custom contribution amounts if present, else default to half
+          var myAmt = Number(tx.myContribution || (amountNum > 0 ? amountNum / 2 : 0));
+          var partnerAmt = Number(tx.partnerContribution || (amountNum > 0 ? amountNum - myAmt : 0));
+
+          // If no custom amounts were saved, divide evenly
+          if (myAmt <= 0 && partnerAmt <= 0 && amountNum > 0) {
+            myAmt = amountNum / 2;
+            partnerAmt = amountNum / 2;
+          }
+
+          var amountStr = amountNum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          var myAmtStr = myAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          var partnerAmtStr = partnerAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+          var myPct = amountNum > 0 ? Math.min(100, Math.max(10, Math.round((myAmt / amountNum) * 100))) : 50;
+          var partnerPct = 100 - myPct;
+
+          var currency = tx.currency || 'USD';
+          var txId = tx.id || tx.tx_id;
+          var statusLabel = tx.status || 'Co-Funded Pending';
+
+          var card = document.createElement('div');
+          card.style.background = '#ffffff';
+          card.style.border = '1.5px solid #e2e8f0';
+          card.style.borderRadius = '12px';
+          card.style.padding = '16px 18px';
+          card.style.marginBottom = '12px';
+          card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.02)';
+
+          card.innerHTML =
+            '<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">' +
+            '<div>' +
+            '<div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.04em;">Joint Agreement Ref: ' + txId + '</div>' +
+            '<div style="font-size:0.98rem; font-weight:800; color:#002b49; margin-top:2px;">' + (tx.title || 'Chrysalias Agreement') + '</div>' +
+            '</div>' +
+            '<div style="text-align:right;">' +
+            '<div style="font-size:1.1rem; font-weight:900; color:#002b49;">' + currency + ' $' + amountStr + '</div>' +
+            '<span class="metric-badge ' + (statusLabel === 'Completed' ? 'badge-green' : (statusLabel === 'Pending Verification' ? 'badge-yellow' : 'badge-blue')) + '">' + statusLabel + '</span>' +
+            '</div>' +
+            '</div>' +
+
+            '<div style="background:#f8fafc; border-radius:10px; padding:12px 14px; margin-bottom:14px;">' +
+            '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:#475569; margin-bottom:6px;">' +
+            '<span>Primary Contribution: ' + currency + ' $' + myAmtStr + '</span>' +
+            '<span>Partner Contribution: ' + currency + ' $' + partnerAmtStr + '</span>' +
+            '</div>' +
+            '<div style="height:8px; border-radius:6px; background:#e2e8f0; overflow:hidden; display:flex;">' +
+            '<div style="width:' + myPct + '%; background:linear-gradient(90deg,#002b49,#0369a1);"></div>' +
+            '<div style="width:' + partnerPct + '%; background:linear-gradient(90deg,#3cb95d,#16a34a);"></div>' +
+            '</div>' +
+            '</div>' +
+
+            '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">' +
+            '<div style="font-size:0.78rem; color:#64748b; font-weight:500;">' +
+            'Co-funded agreement &bull; Each party contributes their agreed amount independently' +
+            '</div>' +
+            '<div style="display:flex; gap:8px;">' +
+            '<a href="checkout.html?tx_id=' + txId + '&role=primary" class="btn-escrow-navy" style="padding:6px 12px; font-size:0.78rem; text-decoration:none; font-weight:700;">Fund My Amount ($' + myAmtStr + ')</a>' +
+            '<a href="checkout.html?tx_id=' + txId + '&role=partner" class="btn-escrow-green" style="padding:6px 12px; font-size:0.78rem; text-decoration:none; font-weight:700;">Fund Partner Share ($' + partnerAmtStr + ')</a>' +
+            '</div>' +
+            '</div>';
+
+          container.appendChild(card);
         });
       }
 
@@ -827,7 +1201,7 @@
         var totalUsers = cpKeys.length;
         var buyersCount = 0, sellersCount = 0;
 
-        cpKeys.forEach(function(k) {
+        cpKeys.forEach(function (k) {
           if (cpMap[k].role === 'Buyer') buyersCount++;
           else sellersCount++;
         });
@@ -852,32 +1226,32 @@
           if (totalUsers === 0) {
             cpGrid.innerHTML =
               '<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">' +
-                '<div style="font-weight: 700; color: #002b49; font-size: 0.92rem; margin-bottom: 4px;">No counterparties linked yet</div>' +
-                '<div style="font-size: 0.8rem;">Counterparties will automatically appear here when you create or join agreements.</div>' +
+              '<div style="font-weight: 700; color: #002b49; font-size: 0.92rem; margin-bottom: 4px;">No counterparties linked yet</div>' +
+              '<div style="font-size: 0.8rem;">Counterparties will automatically appear here when you create or join agreements.</div>' +
               '</div>';
           } else {
-            cpKeys.forEach(function(k) {
+            cpKeys.forEach(function (k) {
               var cp = cpMap[k];
               var initials = cp.email.substring(0, 2).toUpperCase();
               var card = document.createElement('div');
               card.className = 'user-card';
               card.innerHTML =
                 '<div>' +
-                  '<div class="user-card-header">' +
-                    '<div class="user-avatar" style="background: #01426a;">' + initials + '</div>' +
-                    '<div class="user-card-info">' +
-                      '<h4>' + cp.email.split('@')[0] + '</h4>' +
-                      '<p>' + cp.email + '</p>' +
-                    '</div>' +
-                  '</div>' +
-                  '<div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">' +
-                    '<span class="metric-badge badge-blue">' + cp.role + '</span>' +
-                    '<span class="metric-badge badge-green">✓ Verified</span>' +
-                  '</div>' +
+                '<div class="user-card-header">' +
+                '<div class="user-avatar" style="background: #01426a;">' + initials + '</div>' +
+                '<div class="user-card-info">' +
+                '<h4>' + cp.email.split('@')[0] + '</h4>' +
+                '<p>' + cp.email + '</p>' +
+                '</div>' +
+                '</div>' +
+                '<div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">' +
+                '<span class="metric-badge badge-blue">' + cp.role + '</span>' +
+                '<span class="metric-badge badge-green">✓ Verified</span>' +
+                '</div>' +
                 '</div>' +
                 '<div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.78rem;">' +
-                  '<span style="color: #64748b;">Deal: <strong>' + cp.txId + '</strong></span>' +
-                  '<span style="color: #002b49; font-weight: 800;">$' + Number(cp.amount).toLocaleString() + '</span>' +
+                '<span style="color: #64748b;">Deal: <strong>' + cp.txId + '</strong></span>' +
+                '<span style="color: #002b49; font-weight: 800;">$' + Number(cp.amount).toLocaleString() + '</span>' +
                 '</div>';
               cpGrid.appendChild(card);
             });
@@ -890,22 +1264,22 @@
           if (totalUsers === 0) {
             usersTbody.innerHTML =
               '<tr>' +
-                '<td colspan="5" style="text-align:center; padding:32px 20px; color:#64748b; font-size:0.86rem;">' +
-                  'No network counterparties found. Start a transaction to connect with buyers and sellers.' +
-                '</td>' +
+              '<td colspan="5" style="text-align:center; padding:32px 20px; color:#64748b; font-size:0.86rem;">' +
+              'No network counterparties found. Start a transaction to connect with buyers and sellers.' +
+              '</td>' +
               '</tr>';
           } else {
-            cpKeys.forEach(function(k) {
+            cpKeys.forEach(function (k) {
               var cp = cpMap[k];
               var initials = cp.email.substring(0, 2).toUpperCase();
               var tr = document.createElement('tr');
               tr.style.borderBottom = '1px solid #f1f5f9';
               tr.innerHTML =
                 '<td style="padding: 12px 14px;">' +
-                  '<div style="display: flex; align-items: center; gap: 8px;">' +
-                    '<div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #01426a;">' + initials + '</div>' +
-                    '<strong style="font-size: 0.88rem;">' + cp.email.split('@')[0] + '</strong>' +
-                  '</div>' +
+                '<div style="display: flex; align-items: center; gap: 8px;">' +
+                '<div class="user-avatar" style="width: 30px; height: 30px; font-size: 0.78rem; background: #01426a;">' + initials + '</div>' +
+                '<strong style="font-size: 0.88rem;">' + cp.email.split('@')[0] + '</strong>' +
+                '</div>' +
                 '</td>' +
                 '<td style="padding: 12px 14px; color: #475569; font-size: 0.84rem;">' + cp.email + '</td>' +
                 '<td style="padding: 12px 14px;"><span class="metric-badge badge-blue">' + cp.role + '</span></td>' +
@@ -917,20 +1291,20 @@
         }
       }
 
-      window.filterTransactions = function(status, pill) {
+      window.filterTransactions = function (status, pill) {
         currentStatusFilter = status;
-        document.querySelectorAll('.tx-filter-pill').forEach(function(p) { p.classList.remove('active'); });
+        document.querySelectorAll('.tx-filter-pill').forEach(function (p) { p.classList.remove('active'); });
         if (pill) pill.classList.add('active');
         var q = document.getElementById('txSearchInput') ? document.getElementById('txSearchInput').value : '';
         renderTable(status, q);
       };
 
-      window.onTxSearchInput = function() {
+      window.onTxSearchInput = function () {
         var q = document.getElementById('txSearchInput') ? document.getElementById('txSearchInput').value : '';
         renderTable(currentStatusFilter, q);
       };
 
-      window.sharePartneredPaymentLink = function(txId, title, amount) {
+      window.sharePartneredPaymentLink = function (txId, title, amount) {
         var remaining = Math.round(amount * 0.4);
         var currentUser = window.EscrowApp.getUser() || { name: 'Chrysalias User' };
         var ownerName = currentUser.name || 'Chrysalias User';
@@ -943,9 +1317,9 @@
           '&remaining=' + remaining;
 
         if (navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard.writeText(shareUrl).then(function() {
+          navigator.clipboard.writeText(shareUrl).then(function () {
             window.EscrowApp.showToast('Payment link copied to clipboard!');
-          }).catch(function() {
+          }).catch(function () {
             prompt('Copy Partnered Payment Link:', shareUrl);
           });
         } else {
@@ -957,4 +1331,5 @@
     });
   </script>
 </body>
+
 </html>

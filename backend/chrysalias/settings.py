@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ─── Core ──────────────────────────────────────────────────
 SECRET_KEY = config('SECRET_KEY', default='chrysalias-django-dev-secret-key-change-in-production-2026')
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 # Accept all hosts by default — Render assigns a dynamic subdomain (.onrender.com)
 # Override via ALLOWED_HOSTS env var in Render dashboard if you want to restrict.
@@ -71,17 +71,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chrysalias.wsgi.application'
 
-# ─── Database (PostgreSQL via LayerBase) ────────────────────
+# ─── Database (Local SQLite / Configurable) ─────────────────
 import dj_database_url
 
-# DATABASE_URL must include ?sslmode=require for LayerBase/external Postgres
-DEFAULT_DB_URL = 'postgresql://postgres:SFw8Jic6bAdLMvr4eGcpXngS@chrysalias-wild-trail.cloud.layerbase.dev/chrysalias?sslmode=require'
+DEFAULT_DB_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
 DATABASE_URL = config('DATABASE_URL', default=DEFAULT_DB_URL)
 
 DATABASES = {
     'default': dj_database_url.config(
         default=DATABASE_URL,
-        conn_max_age=600,
+        conn_max_age=600 if not DATABASE_URL.startswith('sqlite') else 0,
     )
 }
 
@@ -184,9 +183,9 @@ SECURE_HSTS_PRELOAD = False  # Set True only after confirming HSTS works
 # All values read from .env (or Render environment variables)
 EMAIL_BACKEND       = config('EMAIL_BACKEND',       default='django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST          = config('EMAIL_HOST',          default='smtp.zeptomail.com')
-EMAIL_PORT          = config('EMAIL_PORT',          default=587, cast=int)
-EMAIL_USE_TLS       = config('EMAIL_USE_TLS',       default=True,  cast=bool)
-EMAIL_USE_SSL       = config('EMAIL_USE_SSL',       default=False, cast=bool)
+EMAIL_PORT          = config('EMAIL_PORT',          default=465, cast=int)
+EMAIL_USE_TLS       = config('EMAIL_USE_TLS',       default=False, cast=bool)
+EMAIL_USE_SSL       = config('EMAIL_USE_SSL',       default=True, cast=bool)
 EMAIL_HOST_USER     = config('EMAIL_HOST_USER',     default='emailapikey')
 EMAIL_HOST_PASSWORD = config(
     'EMAIL_HOST_PASSWORD',
@@ -194,6 +193,10 @@ EMAIL_HOST_PASSWORD = config(
 )
 DEFAULT_FROM_EMAIL  = config('DEFAULT_FROM_EMAIL',  default='Chrysalias Support <info@chrysalias.com>')
 EMAIL_TIMEOUT       = 15
+
+# ─── Frontend URL (used in verification emails) ─────────────
+# In production: set FRONTEND_BASE_URL=https://chrysalias.com in Render Dashboard
+FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:8080')
 
 # ─── Static File Serving (WhiteNoise) ───────────────────────
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
@@ -231,3 +234,8 @@ LOGGING = {
         },
     },
 }
+
+# ── File Uploads (Payment Receipts) ──────────────────────────────────
+import os
+MEDIA_URL  = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

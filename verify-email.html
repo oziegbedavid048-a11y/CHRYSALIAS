@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Email Verification | Chrysalias.com</title>
+  <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
+  <link href="css/app-custom.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      background-color: var(--escrow-bg-webapp);
+      margin: 0;
+      padding: 0;
+    }
+    .verify-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 43, 73, 0.08);
+      border: 1px solid #e2e8f0;
+      padding: 36px 28px;
+      max-width: 460px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      margin: 40px auto;
+    }
+    .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .icon-success {
+      background: #f0fdf4;
+      border: 2px solid #bbf7d0;
+      color: #3cb95d;
+    }
+    .icon-error {
+      background: #fef2f2;
+      border: 2px solid #fecaca;
+      color: #ef4444;
+    }
+    .icon-loading {
+      background: #f0f9ff;
+      border: 2px solid #bae6fd;
+      color: #0284c7;
+    }
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 4px solid #e0f2fe;
+      border-top-color: #0284c7;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn-primary-custom {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 13px 24px;
+      background-color: #01426a;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.98rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(1, 66, 106, 0.2);
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary-custom:hover {
+      background-color: #002b49;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body style="background-color: var(--escrow-bg-webapp);">
+
+  <div class="custom-page-wrapper" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+    
+    <!-- Logo Header -->
+    <div style="text-align: center; margin-bottom: 12px;">
+      <a href="index.html" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px;">
+        <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 42px; width: auto; object-fit: contain;">
+        <span style="font-family: 'Inter', sans-serif !important; font-weight:800; font-size:1.6rem; color:#002b49; letter-spacing: -0.5px; line-height: 1;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>
+      </a>
+    </div>
+
+    <div class="verify-card">
+
+      <!-- ===== 1. LOADING STATE ===== -->
+      <div id="loading-state">
+        <div class="icon-wrapper icon-loading">
+          <div class="spinner"></div>
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: #002b49; margin: 0 0 8px 0;">Verifying Your Email…</h2>
+        <p style="font-size: 0.9rem; color: #64748b; margin: 0 0 16px 0; line-height: 1.5;">
+          Please wait while we validate your security token and activate your Chrysalias account.
+        </p>
+      </div>
+
+      <!-- ===== 2. SUCCESS STATE ===== -->
+      <div id="success-state" style="display: none;">
+        <div class="icon-wrapper icon-success">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+
+        <h2 style="font-size: 1.45rem; font-weight: 800; color: #002b49; margin: 0 0 10px 0;">Email Verification Successful!</h2>
+        <p style="font-size: 0.92rem; color: #475569; line-height: 1.55; margin: 0 0 20px 0;">
+          Your email address has been verified. Your Chrysalias account is now fully active and ready to perform safe payment transactions.
+        </p>
+
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #166534; margin-bottom: 6px;">Unlocked Features:</div>
+          <ul style="margin: 0; padding-left: 20px; font-size: 0.83rem; color: #166534; line-height: 1.6;">
+            <li>Level 1 KYC Verification Status</li>
+            <li>Create &amp; Manage Chrysalias Transactions</li>
+            <li>Set Up Partnered Co-Funding Payments</li>
+          </ul>
+        </div>
+
+        <a href="login.html" class="btn-primary-custom">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          Back to Login
+        </a>
+      </div>
+
+      <!-- ===== 3. ERROR STATE ===== -->
+      <div id="error-state" style="display: none;">
+        <div class="icon-wrapper icon-error">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: #002b49; margin: 0 0 10px 0;">Verification Link Invalid</h2>
+        <p id="errorMessage" style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin: 0 0 24px 0;">
+          This verification link is invalid or has expired. Please sign in or request a new verification link.
+        </p>
+
+        <a href="login.html" class="btn-primary-custom">
+          Back to Login
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/app-custom.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadingState = document.getElementById('loading-state');
+      const successState = document.getElementById('success-state');
+      const errorState   = document.getElementById('error-state');
+      const errorMessage = document.getElementById('errorMessage');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const uid   = urlParams.get('uid');
+      const token = urlParams.get('token');
+
+      if (!uid || !token) {
+        loadingState.style.display = 'none';
+        errorState.style.display   = 'block';
+        errorMessage.textContent = 'No verification token provided in the link. Please check your confirmation email.';
+        return;
+      }
+
+      // Perform background API call to verify token
+      const verifyUrl = window.EscrowApp.API_BASE + '/auth/verify-email/?uid=' + encodeURIComponent(uid) + '&token=' + encodeURIComponent(token);
+
+      fetch(verifyUrl)
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          loadingState.style.display = 'none';
+          if (data.success) {
+            successState.style.display = 'block';
+          } else {
+            errorState.style.display   = 'block';
+            errorMessage.textContent   = data.error || 'Verification link is invalid or has expired.';
+          }
+        })
+        .catch(function (err) {
+          loadingState.style.display = 'none';
+          errorState.style.display   = 'block';
+          errorMessage.textContent   = 'Network error — please check your connection and try again.';
+        });
+    });
+  </script>
+</body>
+</html>

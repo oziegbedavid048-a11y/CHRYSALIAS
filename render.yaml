@@ -6,14 +6,23 @@ services:
     buildCommand: "bash build.sh"
     startCommand: "gunicorn chrysalias.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
     envVars:
+      # --- Layerbase PostgreSQL ---
       - key: DATABASE_URL
-        value: postgresql://postgres:SFw8Jic6bAdLMvr4eGcpXngS@chrysalias-wild-trail.cloud.layerbase.dev/chrysalias?sslmode=require
+        value: postgresql://postgres:ZI3GQ8C1IspueEpW71A6WEPy@chrysalias-true-crypt.cloud.layerbase.dev/chrysalias?sslmode=require
+
+      # --- Django Security ---
       - key: SECRET_KEY
-        value: chrysalias-prod-secret-key-2026-very-secure-xyz
+        value: chrysalias-prod-secret-key-2026-very-secure-xyz-v2
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "*"
+        value: "chrysalias-backend.onrender.com,chrysalias.com,www.chrysalias.com,*"
+      - key: FRONTEND_BASE_URL
+        value: "https://chrysalias.com"
+
+      # --- CORS ---
+      - key: CORS_ALLOW_ALL_ORIGINS
+        value: "True"
 
       # --- ZeptoMail SMTP ---
       - key: EMAIL_BACKEND
@@ -34,13 +43,11 @@ services:
         value: "Chrysalias Support <info@chrysalias.com>"
 
       # --- Django Admin Superuser (auto-created on first deploy) ---
-      # Set DJANGO_SUPERUSER_EMAIL + DJANGO_SUPERUSER_PASSWORD in Render Dashboard
-      # to auto-create the admin user on build
       - key: DJANGO_SUPERUSER_EMAIL
-        value: "admin@chrysalias.com"
+        value: "info@chrysalias.com"
       - key: DJANGO_SUPERUSER_PASSWORD
-        value: "ChangeMe2026!Admin#"
+        value: "Chrys@768"
       - key: DJANGO_SUPERUSER_USERNAME
-        value: "admin"
+        value: "admin_chrysalias"
 
     healthCheckPath: /

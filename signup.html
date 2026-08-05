@@ -4,225 +4,916 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Create Your Chrysalias Account | Chrysalias.com</title>
+  <meta name="description" content="Create a standard or joint Chrysalias account — the world's most trusted secure payment platform.">
   <link href="build/css/styles.c1f694f88b96b5fa6f2c.css" rel="stylesheet">
   <link href="css/app-custom.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="build/images/favicons/favicon-32x32.png">
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-      background-color: var(--escrow-bg-webapp);
+      background: linear-gradient(135deg, #f0f4f8 0%, #e8edf5 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px 16px 60px;
+      box-sizing: border-box;
     }
-    .signup-name-grid {
+
+    @keyframes btnSpin {
+      to { transform: rotate(360deg); }
+    }
+    .btn-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: btnSpin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    .signup-shell {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── Brand Header ──────────────────────────────── */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand-header a {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+    .brand-header img { height: 36px; width: auto; }
+    .brand-name {
+      font-weight: 900;
+      font-size: 1.55rem;
+      color: #002b49;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .brand-name span { color: #3cb95d; }
+
+    /* ── Card ──────────────────────────────────────── */
+    .signup-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,43,73,0.09), 0 1px 4px rgba(0,0,0,0.04);
+      padding: 36px 32px;
+      box-sizing: border-box;
+    }
+    @media (max-width: 480px) {
+      .signup-card { padding: 24px 18px; }
+      body { padding: 16px 12px 60px; }
+    }
+
+    /* ── Step Pill Bar ─────────────────────────────── */
+    .step-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .step-pill {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: #e2e8f0;
+      transition: background 0.3s;
+    }
+    .step-pill.done { background: #3cb95d; }
+    .step-pill.active { background: #002b49; }
+    .step-pill + .step-pill { margin-left: 4px; }
+
+    /* ── Section Headings ──────────────────────────── */
+    .step-heading {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #002b49;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.3px;
+    }
+    .step-subheading {
+      font-size: 0.86rem;
+      color: #64748b;
+      margin: 0 0 24px 0;
+    }
+
+    /* ── Account Type Selection ────────────────────── */
+    .acct-type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 420px) {
+      .acct-type-grid { grid-template-columns: 1fr; }
+    }
+
+    .acct-type-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .acct-type-btn:hover {
+      border-color: #002b49;
+      background: #f0f7ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0,43,73,0.1);
+    }
+    .acct-type-btn.selected {
+      border-color: #002b49;
+      background: #002b49;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(0,43,73,0.28);
+    }
+    .acct-type-btn.selected .acct-icon-wrap { background: rgba(255,255,255,0.15); color: #ffffff; }
+    .acct-type-btn.selected .acct-type-label { color: #ffffff; }
+    .acct-type-btn.selected .acct-type-desc { color: rgba(255,255,255,0.75); }
+
+    .acct-type-btn.joint-btn:hover {
+      border-color: #3cb95d;
+      background: #f0fdf4;
+    }
+    .acct-type-btn.joint-btn.selected {
+      border-color: #3cb95d;
+      background: #3cb95d;
+    }
+
+    .acct-icon-wrap {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: #e0f2fe;
+      color: #0369a1;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.22s;
+    }
+    .joint-btn .acct-icon-wrap { background: #dcfce7; color: #166534; }
+    .acct-type-label {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #002b49;
+      line-height: 1.2;
+    }
+    .acct-type-desc {
+      font-size: 0.73rem;
+      color: #64748b;
+      line-height: 1.35;
+    }
+
+    /* ── Form Controls ─────────────────────────────── */
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 5px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      box-sizing: border-box;
+      background: #ffffff;
+      color: #0f172a;
+    }
+    .form-control:focus {
+      border-color: #002b49;
+      box-shadow: 0 0 0 3px rgba(0,43,73,0.08);
+    }
+    .form-grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    @media (max-width: 480px) {
-      .signup-name-grid {
-        grid-template-columns: 1fr !important;
-        gap: 0 !important;
-      }
+    @media (max-width: 420px) {
+      .form-grid-2 { grid-template-columns: 1fr; }
     }
-    #success-screen { display: none; }
-    #signup-screen  { display: block; }
 
-    .success-icon-wrap {
-      width: 72px; height: 72px;
-      background: #f0fdf4;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px auto;
+    /* ── Partner Block ─────────────────────────────── */
+    .partner-block {
+      background: linear-gradient(135deg, #f0fdf4, #eff6ff);
+      border: 1.5px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 18px;
     }
+    .partner-block-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #166534;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Password Strength ─────────────────────────── */
+    .pw-strength-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .pw-seg {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: #e2e8f0;
+      transition: background 0.3s;
+    }
+    .pw-hint {
+      font-size: 0.74rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* ── Buttons ───────────────────────────────────── */
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: #002b49;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: #013a64;
+      box-shadow: 0 4px 16px rgba(0,43,73,0.28);
+      transform: translateY(-1px);
+    }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-green {
+      background: #3cb95d;
+    }
+    .btn-green:hover:not(:disabled) {
+      background: #2ea04e;
+      box-shadow: 0 4px 16px rgba(60,185,93,0.3);
+    }
+
+    .btn-ghost {
+      width: 100%;
+      padding: 11px;
+      background: transparent;
+      color: #64748b;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: inherit;
+      margin-top: 10px;
+    }
+    .btn-ghost:hover { border-color: #94a3b8; color: #334155; }
+
+    /* ── Error Banner ──────────────────────────────── */
     .error-banner {
       background: #fef2f2;
       border: 1px solid #fecaca;
       border-left: 4px solid #ef4444;
       color: #b91c1c;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px 14px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 14px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      margin-bottom: 16px;
       display: none;
+      line-height: 1.4;
     }
-    .form-control {
-      width: 100%;
-      padding: 10px 13px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      transition: border-color 0.2s;
-      outline: none;
-      box-sizing: border-box;
+
+    /* ── Success Screen ────────────────────────────── */
+    .success-icon {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      background: #f0fdf4;
+      border: 2px solid #bbf7d0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px auto;
     }
-    .form-control:focus { border-color: #01426a; }
+    .success-email-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 20px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    /* ── Divider ───────────────────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: #e2e8f0; }
+    .divider-text { font-size: 0.78rem; color: #94a3b8; font-weight: 600; white-space: nowrap; }
+
+    /* ── Terms Checkbox ────────────────────────────── */
+    .terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 16px 0 18px;
+    }
+    .terms-row input[type="checkbox"] {
+      margin-top: 3px;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      accent-color: #3cb95d;
+    }
+    .terms-row label {
+      font-size: 0.8rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .terms-row a { color: #002b49; font-weight: 700; text-decoration: none; }
+
+    /* Screen visibility */
+    .screen { display: none; }
+    .screen.active { display: block; }
   </style>
 </head>
-<body style="background-color: var(--escrow-bg-webapp);">
+<body>
 
-  <div class="custom-page-wrapper">
-    <div class="auth-container">
+  <div class="signup-shell">
 
-      <!-- ===== SIGNUP FORM ===== -->
-      <div id="signup-screen">
-        <div class="auth-header" style="text-align: center; margin-bottom: 24px;">
-          <a href="index.html" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px;">
-            <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias" style="height: 38px; width: auto; object-fit: contain;">
-            <span style="font-family: 'Inter', sans-serif !important; font-weight:800; font-size:1.5rem; color:#002b49; letter-spacing: -0.5px; line-height: 1;">CHRYSALIAS<span style="color:#3cb95d">.COM</span></span>
-          </a>
-          <h2 style="font-size: 1.4rem; font-weight: 800; color: #002b49; margin: 0 0 6px 0;">Create Your Account</h2>
-          <p style="font-size: 0.86rem; color: #64748b; margin: 0;">Join over 3M+ users trading securely worldwide</p>
-        </div>
+    <!-- Brand -->
+    <div class="brand-header">
+      <a href="index.html">
+        <img src="build/images/chrysalias-logo-icon.png" alt="Chrysalias">
+        <span class="brand-name">CHRYSALIAS<span>.COM</span></span>
+      </a>
+    </div>
 
-        <!-- Error Banner -->
-        <div id="errorBanner" class="error-banner"></div>
+    <!-- Card -->
+    <div class="signup-card">
 
-        <form id="signupForm">
-          <div class="signup-name-grid">
-            <div class="form-group">
-              <label for="firstName" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">First Name</label>
-              <input type="text" id="firstName" class="form-control" placeholder="First Name" required>
+      <!-- ══════════════════════════════════════════
+           SCREEN 0 — Account Type Selection
+      ══════════════════════════════════════════ -->
+      <div id="screen0" class="screen active">
+        <h1 class="step-heading">Create Your Account</h1>
+        <p class="step-subheading">Join over 3 million users trading securely worldwide. Choose the account type that suits you.</p>
+
+        <div class="acct-type-grid">
+          <!-- Standard -->
+          <button class="acct-type-btn" id="btnStandardType" onclick="selectAccountType('standard')">
+            <div class="acct-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
             </div>
-            <div class="form-group">
-              <label for="lastName" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Last Name</label>
-              <input type="text" id="lastName" class="form-control" placeholder="Last Name" required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="emailInput" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Email Address</label>
-            <input type="email" id="emailInput" class="form-control" placeholder="name@company.com" required>
-          </div>
-
-          <div class="form-group">
-            <label for="passwordInput" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Password</label>
-            <input type="password" id="passwordInput" class="form-control" placeholder="At least 8 characters" required>
-          </div>
-
-          <div class="form-group" style="display: flex; align-items: flex-start; gap: 8px; margin-top: 6px;">
-            <input type="checkbox" id="termsCheck" required style="margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; accent-color: #3cb95d;">
-            <label for="termsCheck" style="font-size: 0.81rem; color: #64748b; font-weight: normal; margin: 0; line-height: 1.35;">
-              I agree to the <a href="#" style="color: var(--escrow-navy); font-weight: 700;">General Chrysalias Terms</a> and <a href="#" style="color: var(--escrow-navy); font-weight: 700;">Privacy Policy</a>.
-            </label>
-          </div>
-
-          <button type="submit" id="submitBtn" class="btn-escrow-green" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px; font-weight: 700; border-radius: 6px; box-shadow: 0 4px 12px rgba(60,185,93,0.25); margin-top: 8px;">
-            Create Account
+            <div class="acct-type-label">Personal Account</div>
+            <div class="acct-type-desc">Standard individual Chrysalias account</div>
           </button>
 
-          <div class="auth-switch-link" style="font-size: 0.85rem; margin-top: 20px; text-align: center; color: #64748b;">
-            Already have an account? <a href="login.html" style="color: #002b49; font-weight: 700; text-decoration: none;">Sign In</a>
+          <!-- Joint -->
+          <button class="acct-type-btn joint-btn" id="btnJointType" onclick="selectAccountType('joint')">
+            <div class="acct-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="acct-type-label">Joint Account</div>
+            <div class="acct-type-desc">Co-managed with a business partner</div>
+          </button>
+        </div>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">ALREADY HAVE AN ACCOUNT?</div>
+          <div class="divider-line"></div>
+        </div>
+        <div style="text-align: center; font-size: 0.86rem; color: #64748b;">
+          <a href="login.html" style="color: #002b49; font-weight: 700; text-decoration: none;">Sign In to Your Account →</a>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           SCREEN 1 — User Details (Standard)
+      ══════════════════════════════════════════ -->
+      <div id="screen1" class="screen">
+        <div class="step-bar" id="stepBar1">
+          <div class="step-pill active"></div>
+          <div class="step-pill"></div>
+        </div>
+
+        <h1 class="step-heading">Your Details</h1>
+        <p class="step-subheading" id="screen1Subtitle">Enter your personal information to get started.</p>
+
+        <div id="errorBanner1" class="error-banner"></div>
+
+        <form id="formDetails" novalidate>
+          <!-- Primary User Fields -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="s1FirstName">First Name</label>
+              <input type="text" id="s1FirstName" class="form-control" placeholder="First name" autocomplete="given-name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s1LastName">Last Name</label>
+              <input type="text" id="s1LastName" class="form-control" placeholder="Last name" autocomplete="family-name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s1Email">Email Address</label>
+            <input type="email" id="s1Email" class="form-control" placeholder="name@company.com" autocomplete="email" required>
+          </div>
+
+          <!-- Joint Partner Section (shown only for joint accounts) -->
+          <div id="partnerSection" style="display: none;">
+            <div class="partner-block">
+              <div class="partner-block-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Joint Account Partner Details
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label class="form-label" for="s1PartnerFirst">Partner First Name</label>
+                  <input type="text" id="s1PartnerFirst" class="form-control" placeholder="First name">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label class="form-label" for="s1PartnerLast">Partner Last Name</label>
+                  <input type="text" id="s1PartnerLast" class="form-control" placeholder="Last name">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="s1PartnerEmail">Partner Email Address</label>
+                <input type="email" id="s1PartnerEmail" class="form-control" placeholder="partner@company.com">
+                <div style="font-size: 0.74rem; color: #64748b; margin-top: 5px; line-height: 1.4;">
+                  Your partner will receive an invitation to access and co-manage this joint Chrysalias account.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 22px; display: flex; flex-direction: column; gap: 10px;">
+            <button type="submit" class="btn-primary" id="btnDetailsContinue">
+              Continue
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <button type="button" class="btn-ghost" onclick="goToScreen(0)">
+              ← Back
+            </button>
           </div>
         </form>
       </div>
 
-      <!-- ===== SUCCESS SCREEN (shown after account created) ===== -->
-      <div id="success-screen" style="text-align: center; padding: 16px 0;">
-        <div class="success-icon-wrap">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5">
+      <!-- ══════════════════════════════════════════
+           SCREEN 2 — Set Password
+      ══════════════════════════════════════════ -->
+      <div id="screen2" class="screen">
+        <div class="step-bar">
+          <div class="step-pill done"></div>
+          <div class="step-pill active"></div>
+        </div>
+
+        <h1 class="step-heading">Set Your Password</h1>
+        <p class="step-subheading">Choose a strong password to secure your Chrysalias account.</p>
+
+        <div id="errorBanner2" class="error-banner"></div>
+
+        <form id="formPassword" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="s2Password">Password</label>
+            <div style="position: relative;">
+              <input type="password" id="s2Password" class="form-control" placeholder="At least 8 characters" autocomplete="new-password" oninput="updatePasswordStrength(this.value)" required>
+              <button type="button" onclick="togglePwVisibility('s2Password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;padding:0;line-height:1;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pw-strength-bar">
+              <div class="pw-seg" id="pwSeg1"></div>
+              <div class="pw-seg" id="pwSeg2"></div>
+              <div class="pw-seg" id="pwSeg3"></div>
+              <div class="pw-seg" id="pwSeg4"></div>
+            </div>
+            <div class="pw-hint" id="pwHint">Enter a password to see its strength</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="s2PasswordConfirm">Confirm Password</label>
+            <div style="position: relative;">
+              <input type="password" id="s2PasswordConfirm" class="form-control" placeholder="Re-enter your password" autocomplete="new-password" required>
+              <button type="button" onclick="togglePwVisibility('s2PasswordConfirm', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;padding:0;line-height:1;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary Pill -->
+          <div id="accountSummaryPill" style="background:#f1f5f9; border-radius:8px; padding:12px 14px; margin:16px 0; font-size:0.82rem; color:#475569; line-height:1.5; display:none;">
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="termsCheck">
+            <label for="termsCheck">
+              I agree to the <a href="#">General Chrysalias Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </label>
+          </div>
+
+          <button type="submit" class="btn-primary btn-green" id="btnCreateAccount">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-1.5-3.1M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span id="btnCreateAccountLabel">Create Account</span>
+          </button>
+          <button type="button" class="btn-ghost" onclick="goToScreen(1)">← Back</button>
+        </form>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           SCREEN 3 — Success / Confirmation
+      ══════════════════════════════════════════ -->
+      <div id="screen3" class="screen">
+        <div class="success-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
         </div>
-        <h2 style="font-size: 1.4rem; font-weight: 800; color: #002b49; margin: 0 0 10px 0;">Account Created!</h2>
-        <p style="font-size: 0.92rem; color: #475569; line-height: 1.6; margin: 0 0 8px 0;">
-          Your Chrysalias account has been created successfully.
+
+        <h1 class="step-heading" style="text-align:center;" id="successTitle">Account Created!</h1>
+        <p style="text-align:center; font-size:0.88rem; color:#475569; line-height:1.6; margin:0 0 6px;" id="successSubtitle">
+          Your Chrysalias account has been set up successfully.
         </p>
-        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 20px 0; text-align: left;">
-          <div style="display: flex; align-items: flex-start; gap: 10px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2" style="flex-shrink:0; margin-top:1px;">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
-            </svg>
-            <div>
-              <p style="font-size: 0.88rem; font-weight: 700; color: #166534; margin: 0 0 4px 0;">Check your email to confirm your account</p>
-              <p id="successEmailHint" style="font-size: 0.83rem; color: #166534; margin: 0; line-height: 1.4;">
-                A confirmation email has been sent. Please verify your email address before signing in.
-              </p>
+
+        <div class="success-email-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <div>
+            <div style="font-size:0.86rem; font-weight:700; color:#166534; margin-bottom:4px;">Verify Your Email Address</div>
+            <div id="successEmailMsg" style="font-size:0.82rem; color:#166534; line-height:1.5;">
+              A confirmation link has been sent to your email address. Please verify your account before signing in.
             </div>
           </div>
         </div>
-        <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 24px 0;">
-          Didn't receive the email? Check your spam folder or wait a few minutes.
+
+        <div id="jointPartnerNote" style="display:none; background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:14px 16px; margin-bottom:18px;">
+          <div style="font-size:0.82rem; font-weight:700; color:#1d4ed8; display:flex; align-items:center; gap:7px; margin-bottom:4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Joint Account Partner Notified
+          </div>
+          <div id="jointPartnerNoteText" style="font-size:0.8rem; color:#1e40af; line-height:1.5;"></div>
+        </div>
+
+        <p style="font-size:0.78rem; color:#94a3b8; text-align:center; margin:0 0 16px;">
+          Didn't receive the email? Check your spam folder or click below to resend.
         </p>
-        <a href="login.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 32px; background: #01426a; color: #ffffff; text-decoration: none; border-radius: 7px; font-weight: 700; font-size: 0.95rem; width: 100%; box-sizing: border-box;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M19 12H5M12 5l-7 7 7 7"/>
+        <button id="resendBtn" type="button" style="width:100%; padding:11px; background:transparent; border:1.5px solid #002b49; color:#002b49; border-radius:8px; font-weight:700; font-size:0.88rem; cursor:pointer; margin-bottom:12px; font-family:inherit; transition:all 0.2s;" onmouseover="this.style.background='#002b49';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#002b49'">
+          Resend Verification Email
+        </button>
+        <a href="login.html" style="display:flex; align-items:center; justify-content:center; gap:8px; padding:13px; background:#002b49; color:#ffffff; text-decoration:none; border-radius:8px; font-weight:800; font-size:0.93rem; transition:all 0.2s; box-shadow:0 4px 14px rgba(0,43,73,0.2);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
           </svg>
-          Back to Login
+          Sign In to Your Account
         </a>
       </div>
 
+    </div><!-- /signup-card -->
+
+    <!-- Footer -->
+    <div style="text-align:center; margin-top:20px; font-size:0.78rem; color:#94a3b8;">
+      &copy; 2025 Chrysalias.com &mdash; Licensed Secure Payment Platform
     </div>
-  </div>
+
+  </div><!-- /signup-shell -->
 
   <script src="js/app-custom.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const form       = document.getElementById('signupForm');
-      const submitBtn  = document.getElementById('submitBtn');
-      const errorBanner = document.getElementById('errorBanner');
+  /* ══════════════════════════════════════════════════════════
+     Chrysalias Signup Wizard — Multi-Step Registration Flow
+  ══════════════════════════════════════════════════════════ */
 
-      function showError(msg) {
-        errorBanner.textContent = msg;
-        errorBanner.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Account';
-      }
+  // State
+  var accountType   = 'standard'; // 'standard' | 'joint'
+  var currentScreen = 0;
+  var primaryData   = {};
+  var lastSignedUpEmail = '';
 
-      function hideError() {
-        errorBanner.style.display = 'none';
-      }
-
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        hideError();
-
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName  = document.getElementById('lastName').value.trim();
-        const email     = document.getElementById('emailInput').value.trim();
-        const password  = document.getElementById('passwordInput').value.trim();
-
-        if (!firstName) { showError('Please enter your first name.'); return; }
-        if (!email)     { showError('Please enter a valid email address.'); return; }
-        if (password.length < 8) { showError('Password must be at least 8 characters.'); return; }
-
-        const fullName = (firstName + ' ' + lastName).trim();
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Creating account…';
-
-        try {
-          const res = await fetch(window.EscrowApp.API_BASE + '/auth/register/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password, full_name: fullName })
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            // Backend returned an error — show it to the user
-            showError(data.error || 'Registration failed. Please try again.');
-            return;
-          }
-
-          // SUCCESS — store signup user profile and show confirmation screen
-          window.EscrowApp.setUser({ name: fullName || data.user.full_name || email.split('@')[0], email: email });
-          document.getElementById('signup-screen').style.display = 'none';
-          document.getElementById('success-screen').style.display = 'block';
-
-          // Show masked email hint
-          const parts = email.split('@');
-          const masked = parts[0].substring(0, 3) + '***@' + parts[1];
-          document.getElementById('successEmailHint').textContent =
-            'A confirmation email has been sent to ' + masked + '. Please verify your email address before signing in.';
-
-        } catch (err) {
-          showError('Network error — please check your connection and try again.');
-        }
-      });
+  /* ─── Screen Navigation ─────────────────────────────── */
+  function goToScreen(n) {
+    document.querySelectorAll('.screen').forEach(function(el) {
+      el.classList.remove('active');
     });
+    var target = document.getElementById('screen' + n);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    currentScreen = n;
+  }
+
+  /* ─── Account Type Selection ────────────────────────── */
+  function selectAccountType(type) {
+    accountType = type;
+
+    document.getElementById('btnStandardType').classList.toggle('selected', type === 'standard');
+    document.getElementById('btnJointType').classList.toggle('selected', type === 'joint');
+
+    // Configure step 1
+    var partnerSection = document.getElementById('partnerSection');
+    var subtitle = document.getElementById('screen1Subtitle');
+    var btnLabel  = document.getElementById('btnCreateAccountLabel');
+
+    if (type === 'joint') {
+      partnerSection.style.display = 'block';
+      subtitle.textContent = 'Enter your details and your joint partner\'s details below.';
+      document.getElementById('s1PartnerEmail').setAttribute('required', 'required');
+      btnLabel.textContent = 'Create Joint Account';
+      document.getElementById('btnCreateAccount').classList.add('btn-green');
+    } else {
+      partnerSection.style.display = 'none';
+      subtitle.textContent = 'Enter your personal information to get started.';
+      document.getElementById('s1PartnerEmail').removeAttribute('required');
+      btnLabel.textContent = 'Create Account';
+    }
+
+    goToScreen(1);
+  }
+
+  /* ─── Password Strength ─────────────────────────────── */
+  function updatePasswordStrength(pw) {
+    var segs   = [1,2,3,4].map(function(i){ return document.getElementById('pwSeg'+i); });
+    var hint   = document.getElementById('pwHint');
+    var colors = ['#ef4444','#f97316','#eab308','#3cb95d'];
+    var labels = ['Weak','Fair','Good','Strong'];
+
+    var score = 0;
+    if (pw.length >= 8)  score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+    segs.forEach(function(s, idx) {
+      s.style.background = idx < score ? colors[score - 1] : '#e2e8f0';
+    });
+
+    if (pw.length === 0) {
+      hint.textContent = 'Enter a password to see its strength';
+      hint.style.color = '#94a3b8';
+    } else {
+      hint.textContent = labels[score - 1] + ' password';
+      hint.style.color = colors[score - 1];
+    }
+  }
+
+  function togglePwVisibility(fieldId, btn) {
+    var input = document.getElementById(fieldId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.style.color = '#002b49';
+    } else {
+      input.type = 'password';
+      btn.style.color = '#64748b';
+    }
+  }
+
+  /* ─── Error Helpers ─────────────────────────────────── */
+  function showError(bannerId, msg) {
+    var el = document.getElementById(bannerId);
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function hideError(bannerId) {
+    document.getElementById(bannerId).style.display = 'none';
+  }
+
+  /* ─── Step 1: Details Form Submit ───────────────────── */
+  document.getElementById('formDetails').addEventListener('submit', function(e) {
+    e.preventDefault();
+    hideError('errorBanner1');
+
+    var firstName = document.getElementById('s1FirstName').value.trim();
+    var lastName  = document.getElementById('s1LastName').value.trim();
+    var email     = document.getElementById('s1Email').value.trim().toLowerCase();
+
+    if (!firstName) { showError('errorBanner1', 'Please enter your first name.'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('errorBanner1', 'Please enter a valid email address.'); return;
+    }
+
+    if (accountType === 'joint') {
+      var pFirst = document.getElementById('s1PartnerFirst').value.trim();
+      var pLast  = document.getElementById('s1PartnerLast').value.trim();
+      var pEmail = document.getElementById('s1PartnerEmail').value.trim().toLowerCase();
+      if (!pFirst) { showError('errorBanner1', 'Please enter your partner\'s first name.'); return; }
+      if (!pEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pEmail)) {
+        showError('errorBanner1', 'Please enter a valid email address for your partner.'); return;
+      }
+      if (pEmail === email) {
+        showError('errorBanner1', 'Partner email must be different from your own email address.'); return;
+      }
+      primaryData.partnerName  = (pFirst + ' ' + pLast).trim();
+      primaryData.partnerEmail = pEmail;
+    }
+
+    primaryData.firstName = firstName;
+    primaryData.lastName  = lastName;
+    primaryData.fullName  = (firstName + ' ' + lastName).trim();
+    primaryData.email     = email;
+
+    // Populate summary pill on screen 2
+    var summary = document.getElementById('accountSummaryPill');
+    var summaryLines = [
+      '<strong>' + escHtml(primaryData.fullName) + '</strong> &mdash; ' + escHtml(primaryData.email)
+    ];
+    if (accountType === 'joint') {
+      summaryLines.push('<span style="color:#166534;">Joint Partner: <strong>' + escHtml(primaryData.partnerName) + '</strong> (' + escHtml(primaryData.partnerEmail) + ')</span>');
+    }
+    summary.innerHTML = summaryLines.join('<br>');
+    summary.style.display = 'block';
+
+    // Update the create button label
+    document.getElementById('btnCreateAccountLabel').textContent =
+      accountType === 'joint' ? 'Create Joint Account' : 'Create Account';
+
+    goToScreen(2);
+  });
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ─── Step 2: Password & Create Account Submit ───────── */
+  document.getElementById('formPassword').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideError('errorBanner2');
+
+    var password  = document.getElementById('s2Password').value;
+    var confirm   = document.getElementById('s2PasswordConfirm').value;
+    var terms     = document.getElementById('termsCheck').checked;
+    var submitBtn = document.getElementById('btnCreateAccount');
+    var label     = document.getElementById('btnCreateAccountLabel');
+
+    if (password.length < 8) {
+      showError('errorBanner2', 'Your password must be at least 8 characters long.'); return;
+    }
+    if (password !== confirm) {
+      showError('errorBanner2', 'Passwords do not match. Please re-enter them.'); return;
+    }
+    if (!terms) {
+      showError('errorBanner2', 'Please accept the Terms of Service and Privacy Policy to continue.'); return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="btn-spinner"></span> <span id="btnCreateAccountLabel">Creating your account…</span>';
+
+    var payload = {
+      email:         primaryData.email,
+      password:      password,
+      full_name:     primaryData.fullName,
+      is_joint:      accountType === 'joint',
+      partner_name:  primaryData.partnerName  || '',
+      partner_email: primaryData.partnerEmail || '',
+    };
+
+    try {
+      var res  = await fetch(window.EscrowApp.API_BASE + '/auth/register/', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+      var data = await res.json();
+
+      if (!res.ok) {
+        showError('errorBanner2', data.error || 'Registration failed. Please try again.');
+        submitBtn.disabled = false;
+        label.textContent  = accountType === 'joint' ? 'Create Joint Account' : 'Create Account';
+        return;
+      }
+
+      // Store token & user
+      if (data.token) window.EscrowApp.setToken(data.token);
+      window.EscrowApp.setUser({
+        name:  primaryData.fullName || data.user.full_name || primaryData.email.split('@')[0],
+        email: primaryData.email
+      });
+      lastSignedUpEmail = primaryData.email;
+
+      // Populate success screen
+      document.getElementById('successTitle').textContent =
+        accountType === 'joint' ? 'Joint Account Created!' : 'Account Created!';
+
+      document.getElementById('successSubtitle').textContent =
+        accountType === 'joint'
+          ? 'Your Chrysalias Joint Account has been created. Your partner has been notified.'
+          : 'Your Chrysalias account has been set up successfully.';
+
+      document.getElementById('successEmailMsg').textContent =
+        'A confirmation link has been sent to ' + primaryData.email + '. Please verify your email address before signing in.';
+
+      if (accountType === 'joint' && primaryData.partnerEmail) {
+        document.getElementById('jointPartnerNote').style.display = 'block';
+        document.getElementById('jointPartnerNoteText').textContent =
+          'An invitation and access notification has been sent to ' + primaryData.partnerName + ' (' + primaryData.partnerEmail + ') to join and co-manage this joint Chrysalias account.';
+      }
+
+      goToScreen(3);
+
+    } catch (err) {
+      showError('errorBanner2', 'Network error — please check your connection and try again.');
+      submitBtn.disabled = false;
+      label.textContent  = accountType === 'joint' ? 'Create Joint Account' : 'Create Account';
+    }
+  });
+
+  /* ─── Resend Button ─────────────────────────────────── */
+  document.getElementById('resendBtn').addEventListener('click', async function() {
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Resending…';
+    try {
+      var rRes = await fetch(window.EscrowApp.API_BASE + '/auth/resend-verification/', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: lastSignedUpEmail })
+      });
+      var rData = await rRes.json();
+      if (rRes.ok && rData.success) {
+        btn.textContent  = 'Verification Email Resent';
+        btn.style.borderColor = '#3cb95d';
+        btn.style.color       = '#166534';
+        btn.onmouseover = null;
+        btn.onmouseout  = null;
+      } else {
+        btn.textContent = 'Failed — please try again.';
+        btn.disabled    = false;
+      }
+    } catch (err) {
+      btn.textContent = 'Network error — try again.';
+      btn.disabled    = false;
+    }
+  });
   </script>
 </body>
 </html>

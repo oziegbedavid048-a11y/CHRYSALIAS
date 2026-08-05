@@ -40,6 +40,20 @@ class TransactionSerializer(serializers.ModelSerializer):
     buyer_email_display = serializers.SerializerMethodField()
     seller_email_display = serializers.SerializerMethodField()
 
+    # Write-only fields from frontend (not stored on Transaction model directly)
+    my_contribution = serializers.DecimalField(
+        max_digits=18, decimal_places=2, required=False, write_only=True, default=0
+    )
+    partner_contribution = serializers.DecimalField(
+        max_digits=18, decimal_places=2, required=False, write_only=True, default=0
+    )
+    seller_phone = serializers.CharField(
+        required=False, write_only=True, allow_blank=True, default=''
+    )
+    partner_email = serializers.EmailField(
+        required=False, write_only=True, allow_blank=True, default=''
+    )
+
     class Meta:
         model = Transaction
         fields = [
@@ -47,10 +61,17 @@ class TransactionSerializer(serializers.ModelSerializer):
             'buyer_email', 'seller_email', 'buyer_email_display', 'seller_email_display',
             'initiator_role', 'amount', 'currency', 'category', 'inspection_period',
             'status', 'is_partnered', 'escrow_fee', 'processing_fee', 'total_fee',
+            'primary_amount_paid', 'partner_amount_paid',
             'partnered_payment', 'documents', 'activities',
-            'created_at', 'updated_at', 'completed_at'
+            'created_at', 'updated_at', 'completed_at',
+            # write-only
+            'my_contribution', 'partner_contribution', 'seller_phone', 'partner_email',
         ]
-        read_only_fields = ['id', 'tx_id', 'escrow_fee', 'processing_fee', 'total_fee', 'created_at', 'updated_at']
+        read_only_fields = [
+            'id', 'tx_id', 'escrow_fee', 'processing_fee', 'total_fee',
+            'primary_amount_paid', 'partner_amount_paid',
+            'created_at', 'updated_at'
+        ]
 
     def get_buyer_email_display(self, obj):
         return obj.buyer.email if obj.buyer else obj.buyer_email

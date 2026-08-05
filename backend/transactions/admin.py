@@ -71,12 +71,15 @@ class TransactionAdmin(admin.ModelAdmin):
             'fields': ('escrow_fee', 'processing_fee', 'total_fee'),
             'classes': ('collapse',),
         }),
+        ('Payment Receipts & Split Tracking', {
+            'fields': ('primary_receipt', 'partner_receipt', 'primary_amount_paid', 'partner_amount_paid'),
+        }),
         ('Administrative & Internal Notes', {
             'fields': ('admin_notes', 'created_at', 'updated_at', 'completed_at'),
         }),
     )
 
-    actions = ['mark_as_funded', 'mark_as_inspection', 'mark_as_completed', 'mark_as_cancelled', 'mark_as_disputed']
+    actions = ['verify_payment', 'mark_as_funded', 'mark_as_inspection', 'mark_as_completed', 'mark_as_cancelled', 'mark_as_disputed']
 
     @admin.display(description='Transaction ID', ordering='tx_id')
     def tx_id_col(self, obj):
@@ -118,13 +121,14 @@ class TransactionAdmin(admin.ModelAdmin):
     @admin.display(description='Status')
     def status_badge_col(self, obj):
         colours = {
-            'Draft': ('#94a3b8', '#f8fafc', 'Draft'),
-            'Funded': ('#0284c7', '#e0f2fe', 'Funded'),
-            'In Inspection': ('#d97706', '#fef3c7', 'In Inspection'),
-            'In Progress': ('#0284c7', '#e0f2fe', 'In Progress'),
-            'Completed': ('#166534', '#dcfce7', 'Completed'),
-            'Cancelled': ('#991b1b', '#fee2e2', 'Cancelled'),
-            'Disputed': ('#c2410c', '#ffedd5', 'Disputed'),
+            'Draft':                ('#94a3b8', '#f8fafc',  'Draft'),
+            'Pending Verification': ('#d97706', '#fef3c7',  '⏳ Pending Verification'),
+            'Funded':               ('#0284c7', '#e0f2fe',  'Funded'),
+            'In Inspection':        ('#d97706', '#fef3c7',  'In Inspection'),
+            'In Progress':          ('#0284c7', '#e0f2fe',  'In Progress'),
+            'Completed':            ('#166534', '#dcfce7',  'Completed'),
+            'Cancelled':            ('#991b1b', '#fee2e2',  'Cancelled'),
+            'Disputed':             ('#c2410c', '#ffedd5',  'Disputed'),
         }
         c, bg, label = colours.get(obj.status, ('#475569', '#f1f5f9', obj.status))
         return format_html(
@@ -142,7 +146,42 @@ class TransactionAdmin(admin.ModelAdmin):
             )
         return format_html('<span style="color:#cbd5e1;">—</span>')
 
-    # Bulk Status Update Actions
+    # ─── Admin Actions ──────────────────────────────────────────────
+    @admin.action(description='✓ Verify Payment Receipt → Mark as Funded')
+    def verify_payment(self, request, queryset):
+        from accounts.emails import send_payment_verified_email
+        verified = 0
+        for tx in queryset.filter(status='Pending Verification'):
+            tx.status = 'Funded'
+            tx.save()
+            TransactionActivity.objects.create(
+                transaction=tx,
+                action='funded',
+                performed_by=request.user,
+                notes='Payment receipt verified and confirmed by Admin. Transaction funded.',
+            )
+            # Email primary user (buyer)
+            if tx.buyer:
+                send_payment_verified_email(
+                    user_email=tx.buyer.email,
+                    user_name=tx.buyer.display_name,
+                    tx_id=tx.tx_id,
+                    amount_paid=float(tx.amount),
+                )
+            elif tx.buyer_email:
+                send_payment_verified_email(
+                    user_email=tx.buyer_email,
+                    user_name='Valued Customer',
+                    tx_id=tx.tx_id,
+                    amount_paid=float(tx.amount),
+                )
+            verified += 1
+        skipped = queryset.count() - verified
+        msg = f'{verified} transaction(s) verified and marked as Funded.'
+        if skipped:
+            msg += f' {skipped} skipped (not in Pending Verification status).'
+        self.message_user(request, msg)
+
     @admin.action(description='Mark selected transactions as Funded')
     def mark_as_funded(self, request, queryset):
         updated = queryset.update(status='Funded')
