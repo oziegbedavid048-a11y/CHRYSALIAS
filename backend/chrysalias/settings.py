@@ -12,13 +12,14 @@ SECRET_KEY = config('SECRET_KEY', default='chrysalias-django-dev-secret-key-chan
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-# Accept all hosts by default — Render assigns a dynamic subdomain (.onrender.com)
-# Override via ALLOWED_HOSTS env var in Render dashboard if you want to restrict.
 _allowed_raw = config('ALLOWED_HOSTS', default='*')
-if _allowed_raw.strip() == '*':
+if '*' in _allowed_raw:
     ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = [h.strip() for h in _allowed_raw.split(',') if h.strip()]
+    for default_host in ['127.0.0.1', 'localhost', '.onrender.com']:
+        if default_host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(default_host)
 
 # ─── Applications ───────────────────────────────────────────
 INSTALLED_APPS = [
