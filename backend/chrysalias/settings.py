@@ -146,14 +146,9 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.chrysalias\.com$",
 ]
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-csrftoken',
     'x-requested-with',
 ]
