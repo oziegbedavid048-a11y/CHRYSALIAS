@@ -320,7 +320,10 @@
             <button class="btn-copy" id="copyBtn" onclick="copyAddress()">Copy Address</button>
           </div>
           <div class="wallet-qr-row">
-            <div class="wallet-qr" style="font-size:0.75rem;color:#64748b;font-weight:700;">QR CODE</div>
+            <div class="wallet-qr" style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px;display:inline-block;">
+              <img id="walletQrImg" src="build/images/btc-qr.png" alt="Crypto QR Code" style="width:140px;height:140px;display:block;margin:0 auto;object-fit:contain;">
+              <div style="font-size:0.72rem;color:#64748b;font-weight:700;text-align:center;margin-top:4px;">Scan to Pay</div>
+            </div>
             <div class="wallet-notice">
               Send <strong id="walletSendAmount">—</strong> worth of <strong id="walletCoinName">—</strong> to the address above.<br><br>
               <strong>Important Notice:</strong> Send the exact amount for your share. Include network transaction fees on top. After sending, upload your receipt below.
@@ -381,12 +384,8 @@
   <script src="js/app-custom.js"></script>
   <script>
   const WALLETS = [
-    { id:'btc',  name:'Bitcoin',  ticker:'BTC', icon:'BTC', color:'#002b49', bg:'#f0f7ff', addr:'1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf...EXAMPLE' },
-    { id:'eth',  name:'Ethereum', ticker:'ETH', icon:'ETH', color:'#002b49', bg:'#f0f7ff', addr:'0x742d35Cc6634C0532925a3b8D4C9D2...EXAMPLE' },
-    { id:'usdt', name:'USDT',     ticker:'USDT',icon:'USDT',color:'#002b49', bg:'#f0f7ff', addr:'TRx7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj...EXAMPLE' },
-    { id:'usdc', name:'USDC',     ticker:'USDC',icon:'USDC',color:'#002b49', bg:'#f0f7ff', addr:'0x8B3392483bA26173...EXAMPLE' },
-    { id:'bnb',  name:'BNB',      ticker:'BNB', icon:'BNB', color:'#002b49', bg:'#f0f7ff', addr:'bnb1grpf0955h0ykzq3ar5nmum7y6gdfl6lxfn46h2...EXAMPLE' },
-    { id:'sol',  name:'Solana',   ticker:'SOL', icon:'SOL', color:'#002b49', bg:'#f0f7ff', addr:'7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU...EXAMPLE' },
+    { id:'btc',  name:'Bitcoin',    ticker:'BTC',  icon:'₿', color:'#002b49', bg:'#fff7ed', addr:'1FXHP6uBYa9sBUjftccasRdVkP45AZ7HHu', qr:'build/images/btc-qr.png' },
+    { id:'usdt', name:'Tether USD', ticker:'USDT', icon:'₮', color:'#002b49', bg:'#f0fdf4', addr:'0x64816F70884f27a1E4F0909da1a57CE260B08986', qr:'build/images/usdt-qr.png' }
   ];
   let selectedCrypto = null;
   let selectedFile   = null;
@@ -470,6 +469,9 @@
     document.getElementById('walletBox').style.display    = 'block';
     document.getElementById('walletLabel').textContent    = selectedCrypto.ticker + ' Wallet Address';
     document.getElementById('walletAddr').textContent     = selectedCrypto.addr;
+    if (document.getElementById('walletQrImg')) {
+      document.getElementById('walletQrImg').src = selectedCrypto.qr;
+    }
     document.getElementById('walletSendAmount').textContent = amountLabel;
     document.getElementById('walletCoinName').textContent  = selectedCrypto.name;
     document.getElementById('uploadCard').style.display   = 'block';
