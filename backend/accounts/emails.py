@@ -63,7 +63,7 @@ def _send_worker(subject, recipient_email, text_content, html_content):
         from email.mime.text import MIMEText
         from email.mime.multipart import MIMEMultipart
 
-        msg = MIMEMultipart()
+        msg = MIMEMultipart('alternative')
         msg['From'] = from_email
         msg['To'] = recipient_email
         msg['Subject'] = subject
@@ -89,7 +89,7 @@ def _send_worker(subject, recipient_email, text_content, html_content):
         from email.mime.text import MIMEText
         from email.mime.multipart import MIMEMultipart
 
-        msg = MIMEMultipart()
+        msg = MIMEMultipart('alternative')
         msg['From'] = from_email
         msg['To'] = recipient_email
         msg['Subject'] = subject
