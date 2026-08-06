@@ -6,6 +6,9 @@ services:
     buildCommand: "bash build.sh"
     startCommand: "gunicorn chrysalias.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
       # --- Layerbase PostgreSQL ---
       - key: DATABASE_URL
         value: postgresql://postgres:ZI3GQ8C1IspueEpW71A6WEPy@chrysalias-true-crypt.cloud.layerbase.dev/chrysalias?sslmode=require
