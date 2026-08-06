@@ -11,7 +11,7 @@
   const isLocalhost = (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '');
   const API_BASE = isLocalhost
     ? 'http://127.0.0.1:8000/api'
-    : 'https://chrysalias-backend.onrender.com/api';
+    : 'https://chrysalias.onrender.com/api';
 
   window.EscrowApp = {
     API_BASE: API_BASE,
