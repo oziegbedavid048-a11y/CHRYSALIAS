@@ -83,66 +83,58 @@
     .tx-summary-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
     .tx-summary-item { background:#f8fafc;border-radius:10px;padding:12px 14px; }
     .tx-summary-label { font-size:0.72rem;color:#64748b;font-weight:600;margin-bottom:4px; }
-    .tx-summary-value { font-size:0.92rem;font-weight:800;color:#002b49; }
-    .split-bar-wrap { margin-top:4px; }
-    .split-bar-labels { display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.78rem;font-weight:700; }
-    .split-bar { height:10px;border-radius:8px;overflow:hidden;display:flex;background:#f1f5f9; }
-    .split-bar-primary { background:linear-gradient(90deg,#002b49,#0369a1);transition:width .5s; }
-    .split-bar-partner { background:linear-gradient(90deg,#3cb95d,#16a34a);transition:width .5s; }
-    .joint-payments-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
-    .joint-payer-card {
-      border:2px solid #e2e8f0;border-radius:14px;padding:18px;
-      transition:border-color .2s;position:relative;overflow:hidden;
-    }
-    .joint-payer-card.primary-payer { border-color:#002b4930; background:linear-gradient(135deg,#f0f7ff,#fff); }
-    .joint-payer-card.partner-payer { border-color:#3cb95d30; background:linear-gradient(135deg,#f0fdf4,#fff); }
-    .joint-payer-label { font-size:0.7rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px; }
-    .joint-payer-card.primary-payer .joint-payer-label { color:#002b49; }
-    .joint-payer-card.partner-payer .joint-payer-label { color:#16a34a; }
-    .joint-payer-amount { font-size:1.35rem;font-weight:900;margin-bottom:4px; }
-    .joint-payer-card.primary-payer .joint-payer-amount { color:#002b49; }
-    .joint-payer-card.partner-payer .joint-payer-amount { color:#16a34a; }
-    .joint-payer-email { font-size:0.73rem;color:#64748b;font-weight:500; }
-    .joint-payer-badge { position:absolute;top:10px;right:10px;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:20px; }
-    .badge-you { background:#dbeafe;color:#1d4ed8; }
-    .badge-partner { background:#dcfce7;color:#166534; }
-    .crypto-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:6px; }
+    .tx-summary-value { font-size:0.92rem;font-weight:800;color:#002b49;word-break:break-word; }
+    .crypto-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:10px; }
     .crypto-option {
-      border:2px solid #e2e8f0;border-radius:12px;padding:14px 10px;
+      border:2px solid #e2e8f0;border-radius:12px;padding:16px 12px;
       cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;
       transition:all .2s;background:#fff;
     }
     .crypto-option:hover { border-color:#002b4960;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.06); }
     .crypto-option.selected { border-color:#002b49;background:#f0f7ff;box-shadow:0 4px 14px rgba(0,43,73,.12); }
-    .crypto-icon { width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem; }
-    .crypto-name { font-size:0.78rem;font-weight:700;color:#1e293b; }
-    .crypto-ticker { font-size:0.65rem;color:#64748b;font-weight:500; }
+    .crypto-icon { width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800; }
+    .crypto-name { font-size:0.82rem;font-weight:700;color:#1e293b; }
+    .crypto-ticker { font-size:0.68rem;color:#64748b;font-weight:600; }
+    .btn-crypto-next {
+      width:100%;margin-top:16px;padding:14px;border:none;border-radius:12px;
+      background:linear-gradient(135deg,#3cb95d,#16a34a);color:#fff;
+      font-size:0.95rem;font-weight:800;cursor:pointer;
+      box-shadow:0 4px 14px rgba(60,185,93,.3);transition:all .2s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn-crypto-next:hover { transform:translateY(-1px);box-shadow:0 6px 20px rgba(60,185,93,.4); }
+    .btn-crypto-next:disabled { opacity:.5;cursor:not-allowed;transform:none;box-shadow:none; }
     .wallet-box {
       background:linear-gradient(135deg,#f0f7ff,#f8fafc);
-      border:1.5px solid #bfdbfe;border-radius:12px;padding:18px 20px;
+      border:1.5px solid #bfdbfe;border-radius:12px;padding:20px;
       margin-top:16px;
     }
-    .wallet-label { font-size:0.72rem;font-weight:700;color:#1d4ed8;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em; }
-    .wallet-addr-row { display:flex;align-items:center;gap:10px;margin-bottom:12px; }
+    .wallet-label { font-size:0.75rem;font-weight:800;color:#1d4ed8;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em; }
+    .wallet-addr-row { display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap; }
     .wallet-addr {
-      font-family:'Courier New',monospace;font-size:0.82rem;font-weight:600;
-      color:#002b49;word-break:break-all;flex:1;
+      font-family:'Courier New',monospace;font-size:0.84rem;font-weight:600;
+      color:#002b49;word-break:break-all;flex:1;min-width:200px;
       background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;
     }
     .btn-copy {
       background:#002b49;color:#fff;border:none;border-radius:8px;
-      padding:10px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;
+      padding:10px 16px;font-size:0.8rem;font-weight:700;cursor:pointer;
       transition:all .2s;white-space:nowrap;flex-shrink:0;
     }
     .btn-copy:hover { background:#0369a1; }
     .btn-copy.copied { background:#16a34a; }
-    .wallet-qr-row { display:flex;align-items:center;gap:16px; }
+    .wallet-qr-row { display:flex;align-items:flex-start;gap:16px; }
     .wallet-qr {
-      width:72px;height:72px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;
-      display:flex;align-items:center;justify-content:center;font-size:2.4rem;flex-shrink:0;
+      background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px;
+      display:inline-block;flex-shrink:0;text-align:center;
     }
-    .wallet-notice { font-size:0.75rem;color:#64748b;line-height:1.5; }
+    .wallet-notice { font-size:0.8rem;color:#475569;line-height:1.5;flex:1; }
     .wallet-notice strong { color:#0f172a; }
+    @media (max-width:640px) {
+      .wallet-qr-row { flex-direction:column;align-items:center;text-align:center; }
+      .wallet-addr-row { flex-direction:column;align-items:stretch; }
+      .btn-copy { width:100%;text-align:center; }
+    }
     .upload-zone {
       border:2.5px dashed #cbd5e1;border-radius:14px;padding:32px 20px;
       text-align:center;cursor:pointer;transition:all .25s;
@@ -259,107 +251,89 @@
             <div class="tx-summary-value" id="txTitle">—</div>
           </div>
           <div class="tx-summary-item">
-            <div class="tx-summary-label">Total Amount</div>
-            <div class="tx-summary-value" id="txAmount">—</div>
+            <div class="tx-summary-label">Required Payment Share</div>
+            <div class="tx-summary-value" id="txAmount" style="color:#16a34a;font-size:1.1rem;">—</div>
           </div>
           <div class="tx-summary-item">
             <div class="tx-summary-label">Inspection Period</div>
             <div class="tx-summary-value" id="txInspection">—</div>
           </div>
         </div>
-        <div id="splitBarSection" style="margin-top:16px;display:none;">
-          <div class="split-bar-wrap">
-            <div class="split-bar-labels">
-              <span style="color:#002b49;">Primary Share</span>
-              <span style="color:#16a34a;">Partner Share</span>
-            </div>
-            <div class="split-bar">
-              <div class="split-bar-primary" id="splitBarPrimary" style="width:50%"></div>
-              <div class="split-bar-partner" id="splitBarPartner" style="width:50%"></div>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="co-card" id="jointPayerCard" style="display:none;">
-        <div class="co-card-title">
-          <div class="co-card-title-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          </div>
-          Joint Account — 50/50 Co-Funding
-        </div>
-        <div class="joint-payments-grid">
-          <div class="joint-payer-card primary-payer">
-            <span class="joint-payer-badge badge-you">PRIMARY USER</span>
-            <div class="joint-payer-label">Primary Share</div>
-            <div class="joint-payer-amount" id="primaryAmount">—</div>
-            <div class="joint-payer-email" id="primaryEmail">—</div>
-          </div>
-          <div class="joint-payer-card partner-payer">
-            <span class="joint-payer-badge badge-partner">JOINT PARTNER</span>
-            <div class="joint-payer-label">Partner Share</div>
-            <div class="joint-payer-amount" id="partnerAmount">—</div>
-            <div class="joint-payer-email" id="partnerEmailDisplay">—</div>
-          </div>
-        </div>
-        <div style="margin-top:14px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:0.78rem;color:#166534;font-weight:600;">
-          Both co-funding partners pay their 50% share independently. Each partner receives email confirmation once a share is paid.
-        </div>
-      </div>
-      <div class="co-card">
+
+      <!-- Step 1: Select Cryptocurrency -->
+      <div class="co-card" id="cryptoSelectionCard">
         <div class="co-card-title">
           <div class="co-card-title-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
           </div>
-          Choose Cryptocurrency Payment Method
+          Step 1: Choose Cryptocurrency
         </div>
+        <p style="font-size:0.82rem;color:#64748b;margin:0 0 12px 0;">Select your preferred coin to proceed with secure payment:</p>
         <div class="crypto-grid" id="cryptoGrid"></div>
-        <div class="wallet-box" id="walletBox" style="display:none;">
+        <button type="button" class="btn-crypto-next" id="btnContinueToCrypto" onclick="proceedToCryptoDetails()">
+          Continue to Payment Details →
+        </button>
+      </div>
+
+      <!-- Step 2: Deposit Details, QR Code & Upload Receipt -->
+      <div class="co-card" id="cryptoDetailsCard" style="display:none;">
+        <div class="co-card-title">
+          <div class="co-card-title-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          Step 2: Deposit & Upload Receipt
+        </div>
+        
+        <div class="wallet-box" id="walletBox">
           <div class="wallet-label" id="walletLabel">Wallet Address</div>
           <div class="wallet-addr-row">
             <div class="wallet-addr" id="walletAddr">—</div>
-            <button class="btn-copy" id="copyBtn" onclick="copyAddress()">Copy Address</button>
+            <button type="button" class="btn-copy" id="copyBtn" onclick="copyAddress()">Copy Address</button>
           </div>
           <div class="wallet-qr-row">
-            <div class="wallet-qr" style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px;display:inline-block;">
-              <img id="walletQrImg" src="build/images/btc-qr.png" alt="Crypto QR Code" style="width:140px;height:140px;display:block;margin:0 auto;object-fit:contain;">
-              <div style="font-size:0.72rem;color:#64748b;font-weight:700;text-align:center;margin-top:4px;">Scan to Pay</div>
+            <div class="wallet-qr">
+              <img id="walletQrImg" src="build/images/btc-qr.png" alt="Crypto QR Code" style="width:150px;height:150px;display:block;margin:0 auto;object-fit:contain;">
+              <div style="font-size:0.72rem;color:#64748b;font-weight:700;text-align:center;margin-top:6px;">Scan to Pay</div>
             </div>
             <div class="wallet-notice">
-              Send <strong id="walletSendAmount">—</strong> worth of <strong id="walletCoinName">—</strong> to the address above.<br><br>
-              <strong>Important Notice:</strong> Send the exact amount for your share. Include network transaction fees on top. After sending, upload your receipt below.
+              <div style="background:#eff6ff;border-left:4px solid #3b82f6;padding:12px 14px;border-radius:8px;margin-bottom:12px;">
+                Send <strong id="walletSendAmount" style="color:#002b49;">—</strong> worth of <strong id="walletCoinName" style="color:#002b49;">—</strong> to the deposit address above.
+              </div>
+              <p style="margin:0;font-size:0.78rem;color:#64748b;line-height:1.5;">
+                <strong>Notice:</strong> Please send the exact required payment amount. Ensure network transfer fees are covered. After sending, upload your receipt screenshot below.
+              </p>
             </div>
           </div>
         </div>
-      </div>
-      <div class="co-card" id="uploadCard" style="display:none;">
-        <div class="co-card-title">
-          <div class="co-card-title-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+
+        <div style="margin-top:24px;">
+          <label style="font-size:0.85rem;font-weight:800;color:#002b49;display:block;margin-bottom:10px;">
+            Upload Proof of Transfer / Receipt <span style="color:#ef4444;">*</span>
+          </label>
+          <div id="alertBanner" class="co-alert"></div>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="receiptFile" accept="image/jpeg,image/png,image/webp,application/pdf" onchange="handleFileSelect(event)">
+            <div class="upload-icon" style="display:flex;justify-content:center;margin-bottom:8px;color:#002b49;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+            <div class="upload-title">Drop your payment receipt here, or click to browse</div>
+            <div class="upload-sub">JPG, PNG, WEBP or PDF · Max 10 MB</div>
           </div>
-          Upload Payment Receipt
-        </div>
-        <div id="alertBanner" class="co-alert"></div>
-        <div class="upload-zone" id="uploadZone">
-          <input type="file" id="receiptFile" accept="image/jpeg,image/png,image/webp,application/pdf" onchange="handleFileSelect(event)">
-          <div class="upload-icon" style="display:flex;justify-content:center;margin-bottom:8px;color:#002b49;">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+          <div class="upload-preview" id="uploadPreview">
+            <div class="preview-icon" id="previewIcon"></div>
+            <div style="flex:1;">
+              <div class="preview-name" id="previewName">—</div>
+              <div class="preview-size" id="previewSize">—</div>
+            </div>
+            <button type="button" class="preview-remove" onclick="removeFile()">✕</button>
           </div>
-          <div class="upload-title">Drop your receipt here, or click to browse</div>
-          <div class="upload-sub">JPG, PNG, WEBP or PDF · Max 10 MB</div>
-        </div>
-        <div class="upload-preview" id="uploadPreview">
-          <div class="preview-icon" id="previewIcon"></div>
-          <div>
-            <div class="preview-name" id="previewName">—</div>
-            <div class="preview-size" id="previewSize">—</div>
+          <button type="button" class="btn-submit" id="submitBtn" style="margin-top:20px;" onclick="submitReceipt()">
+            Submit Receipt for Verification
+          </button>
+          <div class="security-row">
+            256-bit SSL encrypted · Verified by Chrysalias Compliance Team
           </div>
-          <button class="preview-remove" onclick="removeFile()">✕</button>
-        </div>
-        <button class="btn-submit" id="submitBtn" style="margin-top:20px;" onclick="submitReceipt()">
-          Submit Receipt for Verification
-        </button>
-        <div class="security-row">
-          256-bit SSL encrypted · Verified by Chrysalias Compliance Team
         </div>
       </div>
     </div>
@@ -433,48 +407,46 @@
   function fillTxDisplay(data) {
     document.getElementById('txIdDisplay').textContent  = data.tx_id || '—';
     document.getElementById('txTitle').textContent      = data.title || '—';
-    document.getElementById('txAmount').textContent     = (data.currency || '') + ' ' + (data.amount || '—');
+    const reqAmount = data.your_amount || data.amount || '—';
+    const currency  = data.currency || 'USD';
+    document.getElementById('txAmount').textContent     = currency + ' ' + reqAmount;
     document.getElementById('txInspection').textContent = (data.inspection_period || 7) + ' days';
-    const isJoint       = data.is_joint || data.is_partnered || false;
-    const totalAmount   = parseFloat(String(data.amount || '0').replace(/,/g,'')) || 0;
-    const halfAmount    = (totalAmount / 2).toFixed(2);
-    const currency      = data.currency || 'USD';
-    if (isJoint) {
-      document.getElementById('splitBarSection').style.display = 'block';
-      document.getElementById('jointPayerCard').style.display  = 'block';
-      document.getElementById('primaryAmount').textContent     = currency + ' ' + halfAmount;
-      document.getElementById('partnerAmount').textContent     = currency + ' ' + halfAmount;
-      document.getElementById('primaryEmail').textContent      = data.buyer_email || data.buyer || '—';
-      document.getElementById('partnerEmailDisplay').textContent = data.partner_email || '—';
-    }
-    document.getElementById('uploadCard').style.display = 'block';
   }
   function buildCryptoGrid() {
     const grid = document.getElementById('cryptoGrid');
     grid.innerHTML = WALLETS.map(c => `
       <div class="crypto-option" id="crypto-${c.id}" onclick="selectCrypto('${c.id}')">
-        <div class="crypto-icon" style="background:${c.bg};color:${c.color};font-size:1.5rem;">${c.icon}</div>
+        <div class="crypto-icon" style="background:${c.bg};color:${c.color};">${c.icon}</div>
         <div class="crypto-name">${c.name}</div>
         <div class="crypto-ticker">${c.ticker}</div>
       </div>
     `).join('');
+    if (WALLETS.length > 0) {
+      selectCrypto(WALLETS[0].id);
+    }
   }
   function selectCrypto(id) {
     selectedCrypto = WALLETS.find(c => c.id === id);
     document.querySelectorAll('.crypto-option').forEach(el => el.classList.remove('selected'));
     document.getElementById('crypto-' + id).classList.add('selected');
-    const totalAmount = parseFloat(String(txData.amount || '0').replace(/,/g,'')) || 0;
+    const reqAmount   = txData.your_amount || txData.amount || '0';
+    const numAmount   = parseFloat(String(reqAmount).replace(/,/g,'')) || 0;
     const currency    = txData.currency || 'USD';
-    const amountLabel = currency + ' ' + totalAmount.toFixed(2);
-    document.getElementById('walletBox').style.display    = 'block';
-    document.getElementById('walletLabel').textContent    = selectedCrypto.ticker + ' Wallet Address';
+    const amountLabel = currency + ' ' + (numAmount > 0 ? numAmount.toFixed(2) : reqAmount);
+    document.getElementById('walletLabel').textContent    = selectedCrypto.ticker + ' Deposit Address';
     document.getElementById('walletAddr').textContent     = selectedCrypto.addr;
     if (document.getElementById('walletQrImg')) {
       document.getElementById('walletQrImg').src = selectedCrypto.qr;
     }
     document.getElementById('walletSendAmount').textContent = amountLabel;
     document.getElementById('walletCoinName').textContent  = selectedCrypto.name;
-    document.getElementById('uploadCard').style.display   = 'block';
+  }
+  function proceedToCryptoDetails() {
+    if (!selectedCrypto && WALLETS.length > 0) {
+      selectCrypto(WALLETS[0].id);
+    }
+    document.getElementById('cryptoDetailsCard').style.display = 'block';
+    document.getElementById('cryptoDetailsCard').scrollIntoView({ behavior: 'smooth' });
   }
   function copyAddress() {
     if (!selectedCrypto) return;
