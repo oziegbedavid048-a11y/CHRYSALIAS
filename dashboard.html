@@ -1054,6 +1054,17 @@
                 '</div>'
               ) : '';
 
+              var customDescHTML = (activeDeal.description && activeDeal.description.trim()) ? (
+                '<div style="margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9;">' +
+                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; display:flex; align-items:center; gap:6px;">' +
+                    '📜 Agreement Details &amp; Custom Terms' +
+                  '</div>' +
+                  '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65; white-space:pre-wrap;">' +
+                    escHtml(activeDeal.description) +
+                  '</div>' +
+                '</div>'
+              ) : '';
+
               agreeContainer.innerHTML =
                 '<div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:24px; box-shadow:0 2px 10px rgba(0,0,0,0.02);">' +
                   '<div style="text-align:center; padding-bottom:16px; margin-bottom:20px; border-bottom:1px solid #f1f5f9;">' +
@@ -1076,6 +1087,7 @@
                   '</div>' +
 
                   realEstateHTML +
+                  customDescHTML +
                 '</div>';
             } else {
               agreeContainer.innerHTML =

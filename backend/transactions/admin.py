@@ -57,8 +57,12 @@ class TransactionAdmin(admin.ModelAdmin):
     list_per_page = 20
 
     fieldsets = (
-        ('Transaction Identity & Agreement Details', {
-            'fields': ('tx_id', 'title', 'category', 'status', 'description'),
+        ('Transaction Identity', {
+            'fields': ('tx_id', 'title', 'category', 'status'),
+        }),
+        ('📜 Binding Agreement Details & Specifications (Live on Website)', {
+            'fields': ('description',),
+            'description': 'Edit agreement terms, property descriptions, specifications, or custom contract conditions here. Any text entered or saved here will reflect live instantly on the website dashboard!',
         }),
         ('Parties Involved', {
             'fields': ('initiator_role', 'buyer', 'buyer_email', 'seller', 'seller_email'),

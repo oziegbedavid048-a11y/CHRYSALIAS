@@ -74,7 +74,7 @@ class Transaction(models.Model):
     # Identifiers
     tx_id          = models.CharField(max_length=20, unique=True, default=generate_tx_id)
     title          = models.CharField(max_length=300)
-    description    = models.TextField(blank=True)
+    description    = models.TextField(blank=True, verbose_name='Agreement Details / Terms & Specifications', help_text='Edit agreement terms, property specifications, or custom contract details here. Changes will reflect live on the website!')
 
     # Parties
     buyer          = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='buyer_transactions')
