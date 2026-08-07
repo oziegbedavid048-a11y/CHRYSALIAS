@@ -14,6 +14,7 @@ urlpatterns = [
     path('login/',               views.LoginView.as_view(),                name='login'),
     path('logout/',              views.LogoutView.as_view(),               name='logout'),
     path('me/',                  views.MeView.as_view(),                   name='me'),
+    path('upload-profile-picture/', views.UploadProfilePictureView.as_view(), name='upload-profile-picture'),
     path('send-email/',          views.SendEmailNotificationView.as_view(), name='send-email'),
     path('test-email/',          views.TestEmailView.as_view(),            name='test-email'),
     path('diagnostics/',         views.SystemDiagnosticsView.as_view(),    name='diagnostics'),

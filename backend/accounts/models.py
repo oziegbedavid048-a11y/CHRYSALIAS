@@ -69,6 +69,7 @@ class UserProfile(models.Model):
     bio                  = models.TextField(blank=True)
     address              = models.TextField(blank=True)
     country              = models.CharField(max_length=100, blank=True)
+    profile_picture      = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     id_document          = models.FileField(upload_to='kyc_docs/', blank=True, null=True)
     selfie_photo         = models.ImageField(upload_to='kyc_selfies/', blank=True, null=True)
     is_joint_account     = models.BooleanField(default=False)

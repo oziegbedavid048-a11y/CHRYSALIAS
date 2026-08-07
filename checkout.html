@@ -271,22 +271,19 @@
         </div>
 
         <!-- Custom Payment Amount Input Box -->
-        <div style="background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:12px;padding:16px;margin-bottom:18px;">
-          <label for="customPayAmountInput" style="font-size:0.82rem;font-weight:800;color:#002b49;display:block;margin-bottom:6px;">
+        <div style="background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:12px;padding:16px;margin-bottom:18px;box-sizing:border-box;">
+          <label for="customPayAmountInput" style="font-size:0.84rem;font-weight:800;color:#002b49;display:block;margin-bottom:8px;">
             Enter Amount You Wish to Pay Now ($ USD):
           </label>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="position:relative;flex:1;">
-              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:#64748b;font-size:1.1rem;">$</span>
-              <input type="number" id="customPayAmountInput" step="0.01" min="1" class="form-control" style="padding-left:30px;font-size:1.1rem;font-weight:800;color:#002b49;height:48px;border-radius:8px;border:1.5px solid #bfdbfe;" oninput="onCustomAmountChange()">
-            </div>
-            <button type="button" class="btn-copy" style="background:#e2e8f0;color:#0f172a;border:1px solid #cbd5e1;" onclick="resetToFullShare()">Pay Full Share</button>
+          <div style="position:relative;width:100%;box-sizing:border-box;">
+            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:#002b49;font-size:1.2rem;z-index:2;">$</span>
+            <input type="number" id="customPayAmountInput" step="0.01" min="1" class="form-control" style="width:100%;box-sizing:border-box;padding-left:34px;padding-right:14px;font-size:1.15rem;font-weight:800;color:#002b49;height:52px;border-radius:10px;border:2px solid #0284c7;background:#ffffff;outline:none;" placeholder="0.00" oninput="onCustomAmountChange()">
           </div>
           
           <!-- Real-time Balance Breakdown Badge -->
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:0.8rem;color:#475569;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:0.8rem;color:#475569;">
             <span>Remaining Balance After Payment:</span>
-            <strong id="remainingBalanceDisplay" style="color:#0284c7;font-size:0.92rem;">$0.00 USD</strong>
+            <strong id="remainingBalanceDisplay" style="color:#0284c7;font-size:0.95rem;">$0.00 USD</strong>
           </div>
         </div>
 

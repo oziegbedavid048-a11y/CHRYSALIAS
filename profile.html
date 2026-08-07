@@ -179,13 +179,22 @@
     <!-- Main Profile Card -->
     <div class="profile-card">
       <div class="profile-header-flex">
-        <div class="profile-avatar-large" id="profileInitials">U</div>
+        <div style="position: relative; cursor: pointer;" onclick="document.getElementById('avatarFileInput').click();" title="Click to upload profile picture">
+          <div class="profile-avatar-large" id="profileInitials" style="overflow: hidden; background-size: cover; background-position: center;">U</div>
+          <div style="position: absolute; bottom: 0; right: 0; background: #002b49; color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+            📷
+          </div>
+          <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="uploadAvatarFile(this)">
+        </div>
         <div class="profile-title-group">
           <h1 id="profileFullName">User Name</h1>
           <p id="profileEmail">user@example.com</p>
           <div class="profile-badge">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Verified Chrysalias Account
+          </div>
+          <div style="font-size: 0.76rem; color: #0284c7; font-weight: 700; margin-top: 4px; cursor: pointer;" onclick="document.getElementById('avatarFileInput').click();">
+            📷 Click avatar to change profile picture
           </div>
         </div>
       </div>
@@ -258,12 +267,54 @@
         ? (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase()
         : name.substring(0, 2).toUpperCase();
 
-      document.getElementById('profileInitials').textContent = initials;
+      var avatarEl = document.getElementById('profileInitials');
+      if (user.profile_picture || user.avatar) {
+        avatarEl.style.backgroundImage = 'url(' + (user.profile_picture || user.avatar) + ')';
+        avatarEl.textContent = '';
+      } else {
+        avatarEl.textContent = initials;
+      }
+
       document.getElementById('profileFullName').textContent = name;
       document.getElementById('profileEmail').textContent = email;
       document.getElementById('infoFullName').textContent = name;
       document.getElementById('infoEmail').textContent = email;
     });
+
+    async function uploadAvatarFile(input) {
+      if (!input.files || !input.files[0]) return;
+      var file = input.files[0];
+      var formData = new FormData();
+      formData.append('profile_picture', file);
+
+      try {
+        var token = window.EscrowApp.getToken();
+        var headers = {};
+        if (token) headers['Authorization'] = 'Token ' + token;
+
+        var res = await fetch(window.EscrowApp.API_BASE + '/auth/upload-profile-picture/', {
+          method: 'POST',
+          headers: headers,
+          body: formData
+        });
+        var data = await res.json();
+        if (res.ok && data.profile_picture) {
+          var avatarEl = document.getElementById('profileInitials');
+          avatarEl.style.backgroundImage = 'url(' + data.profile_picture + ')';
+          avatarEl.textContent = '';
+          
+          var user = window.EscrowApp.getUser() || {};
+          user.profile_picture = data.profile_picture;
+          window.EscrowApp.setUser(user);
+
+          alert('Profile picture updated successfully!');
+        } else {
+          alert(data.error || 'Upload failed. Please try again.');
+        }
+      } catch (err) {
+        alert('Network error during upload.');
+      }
+    }
   </script>
 </body>
 </html>

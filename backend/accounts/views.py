@@ -255,15 +255,17 @@ class MeView(View):
         if not request.user.is_authenticated:
             return json_response({'authenticated': False}, 401)
         user = request.user
-        # Fetch joint account details from profile
         is_joint = False
         joint_partner_name = ''
         joint_partner_email = ''
+        profile_picture = None
         try:
             profile = user.profile
             is_joint = profile.is_joint_account
             joint_partner_name = profile.joint_partner_name or ''
             joint_partner_email = profile.joint_partner_email or ''
+            if profile.profile_picture:
+                profile_picture = profile.profile_picture.url
         except Exception:
             pass
         return json_response({
@@ -280,7 +282,33 @@ class MeView(View):
                 'is_joint':            is_joint,
                 'joint_partner_name':  joint_partner_name,
                 'joint_partner_email': joint_partner_email,
+                'profile_picture':     profile_picture,
             }
+        })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UploadProfilePictureView(View):
+    """Allows authenticated user to upload/update their profile picture"""
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return json_response({'error': 'Authentication required.'}, 401)
+        
+        file = request.FILES.get('profile_picture') or request.FILES.get('avatar') or request.FILES.get('file')
+        if not file:
+            return json_response({'error': 'No image file provided.'}, 400)
+        
+        user = request.user
+        from .models import UserProfile
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        profile.profile_picture = file
+        profile.save()
+
+        avatar_url = profile.profile_picture.url if profile.profile_picture else ''
+        return json_response({
+            'success': True,
+            'message': 'Profile picture uploaded successfully.',
+            'profile_picture': avatar_url,
         })
 
 

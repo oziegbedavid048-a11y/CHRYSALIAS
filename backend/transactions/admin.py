@@ -54,7 +54,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ('status', 'currency', 'category', 'is_partnered', 'created_at')
     search_fields = ('tx_id', 'title', 'buyer_email', 'seller_email', 'buyer__email', 'seller__email', 'buyer__full_name', 'seller__full_name')
     ordering = ('-created_at',)
-    readonly_fields = ('tx_id', 'escrow_fee', 'processing_fee', 'total_fee', 'created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
     list_per_page = 20
 
     fieldsets = (
