@@ -496,6 +496,22 @@ h1, h2, h3, h4, h5, h6, input, button, select, textarea, p, span, a, label, td, 
 
 .btn-escrow-navy:hover { background-color: var(--escrow-navy-dark) !important; }
 
+/* ── Button Loading Spinner ── */
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  animation: btnSpin 0.7s linear infinite;
+  margin-right: 8px;
+}
+@keyframes btnSpin {
+  to { transform: rotate(360deg); }
+}
+
 
 /* ==========================================================================
    Auth Pages

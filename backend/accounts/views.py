@@ -265,7 +265,7 @@ class MeView(View):
             joint_partner_name = profile.joint_partner_name or ''
             joint_partner_email = profile.joint_partner_email or ''
             if profile.profile_picture:
-                profile_picture = profile.profile_picture.url
+                profile_picture = request.build_absolute_uri(profile.profile_picture.url)
         except Exception:
             pass
         return json_response({
@@ -304,7 +304,7 @@ class UploadProfilePictureView(View):
         profile.profile_picture = file
         profile.save()
 
-        avatar_url = profile.profile_picture.url if profile.profile_picture else ''
+        avatar_url = request.build_absolute_uri(profile.profile_picture.url) if profile.profile_picture else ''
         return json_response({
             'success': True,
             'message': 'Profile picture uploaded successfully.',

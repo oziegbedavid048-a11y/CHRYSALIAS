@@ -200,7 +200,8 @@
     },
 
     /* ── Toast Notification ───────────────────────────────── */
-    showToast: function (msg) {
+    showToast: function (msg, type) {
+      type = type || 'success';
       let container = document.querySelector('.toast-container');
       if (!container) {
         container = document.createElement('div');
@@ -209,8 +210,14 @@
         document.body.appendChild(container);
       }
       const toast = document.createElement('div');
-      toast.style.cssText = 'background:#002b49;color:#ffffff;padding:12px 20px;border-radius:8px;font-size:0.88rem;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;pointer-events:auto;transition:all 0.3s ease;transform:translateY(20px);opacity:0;border-left:4px solid #3cb95d;';
-      toast.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>' + msg + '</span>';
+      const isError = type === 'error';
+      const borderColor = isError ? '#ef4444' : '#3cb95d';
+      const icon = isError 
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3cb95d" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+
+      toast.style.cssText = 'background:#002b49;color:#ffffff;padding:12px 20px;border-radius:8px;font-size:0.88rem;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;pointer-events:auto;transition:all 0.3s ease;transform:translateY(20px);opacity:0;border-left:4px solid ' + borderColor + ';';
+      toast.innerHTML = icon + '<span>' + msg + '</span>';
       container.appendChild(toast);
       requestAnimationFrame(function () {
         toast.style.transform = 'translateY(0)';

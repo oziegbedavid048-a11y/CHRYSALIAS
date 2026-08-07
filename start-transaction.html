@@ -782,7 +782,7 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                 Item Category <span class="required-dot"></span>
               </label>
-              <select id="itemCategory" class="form-select" required>
+              <select id="itemCategory" class="form-select" required onchange="handleCategoryChange(this.value)">
                 <option value="">Select a category</option>
                 <option value="Domain Names">Domain Names</option>
                 <option value="Motor Vehicles">Motor Vehicles (Cars, Boats, Aircraft)</option>
@@ -932,9 +932,9 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                 Back
               </button>
-              <button type="submit" class="btn-submit">
+              <button type="submit" class="btn-submit" id="btnCreateTxSubmit">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
-                Create Transaction
+                <span>Create Transaction</span>
               </button>
             </div>
           </form>
@@ -946,6 +946,25 @@
 
   <script src="js/app-custom.js"></script>
   <script>
+    /* ── Category Auto-Fill (Real Estate & Property) ── */
+    function handleCategoryChange(val) {
+      if (val && val.includes('Estate')) {
+        var descEl = document.getElementById('itemDesc');
+        if (descEl) {
+          descEl.value = "508 Woodside Terrace, Austin, TX 78738\nPurchase Price: $2,500,000\nThis exceptional 5-bedroom, 8-bathroom home offers 6,164 square feet of refined living space on a generous 0.48-acre lot in the prestigious Rough Hollow Lakeside community (Lakeway Highlands area). Built in 2017, the residence spans three intentional levels and is designed for multigenerational living and large-scale entertaining.";
+        }
+        var priceEl = document.getElementById('itemPrice');
+        if (priceEl && (!priceEl.value || parseFloat(priceEl.value) <= 0)) {
+          priceEl.value = '2500000.00';
+        }
+        var nameEl = document.getElementById('itemName');
+        if (nameEl && !nameEl.value) {
+          nameEl.value = '508 Woodside Terrace Residence';
+        }
+        if (typeof syncPartnerAmount === 'function') syncPartnerAmount();
+      }
+    }
+
     /* ── Payment Type Toggle ── */
     function selectPaymentType(el, type) {
       document.querySelectorAll('.pay-option').forEach(function(o) {
@@ -1065,6 +1084,15 @@
       var sellerPhone = document.getElementById('sellerPhone').value.trim();
       if (!sellerEmail) { alert('Please enter the seller email address.'); return; }
       if (!sellerPhone) { alert('Please enter the seller phone number.'); return; }
+
+      // Disable button & show spinner immediately
+      var submitBtn = document.getElementById('btnCreateTxSubmit') || document.querySelector('#txStep2Form button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.75';
+        submitBtn.style.cursor = 'not-allowed';
+        submitBtn.innerHTML = '<span class="btn-spinner"></span> Creating Agreement...';
+      }
 
       var title         = document.getElementById('txTitle').value.trim();
       var itemName      = document.getElementById('itemName').value.trim();

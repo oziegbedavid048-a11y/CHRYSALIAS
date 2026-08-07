@@ -284,6 +284,17 @@
     async function uploadAvatarFile(input) {
       if (!input.files || !input.files[0]) return;
       var file = input.files[0];
+
+      // Instant local visual feedback
+      var tempUrl = URL.createObjectURL(file);
+      var avatarEl = document.getElementById('profileInitials');
+      if (avatarEl) {
+        avatarEl.style.backgroundImage = 'url("' + tempUrl + '")';
+        avatarEl.style.backgroundSize = 'cover';
+        avatarEl.style.backgroundPosition = 'center';
+        avatarEl.textContent = '';
+      }
+
       var formData = new FormData();
       formData.append('profile_picture', file);
 
@@ -298,21 +309,36 @@
           body: formData
         });
         var data = await res.json();
-        if (res.ok && data.profile_picture) {
-          var avatarEl = document.getElementById('profileInitials');
-          avatarEl.style.backgroundImage = 'url(' + data.profile_picture + ')';
-          avatarEl.textContent = '';
+        if (res.ok && (data.profile_picture || data.success)) {
+          var finalUrl = data.profile_picture || tempUrl;
+          if (avatarEl) {
+            avatarEl.style.backgroundImage = 'url("' + finalUrl + '")';
+            avatarEl.textContent = '';
+          }
           
           var user = window.EscrowApp.getUser() || {};
-          user.profile_picture = data.profile_picture;
+          user.profile_picture = finalUrl;
+          user.avatar = finalUrl;
           window.EscrowApp.setUser(user);
 
-          alert('Profile picture updated successfully!');
+          if (window.EscrowApp.showToast) {
+            window.EscrowApp.showToast('Profile picture uploaded & updated successfully!', 'success');
+          }
         } else {
-          alert(data.error || 'Upload failed. Please try again.');
+          var errMsg = data.error || 'Upload failed. Please try again.';
+          if (window.EscrowApp.showToast) {
+            window.EscrowApp.showToast(errMsg, 'error');
+          } else {
+            alert(errMsg);
+          }
         }
       } catch (err) {
-        alert('Network error during upload.');
+        console.error('Avatar upload error:', err);
+        if (window.EscrowApp.showToast) {
+          window.EscrowApp.showToast('Network error while uploading profile picture.', 'error');
+        } else {
+          alert('Network error while uploading profile picture.');
+        }
       }
     }
   </script>
