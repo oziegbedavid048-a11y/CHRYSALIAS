@@ -383,6 +383,9 @@ h1, h2, h3, h4, h5, h6, input, button, select, textarea, p, span, a, label, td, 
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
 }
 
 .user-profile-name {
