@@ -1043,25 +1043,17 @@
 
               var realEstateHTML = isRealEstate ? (
                 '<div style="margin-top:20px; padding-top:16px; border-top:1px solid #f1f5f9;">' +
-                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">' +
-                    '📍 Property Location &amp; Specifications' +
-                  '</div>' +
+                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">📍 Property Location &amp; Specifications</div>' +
                   '<div style="font-size:1.05rem; font-weight:800; color:#002b49; margin-bottom:4px;">508 Woodside Terrace, Austin, TX 78738</div>' +
                   '<div style="font-size:0.95rem; font-weight:800; color:#16a34a; margin-bottom:8px;">Purchase Price: $2,500,000.00 USD</div>' +
-                  '<div style="font-size:0.86rem; color:#334155; line-height:1.65;">' +
-                    'This exceptional 5-bedroom, 8-bathroom home offers 6,164 square feet of refined living space on a generous 0.48-acre lot in the prestigious Rough Hollow Lakeside community (Lakeway Highlands area). Built in 2017 across 3 levels for multigenerational living and entertaining.' +
-                  '</div>' +
+                  '<div style="font-size:0.86rem; color:#334155; line-height:1.65;">This exceptional 5-bedroom, 8-bathroom home offers 6,164 square feet of refined living space on a generous 0.48-acre lot in the prestigious Rough Hollow Lakeside community (Lakeway Highlands area). Built in 2017 across 3 levels for multigenerational living and entertaining.</div>' +
                 '</div>'
               ) : '';
 
               var customDescHTML = (activeDeal.description && activeDeal.description.trim()) ? (
                 '<div style="margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9;">' +
-                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; display:flex; align-items:center; gap:6px;">' +
-                    '📜 Agreement Details &amp; Custom Terms' +
-                  '</div>' +
-                  '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65; white-space:pre-wrap;">' +
-                    escHtml(activeDeal.description) +
-                  '</div>' +
+                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; display:flex; align-items:center; gap:6px;">📜 Agreement Details &amp; Custom Terms</div>' +
+                  '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65; white-space:pre-wrap;">' + escHtml(activeDeal.description) + '</div>' +
                 '</div>'
               ) : '';
 
@@ -1070,22 +1062,13 @@
                   '<div style="text-align:center; padding-bottom:16px; margin-bottom:20px; border-bottom:1px solid #f1f5f9;">' +
                     '<div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Binding Agreement Document &bull; Ref: ' + txId + '</div>' +
                     '<div style="font-size:1.3rem; font-weight:900; color:#002b49; margin-bottom:6px;">' + title + '</div>' +
-                    '<div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:10px;">' +
-                      '<span class="metric-badge badge-blue" style="font-weight:800; font-size:0.85rem; padding:5px 14px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:20px;">Active Agreement</span>' +
-                    '</div>' +
+                    '<div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:10px;"><span class="metric-badge badge-blue" style="font-weight:800; font-size:0.85rem; padding:5px 14px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:20px;">Active Agreement</span></div>' +
                     '<div style="font-size:0.85rem; color:#475569;">Category: <strong>' + cat + '</strong> &bull; Total Value: <strong style="color:#002b49;">$' + totalStr + ' USD</strong> &bull; Inspection Period: <strong>' + days + ' Days</strong></div>' +
                   '</div>' +
-
                   '<div style="margin-bottom:16px;">' +
-                    '<div style="font-size:0.95rem; font-weight:800; color:#ef4444; margin-bottom:6px; display:flex; align-items:center; gap:6px;">' +
-                      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
-                      'Important Payment &amp; Holding Terms' +
-                    '</div>' +
-                    '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65;">' +
-                      'Due to high demand and limited availability for this property/item, account holder <strong>' + userName + '</strong> is required to complete the agreed contribution payment to secure and lock this agreement under Chrysalias escrow protection.' +
-                    '</div>' +
+                    '<div style="font-size:0.95rem; font-weight:800; color:#ef4444; margin-bottom:6px; display:flex; align-items:center; gap:6px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Important Payment &amp; Holding Terms</div>' +
+                    '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65;">Due to high demand and limited availability for this property/item, account holder <strong>' + userName + '</strong> is required to complete the agreed contribution payment to secure and lock this agreement under Chrysalias escrow protection.</div>' +
                   '</div>' +
-
                   realEstateHTML +
                   customDescHTML +
                 '</div>';
@@ -1101,6 +1084,119 @@
         } else {
           if (jointCard) jointCard.style.display = 'block';
           if (indivCard) indivCard.style.display = 'none';
+
+          var primaryName = (user && (user.full_name || user.name)) || 'Primary Account Owner';
+          var partnerName = (user && (user.joint_partner_name || user.partner_name)) || 'Partner';
+          var jointDeals   = txs.filter(function (t) {
+            return t.is_joint || t.is_partnered || t.isPartneredPayment || t.status === 'Draft' || t.status === 'Pending Verification' || t.status === 'Co-Funded Payment Pending';
+          });
+
+          var primaryAmountDue = 0, primaryAmountPaid = 0, primaryPending = 0;
+          var partnerAmountDue = 0, partnerAmountPaid = 0, partnerPending = 0;
+          var activeDeal = null;
+
+          jointDeals.forEach(function (tx) {
+            var totalAmt = Number(tx.amount || tx.buyerPrice || tx.price || 0);
+            var myContrib = Number(tx.myContribution || (totalAmt > 0 ? totalAmt / 2 : 0));
+            var ptContrib = Number(tx.partnerContribution || (totalAmt > 0 ? totalAmt - myContrib : 0));
+            if (myContrib <= 0 && ptContrib <= 0 && totalAmt > 0) { myContrib = totalAmt / 2; ptContrib = totalAmt / 2; }
+            primaryAmountDue += myContrib; partnerAmountDue += ptContrib;
+            if (tx.status === 'Completed') { primaryAmountPaid += myContrib; partnerAmountPaid += ptContrib; }
+            else if (!activeDeal) { activeDeal = tx; }
+          });
+
+          primaryPending = Math.max(0, primaryAmountDue - primaryAmountPaid);
+          partnerPending = Math.max(0, partnerAmountDue - partnerAmountPaid);
+          var fmt = function (n) { return n > 0 ? '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD' : '—'; };
+
+          var pNameEl = document.getElementById('pillarPrimaryName'); if (pNameEl) pNameEl.textContent = primaryName;
+          var pTotalEl = document.getElementById('pillarPrimaryTotal'); if (pTotalEl) pTotalEl.textContent = fmt(primaryAmountDue);
+          var pBalEl = document.getElementById('pillarPrimaryBalance'); if (pBalEl) pBalEl.textContent = fmt(primaryAmountPaid);
+          var pPendEl = document.getElementById('pillarPrimaryPending'); if (pPendEl) pPendEl.textContent = fmt(primaryPending);
+
+          var ptNameEl = document.getElementById('pillarPartnerName'); if (ptNameEl) ptNameEl.textContent = (partnerName && partnerName !== 'Partner') ? partnerName : 'Joint Account Partner';
+          var ptTotalEl = document.getElementById('pillarPartnerTotal'); if (ptTotalEl) ptTotalEl.textContent = fmt(partnerAmountDue);
+          var ptBalEl = document.getElementById('pillarPartnerBalance'); if (ptBalEl) ptBalEl.textContent = fmt(partnerAmountPaid);
+          var ptPendEl = document.getElementById('pillarPartnerPending'); if (ptPendEl) ptPendEl.textContent = fmt(partnerPending);
+
+          var primaryBtn = document.getElementById('pillarPrimaryBtn');
+          if (primaryBtn) {
+            if (primaryPending > 0 && activeDeal) {
+              var txId = activeDeal.id || activeDeal.tx_id;
+              primaryBtn.href = 'checkout.html?tx_id=' + txId + '&role=primary';
+              primaryBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Fund ($' + primaryPending.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ')';
+            } else {
+              primaryBtn.href = 'start-transaction.html';
+              primaryBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Fund';
+            }
+          }
+
+          var partnerBtn = document.getElementById('pillarPartnerBtn');
+          if (partnerBtn) {
+            if (partnerPending > 0 && activeDeal) {
+              var txId = activeDeal.id || activeDeal.tx_id;
+              partnerBtn.href = 'checkout.html?tx_id=' + txId + '&role=partner';
+              partnerBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Fund ($' + partnerPending.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ')';
+            } else {
+              partnerBtn.href = 'start-transaction.html';
+              partnerBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Fund';
+            }
+          }
+
+          // Populate agreement details for Joint mode active deal
+          var agreeContainer = document.getElementById('agreementDetailsContent');
+          if (agreeContainer) {
+            if (activeDeal) {
+              var totalAmt = Number(activeDeal.amount || activeDeal.buyerPrice || activeDeal.price || 0);
+              var totalStr = totalAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              var txId     = activeDeal.id || activeDeal.tx_id;
+              var title    = activeDeal.title || 'Co-Funded Agreement';
+              var cat      = activeDeal.category || 'General Merchandise';
+              var days     = activeDeal.inspectionDays || activeDeal.inspectionPeriod || 2;
+              var isRealEstate = (cat && cat.toLowerCase().indexOf('estate') !== -1) || (title && title.toLowerCase().indexOf('woodside') !== -1);
+
+              var realEstateHTML = isRealEstate ? (
+                '<div style="margin-top:20px; padding-top:16px; border-top:1px solid #f1f5f9;">' +
+                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">📍 Property Location &amp; Specifications</div>' +
+                  '<div style="font-size:1.05rem; font-weight:800; color:#002b49; margin-bottom:4px;">508 Woodside Terrace, Austin, TX 78738</div>' +
+                  '<div style="font-size:0.95rem; font-weight:800; color:#16a34a; margin-bottom:8px;">Purchase Price: $2,500,000.00 USD</div>' +
+                  '<div style="font-size:0.86rem; color:#334155; line-height:1.65;">This exceptional 5-bedroom, 8-bathroom home offers 6,164 square feet of refined living space on a generous 0.48-acre lot in the prestigious Rough Hollow Lakeside community (Lakeway Highlands area). Built in 2017 across 3 levels for multigenerational living and entertaining.</div>' +
+                '</div>'
+              ) : '';
+
+              var customDescHTML = (activeDeal.description && activeDeal.description.trim()) ? (
+                '<div style="margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9;">' +
+                  '<div style="font-size:0.85rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; display:flex; align-items:center; gap:6px;">📜 Agreement Details &amp; Custom Terms</div>' +
+                  '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65; white-space:pre-wrap;">' + escHtml(activeDeal.description) + '</div>' +
+                '</div>'
+              ) : '';
+
+              agreeContainer.innerHTML =
+                '<div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:24px; box-shadow:0 2px 10px rgba(0,0,0,0.02);">' +
+                  '<div style="text-align:center; padding-bottom:16px; margin-bottom:20px; border-bottom:1px solid #f1f5f9;">' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Binding Agreement Document &bull; Ref: ' + txId + '</div>' +
+                    '<div style="font-size:1.3rem; font-weight:900; color:#002b49; margin-bottom:6px;">' + title + '</div>' +
+                    '<div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:10px;"><span class="metric-badge badge-blue" style="font-weight:800; font-size:0.85rem; padding:5px 14px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:20px;">Active Agreement</span></div>' +
+                    '<div style="font-size:0.85rem; color:#475569;">Category: <strong>' + cat + '</strong> &bull; Total Value: <strong style="color:#002b49;">$' + totalStr + ' USD</strong> &bull; Inspection Period: <strong>' + days + ' Days</strong></div>' +
+                  '</div>' +
+                  '<div style="margin-bottom:16px;">' +
+                    '<div style="font-size:0.95rem; font-weight:800; color:#ef4444; margin-bottom:6px; display:flex; align-items:center; gap:6px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Important Payment &amp; Holding Terms</div>' +
+                    '<div style="font-size:0.86rem; color:#1e293b; line-height:1.65;">Due to high demand and limited availability for this property/item, both parties &mdash; <strong>' + primaryName + '</strong> (Primary Owner) and <strong>' + (partnerName !== 'Partner' ? partnerName : 'Joint Partner') + '</strong> &mdash; are required to complete their agreed contribution payments to secure and lock this agreement under Chrysalias escrow protection.</div>' +
+                  '</div>' +
+                  realEstateHTML +
+                  customDescHTML +
+                '</div>';
+            } else {
+              agreeContainer.innerHTML =
+                '<div style="padding: 24px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;">' +
+                  '<div style="font-weight: 800; color: #002b49; font-size: 0.95rem; margin-bottom: 4px;">No Active Agreement Established</div>' +
+                  '<div style="font-size: 0.82rem; max-width: 480px; margin: 0 auto 14px auto;">Start a transaction to configure custom escrow agreement terms and item specifications.</div>' +
+                  '<a href="start-transaction.html" class="btn-escrow-green" style="padding: 8px 18px; font-size: 0.84rem; text-decoration: none; font-weight: 700; display: inline-block;">+ Start Agreement</a>' +
+                '</div>';
+            }
+          }
+        }
+      }
 function renderJointFunding(txs) {
         var container = document.getElementById('jointFundingList');
         if (!container) return;
