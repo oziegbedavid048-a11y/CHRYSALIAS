@@ -4,6 +4,7 @@ Comprehensive transaction management, inline partnered payments, documents & act
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.urls import reverse
 from .models import Transaction, PartneredPayment, TransactionDocument, TransactionActivity
 
 
@@ -38,6 +39,7 @@ class TransactionActivityInline(admin.TabularInline):
 class TransactionAdmin(admin.ModelAdmin):
     inlines = [PartneredPaymentInline, TransactionDocumentInline, TransactionActivityInline]
     list_display = (
+        'edit_btn',
         'tx_id_col',
         'title_col',
         'parties_col',
@@ -47,6 +49,7 @@ class TransactionAdmin(admin.ModelAdmin):
         'is_partnered_col',
         'created_at'
     )
+    list_display_links = ('tx_id_col', 'title_col')
     list_filter = ('status', 'currency', 'category', 'is_partnered', 'created_at')
     search_fields = ('tx_id', 'title', 'buyer_email', 'seller_email', 'buyer__email', 'seller__email', 'buyer__full_name', 'seller__full_name')
     ordering = ('-created_at',)
@@ -75,6 +78,16 @@ class TransactionAdmin(admin.ModelAdmin):
     )
 
     actions = ['verify_payment', 'mark_as_funded', 'mark_as_inspection', 'mark_as_completed', 'mark_as_cancelled', 'mark_as_disputed']
+
+    @admin.display(description='Actions')
+    def edit_btn(self, obj):
+        url = reverse('admin:transactions_transaction_change', args=[obj.pk])
+        return format_html(
+            '<a href="{}" style="background:#002b49;color:#ffffff;padding:5px 12px;border-radius:6px;'
+            'font-weight:700;font-size:0.78rem;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">'
+            '✏️ Edit</a>',
+            url
+        )
 
     @admin.display(description='Transaction ID', ordering='tx_id')
     def tx_id_col(self, obj):
@@ -205,10 +218,20 @@ class TransactionAdmin(admin.ModelAdmin):
 
 @admin.register(PartneredPayment)
 class PartneredPaymentAdmin(admin.ModelAdmin):
-    list_display = ('transaction', 'partner_email', 'split_type', 'partner_amount', 'partner_status', 'created_at')
+    list_display = ('edit_btn', 'transaction', 'partner_email', 'split_type', 'partner_amount', 'partner_status', 'created_at')
+    list_display_links = ('transaction', 'partner_email')
     list_filter = ('partner_status', 'split_type', 'created_at')
     search_fields = ('transaction__tx_id', 'partner_email', 'payment_token')
-    readonly_fields = ('payment_token', 'created_at', 'paid_at')
+    readonly_fields = ('payment_token',)
+
+    @admin.display(description='Actions')
+    def edit_btn(self, obj):
+        url = reverse('admin:transactions_partneredpayment_change', args=[obj.pk])
+        return format_html(
+            '<a href="{}" style="background:#0284c7;color:#ffffff;padding:4px 10px;border-radius:6px;'
+            'font-weight:700;font-size:0.75rem;text-decoration:none;display:inline-block;">✏️ Edit Split</a>',
+            url
+        )
 
 
 @admin.register(TransactionDocument)

@@ -6,6 +6,7 @@ All display columns are wrapped in try/except to prevent 500 errors on Render.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
+from django.urls import reverse
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from .models import User, UserProfile
 
@@ -61,12 +62,13 @@ class UserAdmin(BaseUserAdmin):
     add_form = ChrysaliasUserCreationForm
     inlines  = [UserProfileInline]
 
-    list_display    = ('email', 'display_name_col', 'phone', 'kyc_badge_col', 'verified_badge_col', 'joint_badge_col', 'is_active', 'is_staff', 'created_at')
-    list_filter     = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
-    search_fields   = ('email', 'full_name', 'username', 'phone')
-    ordering        = ('-created_at',)
-    readonly_fields = ('created_at', 'updated_at', 'last_login', 'date_joined')
-    list_per_page   = 25
+    list_display        = ('edit_btn', 'email', 'display_name_col', 'phone', 'kyc_badge_col', 'verified_badge_col', 'joint_badge_col', 'is_active', 'is_staff', 'created_at')
+    list_display_links  = ('email', 'display_name_col')
+    list_filter         = ('kyc_status', 'is_verified', 'is_active', 'is_staff', 'created_at')
+    search_fields       = ('email', 'full_name', 'username', 'phone')
+    ordering            = ('-created_at',)
+    readonly_fields     = ('created_at', 'updated_at', 'last_login', 'date_joined')
+    list_per_page       = 25
 
     # Django BaseUserAdmin REQUIRES 'password' in fieldsets or it raises FieldError.
     fieldsets = (
@@ -126,6 +128,16 @@ class UserAdmin(BaseUserAdmin):
         return obj
 
     # ── Display Columns ──────────────────────────────────────
+
+    @admin.display(description='Actions')
+    def edit_btn(self, obj):
+        url = reverse('admin:accounts_user_change', args=[obj.pk])
+        return format_html(
+            '<a href="{}" style="background:#002b49;color:#ffffff;padding:5px 12px;border-radius:6px;'
+            'font-weight:700;font-size:0.78rem;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">'
+            '✏️ Edit User</a>',
+            url
+        )
 
     @admin.display(description='Name', ordering='full_name')
     def display_name_col(self, obj):
@@ -228,8 +240,18 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display  = ('user', 'country', 'is_joint_account', 'joint_partner_email', 'created_at')
+    list_display  = ('edit_btn', 'user', 'country', 'is_joint_account', 'joint_partner_email', 'created_at')
+    list_display_links = ('user',)
     list_filter   = ('is_joint_account', 'country', 'created_at')
     search_fields = ('user__email', 'user__full_name', 'joint_partner_email', 'country')
     raw_id_fields = ('user',)
     readonly_fields = ('created_at',)
+
+    @admin.display(description='Actions')
+    def edit_btn(self, obj):
+        url = reverse('admin:accounts_userprofile_change', args=[obj.pk])
+        return format_html(
+            '<a href="{}" style="background:#0284c7;color:#ffffff;padding:4px 10px;border-radius:6px;'
+            'font-weight:700;font-size:0.75rem;text-decoration:none;display:inline-block;">✏️ Edit Profile</a>',
+            url
+        )
