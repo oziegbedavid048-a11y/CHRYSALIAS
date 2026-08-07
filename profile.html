@@ -302,6 +302,13 @@
       var file = input.files[0];
 
       var avatarEl = document.getElementById('profileInitials');
+      var user = window.EscrowApp.getUser() || {};
+      var uName = user.name || user.full_name || 'User';
+      var uParts = uName.trim().split(' ');
+      var safeInitials = uParts.length > 1
+        ? (uParts[0].charAt(0) + uParts[uParts.length - 1].charAt(0)).toUpperCase()
+        : uName.substring(0, 2).toUpperCase();
+
       if (avatarEl) {
         avatarEl.innerHTML = '<span class="btn-spinner" style="width:28px;height:28px;border-width:3.5px;border-color:rgba(255,255,255,0.4);border-top-color:#ffffff;display:inline-block;"></span>';
       }
@@ -330,13 +337,12 @@
         if (res.ok && (data.profile_picture || data.success)) {
           var finalUrl = data.profile_picture || URL.createObjectURL(file);
           if (avatarEl) {
+            avatarEl.innerHTML = '';
             avatarEl.style.backgroundImage = 'url("' + finalUrl + '")';
             avatarEl.style.backgroundSize = 'cover';
             avatarEl.style.backgroundPosition = 'center';
-            avatarEl.textContent = '';
           }
           
-          var user = window.EscrowApp.getUser() || {};
           user.profile_picture = finalUrl;
           user.avatar = finalUrl;
           window.EscrowApp.setUser(user);
@@ -354,7 +360,10 @@
           }
         } else {
           var errMsg = data.error || data.detail || data.message || ('Upload failed with status ' + res.status);
-          if (avatarEl) avatarEl.textContent = initials || 'U';
+          if (avatarEl) {
+            avatarEl.innerHTML = '';
+            avatarEl.textContent = safeInitials;
+          }
           if (window.EscrowApp.showToast) {
             window.EscrowApp.showToast(errMsg, 'error');
           } else {
@@ -363,7 +372,10 @@
         }
       } catch (err) {
         console.error('Avatar upload error:', err);
-        if (avatarEl) avatarEl.textContent = initials || 'U';
+        if (avatarEl) {
+          avatarEl.innerHTML = '';
+          avatarEl.textContent = safeInitials;
+        }
         var msg = err.message || 'Network error while uploading profile picture.';
         if (window.EscrowApp.showToast) {
           window.EscrowApp.showToast(msg, 'error');

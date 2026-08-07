@@ -13,15 +13,11 @@ class PartneredPaymentInline(admin.StackedInline):
     verbose_name = 'Partnered / Co-Funding Payment Details'
     verbose_name_plural = 'Partnered Payment Details'
     fieldsets = (
-        ('Partner Details', {
-            'fields': ('partner_email', 'split_type', 'partner_amount', 'partner_status', 'payment_token'),
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'paid_at'),
-            'classes': ('collapse',),
+        ('Partner Details & Contribution Balances', {
+            'fields': ('partner_email', 'split_type', 'partner_amount', 'partner_status', 'payment_token', 'paid_at'),
         }),
     )
-    readonly_fields = ('payment_token', 'created_at', 'paid_at')
+    readonly_fields = ('payment_token',)
 
 
 class TransactionDocumentInline(admin.TabularInline):
@@ -58,23 +54,22 @@ class TransactionAdmin(admin.ModelAdmin):
     list_per_page = 20
 
     fieldsets = (
-        ('Transaction Identity', {
+        ('Transaction Identity & Agreement Details', {
             'fields': ('tx_id', 'title', 'category', 'status', 'description'),
         }),
         ('Parties Involved', {
             'fields': ('initiator_role', 'buyer', 'buyer_email', 'seller', 'seller_email'),
         }),
-        ('Financial Terms', {
-            'fields': ('currency', 'amount', 'inspection_period', 'is_partnered'),
+        ('Financial Terms & Contribution Balances', {
+            'fields': ('currency', 'amount', 'inspection_period', 'is_partnered', 'primary_amount_paid', 'partner_amount_paid'),
         }),
-        ('Chrysalias Service Fees (Auto-Calculated)', {
+        ('Chrysalias Service Fees (Editable Figures)', {
             'fields': ('escrow_fee', 'processing_fee', 'total_fee'),
-            'classes': ('collapse',),
         }),
-        ('Payment Receipts & Split Tracking', {
-            'fields': ('primary_receipt', 'partner_receipt', 'primary_amount_paid', 'partner_amount_paid'),
+        ('Payment Receipts & Verification Uploads', {
+            'fields': ('primary_receipt', 'partner_receipt'),
         }),
-        ('Administrative & Internal Notes', {
+        ('Administrative & Agreement Notes', {
             'fields': ('admin_notes', 'created_at', 'updated_at', 'completed_at'),
         }),
     )
