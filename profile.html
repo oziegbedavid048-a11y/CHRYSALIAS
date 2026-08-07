@@ -268,8 +268,11 @@
         : name.substring(0, 2).toUpperCase();
 
       var avatarEl = document.getElementById('profileInitials');
-      if (user.profile_picture || user.avatar) {
-        avatarEl.style.backgroundImage = 'url(' + (user.profile_picture || user.avatar) + ')';
+      var pic = user.profile_picture || user.avatar;
+      if (pic) {
+        avatarEl.style.backgroundImage = 'url("' + pic + '")';
+        avatarEl.style.backgroundSize = 'cover';
+        avatarEl.style.backgroundPosition = 'center';
         avatarEl.textContent = '';
       } else {
         avatarEl.textContent = initials;
@@ -279,6 +282,19 @@
       document.getElementById('profileEmail').textContent = email;
       document.getElementById('infoFullName').textContent = name;
       document.getElementById('infoEmail').textContent = email;
+
+      // Also async fetch fresh profile picture from backend
+      if (window.EscrowApp.fetchMe) {
+        window.EscrowApp.fetchMe().then(function (freshUser) {
+          if (freshUser && (freshUser.profile_picture || freshUser.avatar)) {
+            var freshPic = freshUser.profile_picture || freshUser.avatar;
+            avatarEl.style.backgroundImage = 'url("' + freshPic + '")';
+            avatarEl.style.backgroundSize = 'cover';
+            avatarEl.style.backgroundPosition = 'center';
+            avatarEl.textContent = '';
+          }
+        });
+      }
     });
 
     async function uploadAvatarFile(input) {
@@ -313,6 +329,8 @@
           var finalUrl = data.profile_picture || tempUrl;
           if (avatarEl) {
             avatarEl.style.backgroundImage = 'url("' + finalUrl + '")';
+            avatarEl.style.backgroundSize = 'cover';
+            avatarEl.style.backgroundPosition = 'center';
             avatarEl.textContent = '';
           }
           
@@ -320,6 +338,14 @@
           user.profile_picture = finalUrl;
           user.avatar = finalUrl;
           window.EscrowApp.setUser(user);
+
+          // Instantly sync header avatar circles on the page
+          document.querySelectorAll('.user-avatar-circle').forEach(function (circle) {
+            circle.style.backgroundImage = 'url("' + finalUrl + '")';
+            circle.style.backgroundSize = 'cover';
+            circle.style.backgroundPosition = 'center';
+            circle.style.color = 'transparent';
+          });
 
           if (window.EscrowApp.showToast) {
             window.EscrowApp.showToast('Profile picture uploaded & updated successfully!', 'success');

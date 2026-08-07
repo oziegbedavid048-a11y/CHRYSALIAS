@@ -448,5 +448,28 @@
     window.EscrowApp.renderHeader();
     window.EscrowApp.renderFooter();
     initStickyHeader();
+
+    if (window.EscrowApp.getToken()) {
+      window.EscrowApp.fetchMe().then(function (user) {
+        if (user) {
+          var pic = user.profile_picture || user.avatar;
+          if (pic) {
+            document.querySelectorAll('.user-avatar-circle').forEach(function (el) {
+              el.style.backgroundImage = 'url("' + pic + '")';
+              el.style.backgroundSize = 'cover';
+              el.style.backgroundPosition = 'center';
+              el.style.color = 'transparent';
+            });
+            var profInit = document.getElementById('profileInitials');
+            if (profInit) {
+              profInit.style.backgroundImage = 'url("' + pic + '")';
+              profInit.style.backgroundSize = 'cover';
+              profInit.style.backgroundPosition = 'center';
+              profInit.textContent = '';
+            }
+          }
+        }
+      });
+    }
   });
 })();

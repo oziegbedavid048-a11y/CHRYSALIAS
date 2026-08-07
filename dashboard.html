@@ -1052,14 +1052,14 @@
             var isRealEstate = (cat && cat.toLowerCase().indexOf('estate') !== -1) || (title && title.toLowerCase().indexOf('woodside') !== -1);
             
             var realEstateHTML = isRealEstate ? (
-              '<div style="background:#ffffff; border:1.5px solid #bfdbfe; border-radius:10px; padding:18px; margin-bottom:16px;">' +
-                '<div style="font-size:0.75rem; font-weight:800; color:#0284c7; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; display:flex; align-items:center; gap:6px;">' +
-                  '<span>📍 Property Location &amp; Specifications</span>' +
+              '<div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px; margin-top:16px;">' +
+                '<div style="font-size:0.8rem; font-weight:800; color:#002b49; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;">' +
+                  '📍 Property Location &amp; Specifications' +
                 '</div>' +
                 '<div style="font-size:1.05rem; font-weight:800; color:#002b49; margin-bottom:4px;">508 Woodside Terrace, Austin, TX 78738</div>' +
                 '<div style="font-size:0.95rem; font-weight:800; color:#16a34a; margin-bottom:10px;">Purchase Price: $2,500,000.00 USD</div>' +
-                '<div style="font-size:0.84rem; color:#334155; line-height:1.6; background:#f8fafc; border-radius:8px; padding:12px 14px; border-left:3.5px solid #0284c7;">' +
-                  'This exceptional 5-bedroom, 8-bathroom home offers 6,164 square feet of refined living space on a generous 0.48-acre lot in the prestigious Rough Hollow Lakeside community (Lakeway Highlands area). Built in 2017, the residence spans three intentional levels and is designed for multigenerational living and large-scale entertaining.' +
+                '<div style="font-size:0.85rem; color:#1e293b; line-height:1.6; background:#f8fafc; border-radius:8px; padding:14px; border-left:3.5px solid #002b49;">' +
+                  '508 Woodside Terrace, Austin, TX 78738 &bull; Purchase Price: $2,500,000 &bull; 6,164 sq ft on 0.48-acre lot in Lakeway Highlands / Rough Hollow Lakeside. Built in 2017 across 3 levels for multigenerational living and entertaining.' +
                 '</div>' +
               '</div>'
             ) : '';
@@ -1067,29 +1067,27 @@
             agreeContainer.innerHTML =
               '<div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:22px; box-shadow:0 2px 10px rgba(0,0,0,0.02);">' +
 
-                '<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid #f1f5f9;">' +
-                  '<div>' +
-                    '<div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">Binding Agreement Document &bull; Ref: ' + txId + '</div>' +
-                    '<div style="font-size:1.2rem; font-weight:900; color:#002b49; margin-top:3px;">' + title + '</div>' +
-                    '<div style="font-size:0.8rem; color:#475569; margin-top:4px;">Category: <strong>' + cat + '</strong> &bull; Inspection Period: <strong>' + days + ' Days</strong></div>' +
+                '<div style="text-align:center; padding-bottom:14px; margin-bottom:18px; border-bottom:1px solid #f1f5f9;">' +
+                  '<div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Binding Agreement Document &bull; Ref: ' + txId + '</div>' +
+                  '<div style="font-size:1.3rem; font-weight:900; color:#002b49; margin-bottom:6px;">' + title + '</div>' +
+                  '<div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:10px;">' +
+                    '<span class="metric-badge badge-blue" style="font-weight:800; font-size:0.85rem; padding:5px 14px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:20px;">Active Agreement</span>' +
                   '</div>' +
-                  '<div style="text-align:right;">' +
-                    '<div style="font-size:1.25rem; font-weight:900; color:#002b49;">$' + totalStr + ' USD</div>' +
-                    '<span class="metric-badge badge-blue" style="margin-top:4px; font-weight:700;">Active Agreement</span>' +
+                  '<div style="font-size:0.85rem; color:#475569;">Category: <strong>' + cat + '</strong> &bull; Total Value: <strong style="color:#002b49;">$' + totalStr + ' USD</strong> &bull; Inspection Period: <strong>' + days + ' Days</strong></div>' +
+                '</div>' +
+
+                /* Important Payment & Holding Terms (ABOVE Property Location & Specifications) */
+                '<div style="background:#fef2f2; border:1px solid #fecaca; border-left:4px solid #ef4444; border-radius:8px; padding:16px;">' +
+                  '<div style="font-size:0.95rem; font-weight:800; color:#ef4444; margin-bottom:6px; display:flex; align-items:center; gap:6px;">' +
+                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+                    'Important Payment &amp; Holding Terms' +
+                  '</div>' +
+                  '<div style="font-size:0.85rem; color:#1e293b; line-height:1.6;">' +
+                    'Due to high demand and limited availability for this property/item, both parties &mdash; <strong>' + primaryName + '</strong> (Primary Owner) and <strong>' + (partnerName !== 'Partner' ? partnerName : 'Joint Partner') + '</strong> &mdash; are required to complete their agreed contribution payments to secure and lock this agreement under Chrysalias escrow protection.' +
                   '</div>' +
                 '</div>' +
 
                 realEstateHTML +
-
-                '<div style="background:#eff6ff; border:1px solid #bfdbfe; border-left:4px solid #002b49; border-radius:8px; padding:14px 16px;">' +
-                  '<div style="font-size:0.84rem; font-weight:800; color:#002b49; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
-                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
-                    'Important Payment &amp; Holding Terms' +
-                  '</div>' +
-                  '<div style="font-size:0.82rem; color:#1e3a8a; line-height:1.55;">' +
-                    'Due to high demand and limited availability for this property/item, both parties &mdash; <strong>' + primaryName + '</strong> (Primary Owner) and <strong>' + (partnerName !== 'Partner' ? partnerName : 'Joint Partner') + '</strong> &mdash; are required to complete their agreed contribution payments to secure and lock this agreement under Chrysalias escrow protection.' +
-                  '</div>' +
-                '</div>' +
 
               '</div>';
           } else {
