@@ -250,17 +250,39 @@ class LogoutView(View):
         return json_response({'success': True, 'message': 'Logged out successfully.'})
 
 
+def get_authenticated_user(request):
+    """
+    Returns authenticated user from Django session or Authorization: Token header.
+    """
+    if hasattr(request, 'user') and request.user and request.user.is_authenticated:
+        return request.user
+    
+    auth_header = request.headers.get('Authorization', '') or request.META.get('HTTP_AUTHORIZATION', '')
+    if not auth_header and hasattr(request, 'META'):
+        auth_header = request.META.get('Authorization', '')
+    
+    if auth_header and 'Token ' in auth_header:
+        token_key = auth_header.split('Token ')[1].strip()
+        try:
+            token_obj = Token.objects.filter(key=token_key).first()
+            if token_obj and token_obj.user and token_obj.user.is_active:
+                return token_obj.user
+        except Exception:
+            pass
+    return None
+
+
 class MeView(View):
     def get(self, request):
-        if not request.user.is_authenticated:
+        user = get_authenticated_user(request)
+        if not user:
             return json_response({'authenticated': False}, 401)
-        user = request.user
         is_joint = False
         joint_partner_name = ''
         joint_partner_email = ''
         profile_picture = None
         try:
-            profile = user.profile
+            profile, _ = UserProfile.objects.get_or_create(user=user)
             is_joint = profile.is_joint_account
             joint_partner_name = profile.joint_partner_name or ''
             joint_partner_email = profile.joint_partner_email or ''
@@ -291,25 +313,29 @@ class MeView(View):
 class UploadProfilePictureView(View):
     """Allows authenticated user to upload/update their profile picture"""
     def post(self, request):
-        if not request.user.is_authenticated:
-            return json_response({'error': 'Authentication required.'}, 401)
+        user = get_authenticated_user(request)
+        if not user:
+            return json_response({'error': 'Authentication required. Please log in again.'}, 401)
         
         file = request.FILES.get('profile_picture') or request.FILES.get('avatar') or request.FILES.get('file')
         if not file:
             return json_response({'error': 'No image file provided.'}, 400)
         
-        user = request.user
-        from .models import UserProfile
-        profile, _ = UserProfile.objects.get_or_create(user=user)
-        profile.profile_picture = file
-        profile.save()
+        try:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.profile_picture = file
+            profile.save()
 
-        avatar_url = request.build_absolute_uri(profile.profile_picture.url) if profile.profile_picture else ''
-        return json_response({
-            'success': True,
-            'message': 'Profile picture uploaded successfully.',
-            'profile_picture': avatar_url,
-        })
+            avatar_url = request.build_absolute_uri(profile.profile_picture.url) if profile.profile_picture else ''
+            return json_response({
+                'success': True,
+                'message': 'Profile picture uploaded successfully.',
+                'profile_picture': avatar_url,
+            })
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Error saving profile picture: {e}")
+            return json_response({'error': f"Failed to save profile picture: {str(e)}"}, 500)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

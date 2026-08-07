@@ -301,14 +301,9 @@
       if (!input.files || !input.files[0]) return;
       var file = input.files[0];
 
-      // Instant local visual feedback
-      var tempUrl = URL.createObjectURL(file);
       var avatarEl = document.getElementById('profileInitials');
       if (avatarEl) {
-        avatarEl.style.backgroundImage = 'url("' + tempUrl + '")';
-        avatarEl.style.backgroundSize = 'cover';
-        avatarEl.style.backgroundPosition = 'center';
-        avatarEl.textContent = '';
+        avatarEl.innerHTML = '<span class="btn-spinner" style="width:28px;height:28px;border-width:3.5px;border-color:rgba(255,255,255,0.4);border-top-color:#ffffff;display:inline-block;"></span>';
       }
 
       var formData = new FormData();
@@ -324,9 +319,16 @@
           headers: headers,
           body: formData
         });
-        var data = await res.json();
+        
+        var data = {};
+        try {
+          data = await res.json();
+        } catch (e) {
+          data = { error: 'Server returned invalid response (' + res.status + ').' };
+        }
+
         if (res.ok && (data.profile_picture || data.success)) {
-          var finalUrl = data.profile_picture || tempUrl;
+          var finalUrl = data.profile_picture || URL.createObjectURL(file);
           if (avatarEl) {
             avatarEl.style.backgroundImage = 'url("' + finalUrl + '")';
             avatarEl.style.backgroundSize = 'cover';
@@ -351,7 +353,8 @@
             window.EscrowApp.showToast('Profile picture uploaded & updated successfully!', 'success');
           }
         } else {
-          var errMsg = data.error || 'Upload failed. Please try again.';
+          var errMsg = data.error || data.detail || data.message || ('Upload failed with status ' + res.status);
+          if (avatarEl) avatarEl.textContent = initials || 'U';
           if (window.EscrowApp.showToast) {
             window.EscrowApp.showToast(errMsg, 'error');
           } else {
@@ -360,10 +363,12 @@
         }
       } catch (err) {
         console.error('Avatar upload error:', err);
+        if (avatarEl) avatarEl.textContent = initials || 'U';
+        var msg = err.message || 'Network error while uploading profile picture.';
         if (window.EscrowApp.showToast) {
-          window.EscrowApp.showToast('Network error while uploading profile picture.', 'error');
+          window.EscrowApp.showToast(msg, 'error');
         } else {
-          alert('Network error while uploading profile picture.');
+          alert(msg);
         }
       }
     }
